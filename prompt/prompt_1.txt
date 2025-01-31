@@ -16,9 +16,10 @@ Task:
     
     
 Inputs :
-    
-    1. The post-condition must be verified.
+    1. A full function with the post-condition must be verified.
+
     2. The pre-condition before the loop begins execution.
+
     3. A C loop_content with invariant annotations with PLACE_HOLDER need to fill.
    
 Output:
@@ -31,7 +32,7 @@ Rules:
 
     3. Only use keywords and constructs supported in ACSL annotations for loops.
 
-    4. Dont Use \at(var, LoopEntry) to refer to the value of a variable at the start of the loop, use the value in pre_condition instead.
+    4. Do not Use \at(var, LoopEntry) to refer to the value of a variable at the start of the loop, use the value in pre_condition instead.
 
     5. You can use \at(var, Pre) to represent the value of the parameter passed in (void foo (int v ...)), but local variables cannot be used (int v = 0).
     
