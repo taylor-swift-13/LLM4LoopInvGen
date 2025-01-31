@@ -1,6 +1,5 @@
 
-void foo(int n,int v1,int v2,int v3) {
-    int y;
+void foo(int n,int y,int v1,int v2,int v3) {
     int x = 1;
 
     
