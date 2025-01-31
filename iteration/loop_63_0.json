@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "state": "((((x2 == ((x2@pre) - (d2@pre))) * (x3 == ((x3@pre) - (d3@pre)))) * (d1 == (d1@pre))) * (d2 == (d2@pre))) * (d3 == (d3@pre))) * (x1 == ((x1@pre) - (d1@pre))",
+        "path_condition": "(((x3@pre) > 0)) ==> (((x2@pre) > 0))"
+    },
+    {
+        "id": 2,
+        "state": "(((((x2 == (x2@pre)) * (x3 == (x3@pre))) * (d1 == (d1@pre))) * (d2 == (d2@pre))) * (d3 == (d3@pre))) * (x1 == (x1@pre))",
+        "path_condition": "(((x3@pre) <= 0)) ==> (((x2@pre) > 0))"
+    }
+]

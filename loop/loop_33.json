@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "((((x@pre) >= (y@pre)) && ((y@pre) >= 0)) && (((i == 0) * (y == (y@pre))) * (x == (x@pre))))",
+        "content": "while (1) {\n    if ( i < y )\n    {\n    i  = (i + 1);\n    /*@  (i >= 0 && i < x ) */\n    }\n  }"
+    }
+]

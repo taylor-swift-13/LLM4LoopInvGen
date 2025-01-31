@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(((n@pre) >= 0) && ((((y == 0) * (x == 0)) * (i == 0)) * (n == (n@pre))))",
+        "content": "while (i < n) {\n    \n    i  = i + 1;\n      if ( i % 2 == 0) {\n        \n        x  = x + 1;\n        y  = y + 2;\n        \n      } else {\n        \n        x  = x + 2;\n        y  = y + 1;\n        \n      }\n\n\n  }"
+    }
+]

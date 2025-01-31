@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "state": "((((m == (m@pre)) * (j == (j@pre))) * (a == (a@pre))) * (c == (c@pre))) * (k == ((k@pre) + 1))",
+        "path_condition": "((m@pre) >= (a@pre))"
+    },
+    {
+        "id": 2,
+        "state": "((((m == (a@pre)) * (j == (j@pre))) * (a == (a@pre))) * (c == (c@pre))) * (k == ((k@pre) + 1))",
+        "path_condition": "((m@pre) < (a@pre))"
+    }
+]

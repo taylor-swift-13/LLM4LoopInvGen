@@ -1,0 +1,7 @@
+[
+    {
+        "id": 1,
+        "state": "(((((size == (size@pre)) * (v1 == (v1@pre))) * (v2 == (v2@pre))) * (v3 == (v3@pre))) * (i == ((i@pre) + 1))) * (sn == ((sn@pre) + 1))",
+        "path_condition": ""
+    }
+]

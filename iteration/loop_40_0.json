@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "state": "(((n == (n@pre)) * (i == ((i@pre) + 1))) * (x == ((x@pre) + 1))) * (y == ((y@pre) + 2))",
+        "path_condition": "(((((i@pre) + 1) % 2) == 0))"
+    },
+    {
+        "id": 2,
+        "state": "(((n == (n@pre)) * (i == ((i@pre) + 1))) * (x == ((x@pre) + 2))) * (y == ((y@pre) + 1))",
+        "path_condition": "(((((i@pre) + 1) % 2) != 0))"
+    }
+]

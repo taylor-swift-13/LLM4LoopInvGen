@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "state": "((j == ((i@pre) + (i@pre))) * (c == (c@pre))) * (t == ((c@pre) - 48))) * (i == (((i@pre) + (i@pre)) + ((c@pre) - 48))",
+        "path_condition": "(((c@pre) < 57)) ==> (((c@pre) > 48))"
+    },
+    {
+        "id": 2,
+        "state": "(((j == (j@pre)) * (c == (c@pre))) * (t == (t@pre))) * (i == (i@pre))",
+        "path_condition": "(((c@pre) >= 57)) ==> (((c@pre) > 48))"
+    }
+]

@@ -1,0 +1,7 @@
+[
+    {
+        "id": 1,
+        "state": "((x == ((x@pre) + (y@pre))) * (y == ((y@pre) + 1)))",
+        "path_condition": ""
+    }
+]
