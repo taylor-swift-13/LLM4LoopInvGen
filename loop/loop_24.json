@@ -2,6 +2,6 @@
     {
         "loop_id": 0,
         "condition": "(((n@pre) > 0) && ((c == 0) * (n == (n@pre))))",
-        "content": "while (1){\n        if(c == n) {\n            c = 1;\n        }\n        else {\n            c = c + 1;\n        }\n\n        /*@ (c >= 0) && (c <= n) */\n    }"
+        "content": "while (1){\n        if(c == n) {\n            c = 1;\n        }\n        else {\n            c = c + 1;\n        }\n\n        /*@ assert (c >= 0) && (c <= n); */\n    }"
     }
 ]

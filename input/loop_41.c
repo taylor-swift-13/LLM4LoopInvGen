@@ -14,6 +14,6 @@ void foo(int n,int k) {
     
 
   }
-  /*@ assert i + j + k > (2 * n) */;
+  /*@ assert i + j + k > (2 * n); */;
 
 }

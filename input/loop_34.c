@@ -9,7 +9,11 @@ void foo(int x, int y,int z1,int z2,int z3) {
     if ( i < y )
     {
     i  = (i + 1);
-    /*@ assert (i >= 0 && i < x); */
+
+   
+    }
+    if(i < y){
+     /*@ assert (i >= 0 && i < x); */
     }
   }
 

@@ -8,7 +8,7 @@ void foo(int n) {
 
   while (i < n) {
     
-    i  = i + 1;
+      i  = i + 1;
       if ( i % 2 == 0) {
         
         x  = x + 1;

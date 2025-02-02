@@ -2,6 +2,6 @@
     {
         "loop_id": 0,
         "condition": "((x == 0) * (sn == 0))",
-        "content": "while (1) {\n\n    x  = (x + 1);\n    sn  = (sn + 1);\n\n    if(sn != x){\n    /*@  (sn == -1) */\n    }\n    \n  }"
+        "content": "while (1) {\n\n    x  = (x + 1);\n    sn  = (sn + 1);\n\n    if(sn != x){\n    /*@ assert (sn == -1); */\n    }\n    \n  }"
     }
 ]

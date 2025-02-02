@@ -22,7 +22,7 @@ class LoopProcessor:
         self.proof_manual_file = f"../ip_postcond/goal/{self.file_name}_proof_manual.v"
         self.input_file = f"symexe/input/{self.file_name}.c"
         self.output_file =f"symexe/output/{self.file_name}.c"
-        self.iter_file = f"../../LoopInvGen_V1/symexe/output/{self.file_name}.c"
+        self.iter_file = f"../../LLM4LoopInvGen/symexe/output/{self.file_name}.c"
         self.json_file = f'loop/{self.file_name}.json'
 
     def delete_file_if_exists(self, file_path):
@@ -80,6 +80,14 @@ class LoopProcessor:
 
             # 提取循环内容
             loop_content = loop_head + ''.join(code_list[loop_start +1:end_index])
+
+            
+            # 修改注释为 acsl 格式
+            assert_pattern = r'/\*@\s*(.*?)\s*\*/'
+    
+            # 替换为 /*@ assert xxxxxx ;*/
+            loop_content = re.sub(assert_pattern, r'/*@ assert \1; */', loop_content)
+            
             
             # 打印循环内容
             print(f"LoopContent_{idx}:\n{loop_content}\n")
