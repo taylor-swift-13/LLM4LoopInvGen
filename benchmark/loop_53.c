@@ -12,6 +12,6 @@ void foo(int n) {
 
   }
   
-  /*@ assert ( sn!= 0) ==> (sn ==n)*/
+  /*@ assert (sn!= 0) ==> (sn ==n); */
 
 }

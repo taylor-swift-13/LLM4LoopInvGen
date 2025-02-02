@@ -13,7 +13,11 @@ void foo(int y) {
     z  = z + 1;
     c  = c + 1;
 
-    /*@ assert  z >= 0 && z < 4608; */
+    }
+
+     if( c < 36 )
+    {
+      /*@ assert  z >= 0 && z < 4608; */
     }
 
   }
