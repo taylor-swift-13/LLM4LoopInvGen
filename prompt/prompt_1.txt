@@ -33,8 +33,10 @@ Rules:
     5. You can use \at(var, Pre) to represent the value of the parameter passed in (void foo (int v ...)), but local variables cannot be used (int v = 0).
     
     6. Generate loop invariants with equality constraints as comprehensively as possible.
+
+    7. The variables in the loop condition must be constrained by upper and lower bounds.
     
-    7. If you break any of these rules, my family will disown me.
+    8. If you break any of these rules, my family will disown me.
 
 
 Consider the following C loop:
