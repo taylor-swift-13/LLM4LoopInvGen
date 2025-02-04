@@ -1,25 +1,21 @@
 # LLM4LoopInvGen
 the tool using large language model to automatically generate inductive loop invariants for c program
 
-V1:
-——————————————————————————————
-ACSL                
-——————————————————————————————
-Single loop         
-——————————————————————————————
-Post condition      
-——————————————————————————————
-Symbolic execution  
-——————————————————————————————
-Pre condition       
-——————————————————————————————
-Path classify       
-——————————————————————————————
-No feedback         
-——————————————————————————————
+### V1
 
-result for gpt-4o
+| V1                 | Yes  | No   |
+| ------------------ | ---- | ---- |
+| ACSL               | 1    |      |
+| Pre condition      | 1    |      |
+| Post condition     | 1    |      |
+| Single loop        | 1    |      |
+| Symbolic execution | 1    |      |
+| Path classify      | 1    |      |
+| Feedback           |      | 1    |
 
+### result for gpt-4o
+
+```
 -----------------------------------------
 ========================================
                   统计结果                  
@@ -58,9 +54,11 @@ result for gpt-4o
   - loop_21.c
   - loop_18.c
 ========================================
+```
 
-result for deepseek-r1
+### result for deepseek-r1
 
+```
 -----------------------------------------
 ========================================
                   统计结果
@@ -95,3 +93,5 @@ result for deepseek-r1
   - loop_21.c
   - loop_18.c
 ========================================
+```
+
