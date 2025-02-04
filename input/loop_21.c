@@ -9,5 +9,5 @@ void foo(int n, int v1,int v2,int v3) {
 
   }
 
- /*@ assert (n >= 0) ==> (x == 1); */
+ /*@ assert (n >= 1) ==> (x == 1); */
 }

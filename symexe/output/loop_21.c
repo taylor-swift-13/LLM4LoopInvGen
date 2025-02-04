@@ -15,7 +15,7 @@ void foo(int n, int v1,int v2,int v3)
 
   }
 
-   if(n >= 0){
+   if(n >= 1){
     /*@ (x == 1) */
   }
 }

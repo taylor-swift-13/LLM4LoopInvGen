@@ -39,8 +39,10 @@ Rules:
     6. The input source code already contains some comments, and you are not allowed to modify them. You only need to generate a logical expression related to the variable v to replace the part marked as PLACE_HOLDER_v. Ensure that your generated expression does not conflict with the existing code or comments, and strictly respects the context of the original code.
     
     7. Generate loop invariants with equality constraints as comprehensively as possible.
+
+    8. The variables in the loop condition must be constrained by upper and lower bounds.
     
-    8. If you break any of these rules, my family will disown me.
+    9. If you break any of these rules, my family will disown me.
 
 
 Consider the following C loop:
