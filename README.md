@@ -95,3 +95,54 @@ the tool using large language model to automatically generate inductive loop inv
 ========================================
 ```
 
+### result for deepseek-v3
+
+```
+-----------------------------------------
+========================================
+                  统计结果                  
+========================================
+有效个数：45/65
+有效率： 69.23%
+正确个数: 30/65
+正确率: 46.15%
+----------------------------------------
+错误的文件名:
+  - loop_65.c
+  - loop_51.c
+  - loop_42.c
+  - loop_43.c
+  - loop_62.c
+  - loop_7.c
+  - loop_23.c
+  - loop_46.c
+  - loop_15.c
+  - loop_8.c
+  - loop_64.c
+  - loop_59.c
+  - loop_19.c
+  - loop_60.c
+  - loop_26.c
+  - loop_45.c
+  - loop_63.c
+  - loop_40.c
+  - loop_9.c
+  - loop_24.c
+  - loop_48.c
+  - loop_16.c
+  - loop_53.c
+  - loop_10.c
+  - loop_36.c
+  - loop_47.c
+  - loop_54.c
+  - loop_35.c
+  - loop_61.c
+  - loop_20.c
+  - loop_44.c
+  - loop_38.c
+  - loop_37.c
+  - loop_21.c
+  - loop_18.c
+========================================
+```
+
