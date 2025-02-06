@@ -2,7 +2,7 @@ import os
 from outputVerify import OutputVerifier
 from invGen import InvGenerator
 
-def print_statistics(valid_count,correct_count, file_count, error_files):
+def print_statistics(syntax_count,valid_count,correct_count, file_count, error_files):
     """
     打印统计信息，包括正确个数、文件总数、正确率以及错误的文件名
     :param correct_count: 正确个数
@@ -13,6 +13,8 @@ def print_statistics(valid_count,correct_count, file_count, error_files):
     print("=" * 40)
     print(f"{'统计结果':^40}")  # 居中显示标题
     print("=" * 40)
+    print(f"合法个数：{syntax_count}/{file_count}")
+    print(f"合法率： {(syntax_count / file_count) * 100:.2f}%")
     print(f"有效个数：{valid_count}/{file_count}")
     print(f"有效率： {(valid_count / file_count) * 100:.2f}%")
     print(f"正确个数: {correct_count}/{file_count}")
@@ -35,6 +37,7 @@ def main():
 
     valid_count = 0
     correct_count = 0
+    syntax_count = 0
     file_count = 65
     error_files = []
 
@@ -43,6 +46,7 @@ def main():
 
             flag = False
             isValid = False
+            isSyntax = False
 
             # 尝试最多3次验证
             for _ in range(3):
@@ -56,10 +60,16 @@ def main():
                 # 获取验证结果（假设返回的是列表）
                 validate_result = verifier.validate_result
                 verify_result = verifier.verify_result
+                syntax_error = verifier.syntax_error
 
                 # 判断验证结果
                 valid = bool(validate_result) and all(validate_result)
+                syntax = syntax_error ==''
                 satisfy = bool(verify_result) and all(verify_result)
+
+                if syntax and not isSyntax:
+                    syntax_count += 1
+                    isSyntax = True  # 修正赋值操作
 
                 # 更新有效计数（每个文件只计一次）
                 if valid and not isValid:
@@ -78,19 +88,4 @@ def main():
 
             print('-----------------------------------------')
 
-    print_statistics(valid_count, correct_count, file_count, error_files)
-    
-
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-    main()
+    print_statistics(syntax_count, valid_count, correct_count, file_count, error_files)
