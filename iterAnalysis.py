@@ -12,7 +12,7 @@ class IterationAnalysis:
         self.proof_auto_file = f"../ip_postcond/goal/{self.file_name}_proof_auto.v"
         self.proof_manual_file = f"../ip_postcond/goal/{self.file_name}_proof_manual.v"
         self.json_file = f"iteration/{self.file_name}.json"
-        self.input_file = f"../../LoopInvGen_V1/unloop/{self.file_name}.c"
+        self.input_file = f"../../LLM4LoopInvGen/unloop/{self.file_name}.c"
 
     def delete_file_if_exists(self, file_path):
         """

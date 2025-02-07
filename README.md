@@ -20,78 +20,26 @@ the tool using large language model to automatically generate inductive loop inv
 ========================================
                   统计结果                  
 ========================================
-有效个数：50/65
-有效率： 76.92%
-正确个数: 38/65
-正确率: 58.46%
+合法个数：64/65
+合法率： 98.46%
+有效个数：53/65
+有效率： 81.54%
+正确个数: 53/65
+正确率: 81.54%
 ----------------------------------------
 错误的文件名:
-  - loop_51.c
-  - loop_42.c
-  - loop_43.c
   - loop_62.c
-  - loop_46.c
-  - loop_15.c
   - loop_64.c
   - loop_17.c
-  - loop_59.c
-  - loop_60.c
-  - loop_26.c
-  - loop_31.c
   - loop_63.c
   - loop_40.c
-  - loop_24.c
-  - loop_48.c
   - loop_16.c
-  - loop_53.c
   - loop_36.c
   - loop_35.c
   - loop_61.c
-  - loop_20.c
-  - loop_44.c
+  - loop_27.c
   - loop_38.c
   - loop_37.c
-  - loop_21.c
-  - loop_18.c
-========================================
-```
-
-### result for deepseek-r1
-
-```
------------------------------------------
-========================================
-                  统计结果
-========================================
-有效个数：60/65
-有效率： 92.31%
-正确个数: 42/65
-正确率: 64.62%
-----------------------------------------
-错误的文件名:
-  - loop_13.c
-  - loop_65.c
-  - loop_51.c
-  - loop_42.c
-  - loop_43.c
-  - loop_62.c
-  - loop_46.c
-  - loop_59.c
-  - loop_19.c
-  - loop_60.c
-  - loop_6.c
-  - loop_26.c
-  - loop_45.c
-  - loop_63.c
-  - loop_40.c
-  - loop_24.c
-  - loop_48.c
-  - loop_53.c
-  - loop_61.c
-  - loop_44.c
-  - loop_38.c
-  - loop_21.c
-  - loop_18.c
 ========================================
 ```
 
@@ -102,47 +50,34 @@ the tool using large language model to automatically generate inductive loop inv
 ========================================
                   统计结果                  
 ========================================
-有效个数：45/65
-有效率： 69.23%
-正确个数: 30/65
-正确率: 46.15%
+合法个数：57/65
+合法率： 87.69%
+有效个数：47/65
+有效率： 72.31%
+正确个数: 45/65
+正确率: 69.23%
 ----------------------------------------
 错误的文件名:
-  - loop_65.c
-  - loop_51.c
-  - loop_42.c
-  - loop_43.c
   - loop_62.c
   - loop_7.c
   - loop_23.c
-  - loop_46.c
   - loop_15.c
-  - loop_8.c
   - loop_64.c
-  - loop_59.c
-  - loop_19.c
-  - loop_60.c
-  - loop_26.c
-  - loop_45.c
+  - loop_17.c
   - loop_63.c
   - loop_40.c
   - loop_9.c
   - loop_24.c
-  - loop_48.c
+  - loop_25.c
   - loop_16.c
-  - loop_53.c
-  - loop_10.c
   - loop_36.c
   - loop_47.c
   - loop_54.c
   - loop_35.c
   - loop_61.c
   - loop_20.c
-  - loop_44.c
   - loop_38.c
   - loop_37.c
-  - loop_21.c
-  - loop_18.c
 ========================================
 ```
 

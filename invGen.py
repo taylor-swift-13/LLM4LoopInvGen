@@ -2,6 +2,7 @@ import openai
 import argparse
 import json
 import re
+from sympy import symbols, Eq, solve, sympify
 from loopAnalysis import LoopAnalysis
 
 class InvGenerator:
@@ -9,7 +10,7 @@ class InvGenerator:
         # OpenAI 客户端初始化
         self.client = openai.OpenAI(
             base_url="https://yunwu.ai/v1",
-            api_key="my-key"
+            api_key="sk-S3fNVvxTTDcQymGTYJU35ZheQZ6cON1zZW0rMGeM8F1nIA6l"
         )
         # 初始化消息列表
         self.messages = [
@@ -100,9 +101,57 @@ class InvGenerator:
        # Join the list back into a single string and return
         return "\n".join(updated_code)
     
-    def append_simple_annotations(self, annotations, var_map , updated_loop_condition, cond, key, value):
+
+    def append_notin_annotations(self, annotations, var_map , updated_loop_condition):
+        invariant_annotation = ''
+
+        init_invariants = []
+        for var in var_map:
+            init_value = var_map[var]
+            init_value = self.filter_conditon(init_value)
+            init_invariants.append( f'({var} == {init_value})')
+        
+        init_invariant = '&&'.join(init_invariants)
+
+        def contains_no_letters(updated_loop_condition):
+            # 检查字符串中是否含有字母
+            if re.search(r'[a-zA-Z]', updated_loop_condition):
+                return False  # 含有字母
+            else:
+                return True  # 不含字母
+            
+        if not contains_no_letters(updated_loop_condition):
+            
+            invariant_annotation = f"loop invariant (!({updated_loop_condition})) ==> ({init_invariant});"
+
+        # Iterate through the annotations
+        updated_code = []
+        found_first_annotation = False
+
+        for line in annotations.splitlines():
+            if not found_first_annotation and '/*@' in line:
+            # Append the current line
+                updated_code.append(line)
+            # Insert the invariant annotations below the first occurrence of /*@
+                updated_code.append(f"          {invariant_annotation}")
+                found_first_annotation = True
+            else:
+            # Keep other lines as they are
+                updated_code.append(line)
+
+       # Join the list back into a single string and return
+        return "\n".join(updated_code)
+            
+        
+
+
+    
+
+    def append_special_annotations(self, annotations, var_map , updated_loop_condition, cond, key, value):
     
         invariant_annotation = ''
+
+        print("simple")
 
         init_invariants = []
         for var in var_map:
@@ -135,7 +184,72 @@ class InvGenerator:
                 invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> ( ({init_invariant}) || ({key} == {value}) );"
             else:
                 invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> ( ({init_invariant}) ||  ( ({cond})  ==> ({key} == {value}) ) );"
+            
+        
        
+        # Iterate through the annotations
+        updated_code = []
+        found_first_annotation = False
+
+        for line in annotations.splitlines():
+            if not found_first_annotation and '/*@' in line:
+            # Append the current line
+                updated_code.append(line)
+            # Insert the invariant annotations below the first occurrence of /*@
+                updated_code.append(f"          {invariant_annotation}")
+                found_first_annotation = True
+            else:
+            # Keep other lines as they are
+                updated_code.append(line)
+
+       # Join the list back into a single string and return
+        return "\n".join(updated_code)
+
+
+
+
+    def append_simple_annotations(self, annotations, var_map , updated_loop_condition, cond, key, value):
+    
+        invariant_annotation = ''
+
+
+        init_invariants = []
+        for var in var_map:
+            init_value = var_map[var]
+            init_value = self.filter_conditon(init_value)
+            init_invariants.append( f'({var} == {init_value})')
+        
+        init_invariant = '&&'.join(init_invariants)
+
+
+        value = self.filter_conditon(value)
+        cond = self.filter_conditon(cond)
+
+
+        def contains_no_letters(updated_loop_condition):
+            # 检查字符串中是否含有字母
+            if re.search(r'[a-zA-Z]', updated_loop_condition):
+                return False  # 含有字母
+            else:
+                return True  # 不含字母
+
+        if contains_no_letters(updated_loop_condition):
+            if cond == '':
+                invariant_annotation = f"loop invariant ({init_invariant}) || ({key} == {value}) ;"
+            elif '@last' not in cond :
+                invariant_annotation = f"loop invariant ({init_invariant}) || ( ({cond})  ==> ({key} == {value}) ) ;"
+            else :
+                invariant_annotation = f"loop invariant ({init_invariant}) || (PLACE_HOLDER_{key}) ;"
+        else:
+            if cond == '':
+                invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> ( ({init_invariant}) || ({key} == {value}) );"
+            elif '@last' not in cond :
+                invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> ( ({init_invariant}) ||  ( ({cond})  ==> ({key} == {value}) ) );"
+            else:
+                invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> ( ({init_invariant}) || (PLACE_HOLDER_{key}) );"
+            
+    
+                
        
         # Iterate through the annotations
         updated_code = []
@@ -155,7 +269,9 @@ class InvGenerator:
        # Join the list back into a single string and return
         return "\n".join(updated_code)
     
-    def append_medium_annotations(self,annotations, var_map ,updated_loop_condition,key):
+    
+    #def append_medium_annotations(self,annotations, var_map ,updated_loop_condition,key):
+    def append_medium_annotations(self,annotations,var_map,updated_loop_condition,cond,key):
         
         init_invariants = []
         for var in var_map:
@@ -174,11 +290,31 @@ class InvGenerator:
                 return True  # 不含字母
 
         
+        # if contains_no_letters(updated_loop_condition):
+        # # 未进入循环
+        #     invariant_annotation= f"loop invariant  ( {init_invariant} ) || PLACE_HOLDER_{key} ;"
+        # else:
+        #     invariant_annotation= f"loop invariant ({updated_loop_condition}) ==> ( ( {init_invariant} ) || PLACE_HOLDER_{key} );"
+
+        cond = self.filter_conditon(cond)
+
+
+
         if contains_no_letters(updated_loop_condition):
-        # 未进入循环
-            invariant_annotation= f"loop invariant  ( {init_invariant} ) || PLACE_HOLDER_{key} ;"
+            if cond == '':
+                invariant_annotation = f"loop invariant ({init_invariant}) || (PLACE_HOLDER_{key}) ;"
+            elif '@last' not in cond :
+                invariant_annotation = f"loop invariant ({init_invariant}) || ( ({cond})  ==> (PLACE_HOLDER_{key}) ) ;"
+            else:
+                invariant_annotation = f"loop invariant ({init_invariant}) || (PLACE_HOLDER_{key});"
         else:
-            invariant_annotation= f"loop invariant ({updated_loop_condition}) ==> ( ( {init_invariant} ) || PLACE_HOLDER_{key} );"
+            if cond == '':
+                invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> ( ({init_invariant}) || (PLACE_HOLDER_{key}) );"
+            elif '@last' not in cond :
+                invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> ( ({init_invariant}) ||  ( ({cond})  ==> (PLACE_HOLDER_{key}) ) );"
+            else:
+                invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> ( ({init_invariant}) || (PLACE_HOLDER_{key}) );"
+
 
 
 
@@ -199,8 +335,10 @@ class InvGenerator:
        # Join the list back into a single string and return
         return "\n".join(updated_code)
     
-    def append_hard_annotations(self,annotations, updated_loop_condition,key):
+    #def append_hard_annotations(self,annotations, updated_loop_condition,key):
+    def append_hard_annotations(self,annotations,updated_loop_condition,cond,key):
 
+        
         def contains_no_letters(updated_loop_condition):
             # 检查字符串中是否含有字母
             if re.search(r'[a-zA-Z]', updated_loop_condition):
@@ -208,12 +346,31 @@ class InvGenerator:
             else:
                 return True  # 不含字母
             
+        # if contains_no_letters(updated_loop_condition):
+        #     invariant_annotation= f"loop invariant PLACE_HOLDER_{key} ;"
+        # else:
+        #     invariant_annotation= f"loop invariant ({updated_loop_condition}) ==> ( PLACE_HOLDER_{key} );"
+
+        
+        cond = self.filter_conditon(cond)
+
         if contains_no_letters(updated_loop_condition):
-
-            invariant_annotation= f"loop invariant  PLACE_HOLDER_{key} ;"
+            if cond == '':
+                invariant_annotation = f"loop invariant PLACE_HOLDER_{key} ;"
+            elif '@last' not in cond :
+                invariant_annotation = f"loop invariant ({cond})  ==> (PLACE_HOLDER_{key})  ;"
+            else:
+                invariant_annotation = f"loop invariant PLACE_HOLDER_{key} ;"
         else:
-            invariant_annotation= f"loop invariant ({updated_loop_condition}) ==> ( PLACE_HOLDER_{key} );"
+            if cond == '':
+                invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> (PLACE_HOLDER_{key});"
+            elif '@last' not in cond :
+                invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> ( ({cond})  ==> (PLACE_HOLDER_{key}) );"
+            else:
+                invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> (PLACE_HOLDER_{key});"
 
+        
+        
         updated_code = []
         found_first_annotation = False
 
@@ -232,7 +389,68 @@ class InvGenerator:
         return "\n".join(updated_code)
 
 
+    def solve_statemap(self,statemap):
+        """
+        输入: statemap 字典，格式如 {'x': 'x@last + y@last', 'y': 'y@last + 1'}
+        输出: 包含所有 key@last 变量解的字典
+        """
+        # 提取所有当前变量名（如 'x', 'y'）
+        current_vars = list(statemap.keys())
+        
+        # 从所有表达式中提取所有 @last 变量名（如 'x@last', 'y@last'）
+        last_vars = set()
+        pre_vars = set()
+        for expr in statemap.values():
+            last_matches = re.findall(r'\b([a-zA-Z_]\w*)@last\b', expr)
+            last_vars.update(f"{m}@last" for m in last_matches)
 
+            pre_matches = re.findall(r'\b([a-zA-Z_]\w*)@pre\b', expr)
+            pre_vars.update(f"{m}@pre" for m in pre_matches)
+
+        last_vars = list(last_vars)
+        pre_vars = list(pre_vars)
+        
+        # 创建符号变量映射表
+        # 1. 当前变量直接使用原名称（如 symbols('x'), symbols('y')）
+        # 2. @last 变量将 @ 替换为 _ （如 'x@last' -> symbols('x_last')）
+        symbol_map = {}
+        for var in current_vars:
+            symbol_map[var] = symbols(var)  # 当前变量符号
+        for lvar in last_vars:
+            safe_name = lvar.replace('@', '_')  # 合法符号名
+            symbol_map[lvar] = symbols(safe_name)  # @last 变量符号
+        for pvar in pre_vars:
+            safe_name = pvar.replace('@', '_')  # 合法符号名
+            symbol_map[pvar] = symbols(safe_name)  # @pre 变量符号
+        
+        # 构建方程组
+        equations = []
+        for key in statemap:
+            expr_str = statemap[key]
+            # 将表达式中的 @last 变量替换为符号变量（如 'x@last' -> x_last）
+            parsed_expr = expr_str.replace('@', '_') 
+            equations.append(Eq(symbol_map[key], sympify(parsed_expr)))  # 等式 key = expr
+        
+        # 提取所有 @last 变量的符号作为未知数
+        unknowns = [symbol_map[lvar] for lvar in last_vars]
+        
+        # 解方程组
+        solutions = solve(equations, unknowns, dict=True)
+        if not solutions:
+            return None
+        
+        # 将解转换为原始 @last 变量名的字典
+        result = {}
+        for lvar in last_vars :
+            sym = symbol_map[lvar]
+            ans = str(solutions[0].get(sym, None))
+
+            for pvar in pre_vars:
+                ans = ans.replace(str(symbol_map[pvar]),pvar)
+
+            result[lvar] = ans
+        
+        return result
 
     def get_json_at_index(self,json_file, idx):
         with open(json_file, 'r') as file:
@@ -279,14 +497,14 @@ class InvGenerator:
 
         # 获取助手的响应
         response = self.client.chat.completions.create(
-            model="gpt-4o",
+            model="deepseek-v3",
             messages=self.messages,
             temperature=0.7
         )
 
         # 处理响应
         assistant_response = response.choices[0].message.content
-        #assistant_response = re.sub(r'<think>.*?</think>', '', assistant_response, flags=re.DOTALL)
+        # assistant_response = re.sub(r'<think>.*?</think>', '', assistant_response, flags=re.DOTALL)
         assistant_response = assistant_response.replace('```c', '').replace('```', '')
         return assistant_response
 
@@ -338,25 +556,40 @@ class InvGenerator:
         # 使用正则表达式进行替换
         updated_loop_condition = self.filter_conditon(updated_loop_condition)
 
-
         unloop_paths = analysis.unloop_paths
+
+        annotations  = self.append_notin_annotations(annotations,var_map,updated_loop_condition)
 
         for path in unloop_paths:
             states = path['state']
             cond = path['path_condition']
             state_map = self.extract_var_map_from_state(states)
             print(state_map)
+            reverse_map = self.solve_statemap(state_map)
+            print(reverse_map)
+
+            if reverse_map != None:
+                for key in reverse_map.keys():
+                    value = reverse_map[key]
+                    cond = cond.replace(key,value)
             
+
+
             for key in state_map.keys():
                 if key not in unchanged_vars:
                     value = state_map[key]
-                    if '@last' not in value :
+                    if '@last' not in value and len(unloop_paths) == 1:
+                        # 可以不反解
+                        annotations  = self.append_special_annotations(annotations,var_map,updated_loop_condition,cond,key,value)
+                    elif '@last' not in value :
                         # 非迭代关系
                         annotations  = self.append_simple_annotations(annotations,var_map,updated_loop_condition,cond,key,value)
-                    elif f"{key}@last" not in value:
-                        annotations  = self.append_medium_annotations(annotations,var_map,updated_loop_condition,key)
+                    elif f"{key}@last" not in value :
+                        # annotations  = self.append_medium_annotations(annotations,var_map,updated_loop_condition,key)
+                        annotations  = self.append_medium_annotations(annotations,var_map,updated_loop_condition,cond,key)
                     else :
-                        annotations  = self.append_hard_annotations(annotations,updated_loop_condition,key)
+                        # annotations  = self.append_hard_annotations(annotations,updated_loop_condition,key)
+                        annotations  = self.append_hard_annotations(annotations,updated_loop_condition,cond,key)
 
         print(annotations)
 
@@ -369,7 +602,6 @@ class InvGenerator:
         #  获取 ACSL 注释
         annotations = self.get_annotations(user_prompt)
 
-        
         
         print(annotations)
 

@@ -23,7 +23,7 @@ class LoopAnalysis:
         # OpenAI 客户端初始化
         self.client = openai.OpenAI(
             base_url="https://yunwu.ai/v1",
-            api_key="sk-KBkzvVT2JoKyUhmd0f4tkpCKXQNuSBMJpInHMFTnkKDI6zAA"
+            api_key="my-key"
         )
         # 初始化消息列表
         self.messages = [
@@ -43,7 +43,8 @@ class LoopAnalysis:
             if key not in self.unchanged_vars:
                 return key + '@last'
             else:
-                return key_with_suffix  # 不修改
+                return self.var_map[key]    # v@pre 修改为循环初始值 var_map
+            
         
         # 正则表达式匹配所有的 v@pre 格式
         pattern = r'\b([a-zA-Z_]\w*)@pre\b'
@@ -135,8 +136,16 @@ class LoopAnalysis:
                     end_index += 1
 
         code_list[end_index-1] = f'/*@ Print user assertion at number End*/ \n }}'
+
+        code = ''.join(code_list[begin_idx:end_index])
+
+        clean_pattern = r'if\s*\([^)]*\)\s*\{\s*\}'
+    
+        # 使用 re.sub 替换匹配的空 if 块为空字符串
+        clean_code = re.sub(clean_pattern, '', code)
         
-        unloop = function_signature + vst_annotations + ''.join(code_list[begin_idx:end_index])
+        unloop = function_signature + vst_annotations + clean_code
+
 
         file_name = f"{self.json_file.split('/')[1].split('.')[0]}_{self.idx}.c"
 
