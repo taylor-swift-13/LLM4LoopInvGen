@@ -18,18 +18,6 @@ class LoopAnalysis:
         self.unchanged_vars = None
         self.unloop_name =None
         self.unloop_paths = None
-
-
-        # OpenAI 客户端初始化
-        self.client = openai.OpenAI(
-            base_url="https://yunwu.ai/v1",
-            api_key="my-key"
-        )
-        # 初始化消息列表
-        self.messages = [
-            {"role": "system", "content": "You are a helpful assistant."}
-        
-        ]
     
     def replace_pre_with_last(self, state, path_condition):
         """将不在 unchanged_vars 中的变量的 v@pre 替换为 v@last"""

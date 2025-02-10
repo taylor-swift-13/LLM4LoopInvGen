@@ -103,7 +103,7 @@ class InvGenerator:
     
 
     def append_notin_annotations(self, annotations, var_map , updated_loop_condition):
-        invariant_annotation = ''
+        invariant_annotation = None
 
         init_invariants = []
         for var in var_map:
@@ -133,8 +133,9 @@ class InvGenerator:
             # Append the current line
                 updated_code.append(line)
             # Insert the invariant annotations below the first occurrence of /*@
-                updated_code.append(f"          {invariant_annotation}")
-                found_first_annotation = True
+                if invariant_annotation:
+                    updated_code.append(f"          {invariant_annotation}")
+                    found_first_annotation = True
             else:
             # Keep other lines as they are
                 updated_code.append(line)
@@ -150,8 +151,6 @@ class InvGenerator:
     def append_special_annotations(self, annotations, var_map , updated_loop_condition, cond, key, value):
     
         invariant_annotation = ''
-
-        print("simple")
 
         init_invariants = []
         for var in var_map:
@@ -269,6 +268,16 @@ class InvGenerator:
        # Join the list back into a single string and return
         return "\n".join(updated_code)
     
+    def get_user_prompt(self, full_code, loop_content,pre_condition):
+
+        # 从文件中读取 prompt 模板
+        with open("prompt/prompt_1.txt", "r", encoding="utf-8") as file:
+            prompt_template = file.read()
+
+        # 替换模板中的 {code} 占位符
+        user_prompt = prompt_template.format(code = full_code,content=loop_content,pre_cond = pre_condition)
+
+        return user_prompt
     
     #def append_medium_annotations(self,annotations, var_map ,updated_loop_condition,key):
     def append_medium_annotations(self,annotations,var_map,updated_loop_condition,cond,key):
@@ -296,6 +305,7 @@ class InvGenerator:
         # else:
         #     invariant_annotation= f"loop invariant ({updated_loop_condition}) ==> ( ( {init_invariant} ) || PLACE_HOLDER_{key} );"
 
+        
         cond = self.filter_conditon(cond)
 
 
@@ -351,7 +361,6 @@ class InvGenerator:
         # else:
         #     invariant_annotation= f"loop invariant ({updated_loop_condition}) ==> ( PLACE_HOLDER_{key} );"
 
-        
         cond = self.filter_conditon(cond)
 
         if contains_no_letters(updated_loop_condition):
@@ -387,70 +396,6 @@ class InvGenerator:
 
        # Join the list back into a single string and return
         return "\n".join(updated_code)
-
-
-    def solve_statemap(self,statemap):
-        """
-        输入: statemap 字典，格式如 {'x': 'x@last + y@last', 'y': 'y@last + 1'}
-        输出: 包含所有 key@last 变量解的字典
-        """
-        # 提取所有当前变量名（如 'x', 'y'）
-        current_vars = list(statemap.keys())
-        
-        # 从所有表达式中提取所有 @last 变量名（如 'x@last', 'y@last'）
-        last_vars = set()
-        pre_vars = set()
-        for expr in statemap.values():
-            last_matches = re.findall(r'\b([a-zA-Z_]\w*)@last\b', expr)
-            last_vars.update(f"{m}@last" for m in last_matches)
-
-            pre_matches = re.findall(r'\b([a-zA-Z_]\w*)@pre\b', expr)
-            pre_vars.update(f"{m}@pre" for m in pre_matches)
-
-        last_vars = list(last_vars)
-        pre_vars = list(pre_vars)
-        
-        # 创建符号变量映射表
-        # 1. 当前变量直接使用原名称（如 symbols('x'), symbols('y')）
-        # 2. @last 变量将 @ 替换为 _ （如 'x@last' -> symbols('x_last')）
-        symbol_map = {}
-        for var in current_vars:
-            symbol_map[var] = symbols(var)  # 当前变量符号
-        for lvar in last_vars:
-            safe_name = lvar.replace('@', '_')  # 合法符号名
-            symbol_map[lvar] = symbols(safe_name)  # @last 变量符号
-        for pvar in pre_vars:
-            safe_name = pvar.replace('@', '_')  # 合法符号名
-            symbol_map[pvar] = symbols(safe_name)  # @pre 变量符号
-        
-        # 构建方程组
-        equations = []
-        for key in statemap:
-            expr_str = statemap[key]
-            # 将表达式中的 @last 变量替换为符号变量（如 'x@last' -> x_last）
-            parsed_expr = expr_str.replace('@', '_') 
-            equations.append(Eq(symbol_map[key], sympify(parsed_expr)))  # 等式 key = expr
-        
-        # 提取所有 @last 变量的符号作为未知数
-        unknowns = [symbol_map[lvar] for lvar in last_vars]
-        
-        # 解方程组
-        solutions = solve(equations, unknowns, dict=True)
-        if not solutions:
-            return None
-        
-        # 将解转换为原始 @last 变量名的字典
-        result = {}
-        for lvar in last_vars :
-            sym = symbol_map[lvar]
-            ans = str(solutions[0].get(sym, None))
-
-            for pvar in pre_vars:
-                ans = ans.replace(str(symbol_map[pvar]),pvar)
-
-            result[lvar] = ans
-        
-        return result
 
     def get_json_at_index(self,json_file, idx):
         with open(json_file, 'r') as file:
@@ -497,7 +442,7 @@ class InvGenerator:
 
         # 获取助手的响应
         response = self.client.chat.completions.create(
-            model="deepseek-v3",
+            model="gpt-4o",
             messages=self.messages,
             temperature=0.7
         )
@@ -535,7 +480,6 @@ class InvGenerator:
         pre_conditon =loop.get('condition')
         pre_conditon =self.filter_conditon(pre_conditon)
         
-
         
         annotations =f'''
         /*@
@@ -565,13 +509,6 @@ class InvGenerator:
             cond = path['path_condition']
             state_map = self.extract_var_map_from_state(states)
             print(state_map)
-            reverse_map = self.solve_statemap(state_map)
-            print(reverse_map)
-
-            if reverse_map != None:
-                for key in reverse_map.keys():
-                    value = reverse_map[key]
-                    cond = cond.replace(key,value)
             
 
 
@@ -605,6 +542,12 @@ class InvGenerator:
         
         print(annotations)
 
+        for var in var_map.keys():
+            replacement = self.filter_conditon(var_map[var])
+            annotations = annotations.replace(f'\\at({var}, Pre)',replacement)
+        
+        
+        print(annotations)
         
         updated_code = self.update_loop_content(code,annotations,0)
         
