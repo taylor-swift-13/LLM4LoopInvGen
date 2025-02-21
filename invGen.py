@@ -2,7 +2,6 @@ import openai
 import argparse
 import json
 import re
-from sympy import symbols, Eq, solve, sympify
 from loopAnalysis import LoopAnalysis
 
 class InvGenerator:
@@ -10,7 +9,7 @@ class InvGenerator:
         # OpenAI 客户端初始化
         self.client = openai.OpenAI(
             base_url="https://yunwu.ai/v1",
-            api_key="sk-S3fNVvxTTDcQymGTYJU35ZheQZ6cON1zZW0rMGeM8F1nIA6l"
+            api_key="my-key"
         )
         # 初始化消息列表
         self.messages = [
