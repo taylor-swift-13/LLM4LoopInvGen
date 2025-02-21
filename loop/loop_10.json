@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "((((((x@pre) >= 0) && ((x@pre) <= 2)) && ((y@pre) <= 2)) && ((y@pre) >= 0)) && (((((z3 == (z3@pre)) * (z2 == (z2@pre))) * (z1 == (z1@pre))) * (y == (y@pre))) * (x == (x@pre))))",
+        "content": "/*@ Inv\n    z3 == z3@pre \n    && z2 == z2@pre \n    && z1 == z1@pre \n    && x >= 0 \n    && y >= 0 \n    && (x - y) == (x@pre - y@pre) \n    && ((x - x@pre) % 2 == 0) \n    && ((y - y@pre) % 2 == 0)\n*/\nwhile (1) {\n    x = x + 2;\n    y = y + 2;\n\n    if (x == 4) {\n        /*@ (y != 0) */\n    }\n}"
+    }
+]

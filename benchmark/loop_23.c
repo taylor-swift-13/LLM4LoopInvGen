@@ -1,4 +1,7 @@
-void foo() {
+void foo()
+/*@  Require emp
+     Ensure emp
+*/ {
   int c = 0;
 
    
@@ -11,9 +14,10 @@ void foo() {
         {
         c = 1;
         }
-    /*@ assert (c >= 0) && (c <= 40);*/
+
+      /*@ (c >= 0) && (c <= 40) */
   }
 
- 
+  
 
 }

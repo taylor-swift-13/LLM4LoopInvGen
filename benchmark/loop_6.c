@@ -1,4 +1,7 @@
 void foo(int v1, int v2 ,int v3,int size, int y, int z)
+/*@  Require emp
+     Ensure emp
+*/
 {
     
     int x = 0;
@@ -10,6 +13,7 @@ void foo(int v1, int v2 ,int v3,int size, int y, int z)
        }
     }
 
-    /*@ assert (size > 0) ==> (z >= y);  */
-
+   if(size > 0){
+    /*@ (z >= y) */
+    }
 }

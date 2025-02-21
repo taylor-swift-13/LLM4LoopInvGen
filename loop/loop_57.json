@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(((sn == 0) * (i == 1)) * (size == (size@pre)))",
+        "content": "/*@ Inv\n    size == size@pre \n    && sn == i - 1\n    && i >= 1\n    && i <= 9\n*/ \nwhile (i <= 8) {\n    i  = (i + 1);\n    sn  = (sn + 1);\n}"
+    }
+]

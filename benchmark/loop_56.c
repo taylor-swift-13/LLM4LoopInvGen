@@ -1,5 +1,8 @@
-/*@ requires size >= 1; */
-void foo(int size) {
+
+void foo(int size)
+/*@  Require size >= 1
+     Ensure emp
+*/ {
  
   int i = 1;
   int sn = 0;
@@ -12,6 +15,7 @@ void foo(int size) {
     
   }
 
-  /*@ assert (sn != size) ==> (sn == 0);*/
-
+  if(sn != size){
+  /*@ (sn == 0)*/
+  }
 }

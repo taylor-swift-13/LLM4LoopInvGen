@@ -1,4 +1,7 @@
 void foo(int y,int z)
+/*@  Require emp
+     Ensure emp
+*/
 {
     int x = 0;   
 
@@ -11,5 +14,5 @@ void foo(int y,int z)
     }
 
    
-    /*@ assert z >= y; */
+    /*@  z >= y */
 }

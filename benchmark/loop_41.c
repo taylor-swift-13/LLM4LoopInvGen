@@ -1,7 +1,8 @@
-/*@ requires n >= 0; 
-    requires k >= 0;
-*/
-void foo(int n,int k) {
+
+void foo(int n,int k)
+/*@  Require n >= 0 && k >= 0
+     Ensure emp
+*/ {
   
   int i = 0;
   int j = 0;
@@ -14,6 +15,6 @@ void foo(int n,int k) {
     
 
   }
-  /*@ assert i + j + k > (2 * n); */;
+  /*@ i + j + k > (2 * n) */;
 
 }

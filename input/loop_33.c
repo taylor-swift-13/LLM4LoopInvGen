@@ -1,6 +1,8 @@
 
-/*@ requires x >= y  && y >= 0; */
-void foo(int x, int y) {
+void foo(int x, int y)
+/*@  Require x >= y  && y >= 0
+     Ensure emp
+*/ {
 
   int i = 0;
   
@@ -10,14 +12,11 @@ void foo(int x, int y) {
     if ( i < y )
     {
     i  = (i + 1);
-
-    }
-
-    if(i < y){
-     /*@ assert (i >= 0 && i < x); */
+    /*@  (i >= 0 && i < x ) */
     }
   }
 
- 
+
+
  
 }

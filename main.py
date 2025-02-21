@@ -1,8 +1,9 @@
 import os
-from outputVerify import OutputVerifier
-from invGen import InvGenerator
+from syntaxChecker import SyntaxChecker
+from yangfp.LLM4LoopInvGen.invGen import InvGenerator
+from yangfp.LLM4LoopInvGen.invMod import InvModifier
 
-def print_statistics(syntax_count,valid_count,correct_count, file_count, error_files):
+def print_statistics(syntax_count,file_count, error_files):
     """
     打印统计信息，包括正确个数、文件总数、正确率以及错误的文件名
     :param correct_count: 正确个数
@@ -15,10 +16,6 @@ def print_statistics(syntax_count,valid_count,correct_count, file_count, error_f
     print("=" * 40)
     print(f"合法个数：{syntax_count}/{file_count}")
     print(f"合法率： {(syntax_count / file_count) * 100:.2f}%")
-    print(f"有效个数：{valid_count}/{file_count}")
-    print(f"有效率： {(valid_count / file_count) * 100:.2f}%")
-    print(f"正确个数: {correct_count}/{file_count}")
-    print(f"正确率: {(correct_count / file_count) * 100:.2f}%")
     print("-" * 40)
 
     if error_files:
@@ -30,62 +27,69 @@ def print_statistics(syntax_count,valid_count,correct_count, file_count, error_f
     print("=" * 40)
 
 def main():
+
+
     # 指定要遍历的文件夹路径
     input_folder = 'input'
 
-    # 统计正确个数
-
-    valid_count = 0
-    correct_count = 0
+    # 统计合法文件个数
     syntax_count = 0
-    file_count = 65
+    file_count = 0
     error_files = []
 
-    for root, dirs, files in os.walk(input_folder):
-        for file in files:
+    # 初始化语法检查器
+    checker = SyntaxChecker()
 
-            flag = False
-            isValid = False
-            isSyntax = False
+    # 遍历文件夹中的所有文件
+    # for filename in os.listdir(input_folder):
+    #     if filename.endswith('.c'):  # 只处理 .c 文件
+    #         file_count += 1
+    #         # 运行语法检查
 
-            # 尝试最多3次验证
-            for _ in range(3):
-                # 每次尝试都创建新的生成器和验证器
+    #         if checker.run(filename):
+    #             syntax_count += 1
+    #         else:
+    #             print(f"{filename} fails : {checker.syntax_msg}")
+    #             error_files.append(filename)
+
+    # 遍历文件夹中的所有文件
+    for filename in os.listdir(input_folder):
+        if filename.endswith('.c'):  # 只处理 .c 文件
+            file_count += 1
+
+            # 尝试三次语法检查
+            success = False
+            for attempt in range(3):  # 最多尝试三次
+
+                # 运行不变式生成器
                 generator = InvGenerator()
-                generator.run(file)  # 传入完整路径
+                generator.run(filename)
 
-                verifier = OutputVerifier()
-                verifier.run(file)   # 传入完整路径
-
-                # 获取验证结果（假设返回的是列表）
-                validate_result = verifier.validate_result
-                verify_result = verifier.verify_result
-                syntax_error = verifier.syntax_error
-
-                # 判断验证结果
-                valid = bool(validate_result) and all(validate_result)
-                syntax = syntax_error ==''
-                satisfy = bool(verify_result) and all(verify_result)
-
-                if syntax and not isSyntax:
+                # 运行语法检查
+                if checker.run(filename):
+                    success = True
                     syntax_count += 1
-                    isSyntax = True  # 修正赋值操作
+                    break  # 如果通过，跳出尝试循环
+                else:
+                    error_message = checker.syntax_msg
+                    modifier = InvModifier(filename,error_message)
+                    modifier.run()
+                    if checker.run(filename):
+                        success = True
+                        syntax_count += 1
+                        break  # 如果通过，跳出尝试循环
 
-                # 更新有效计数（每个文件只计一次）
-                if valid and not isValid:
-                    valid_count += 1
-                    isValid = True  # 修正赋值操作
+            # 如果三次尝试都失败，记录错误信息
+            if not success:
+                error_files.append(filename)
+                
 
-                # 如果同时满足则标记为正确
-                if valid and satisfy:
-                    correct_count += 1
-                    flag = True
-                    break  # 成功则跳出尝试循环
 
-            # 记录无法验证的文件
-            if not flag:
-                error_files.append(file)
+    # 打印统计信息
+    print_statistics(syntax_count, file_count, error_files)
 
-            print('-----------------------------------------')
 
-    print_statistics(syntax_count, valid_count, correct_count, file_count, error_files)
+if __name__ == "__main__":
+    main()
+
+         

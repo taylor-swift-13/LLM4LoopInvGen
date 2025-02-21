@@ -1,5 +1,8 @@
 
-void foo(int n) {
+void foo(int n)
+/*@  Require emp
+     Ensure emp
+*/ {
 
   int i = 1;
   int sn = 0;
@@ -12,6 +15,8 @@ void foo(int n) {
 
   }
   
-  /*@ assert (sn!= 0) ==> (sn ==n); */
+  if(sn != 0){
+  /*@  (sn ==n)*/
+  }
 
 }

@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(((m == 0) * (x == 0)) * (n == (n@pre)))",
+        "content": "/*@ Inv   \n    n == n@pre \n    && x >= 0 \n    && x <= n \n    && m >= 0 \n    && m < n \n    && (x == 0 => m == 0) \n    && (x > 0 => m == x - 1)\n*/ \nwhile (x < n) {\n    m = x;\n    x = x + 1;\n}"
+    }
+]

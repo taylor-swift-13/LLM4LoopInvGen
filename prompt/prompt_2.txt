@@ -1,0 +1,26 @@
+Formal Semantics:
+
+1. store_int_array(address,len,l):
+
+	Meaning: This function or predicate represents the state of an integer array in memory.
+
+	Purpose: It is used to formally describe the contents of an array at a specific point in the program (e.g., before or after a function call).
+
+	Parameters:
+
+		address: The base address (pointer) of the array.
+
+		len: The length of the array.
+
+		l: The logical representation of the array's contents.
+    
+	for example：
+
+    	int arr[len];
+
+	can be discribed by 'store_int_array(arr,len,l)' in vst annotations.
+	You must only use 'l[i]' to get ith content of the array bu not 'arr[i]' in vst annotations.
+
+	/*@
+		store_int_array(arr, len, l) && (forall (k: Z), (0 <= k && k < i) => (l[k] == 1))
+    */

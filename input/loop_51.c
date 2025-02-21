@@ -1,6 +1,8 @@
 
-/*@ requires a <= m;*/
-void foo(int m,int j,int a,int c) {
+void foo(int m,int j,int a,int c)
+/*@  Require a <= m
+     Ensure emp
+*/ {
 
     int k = 0;
     
@@ -14,6 +16,6 @@ void foo(int m,int j,int a,int c) {
         k = k + 1;
     }
 
-  /*@ assert a <= m; */
+  /*@  a <= m */
 
 }

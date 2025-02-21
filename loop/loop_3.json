@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(((x == 0) * (z == (z@pre))) * (y == (y@pre)))",
+        "content": "/*@ Inv   \n    z == z@pre \n    && x >= 0 \n    && x <= 5 \n    && (x == 0 => y == y@pre) \n    && (x > 0 => y <= y@pre) \n    && (x > 0 => y == (z <= y@pre ? z@pre : y@pre))\n*/ \nwhile(x < 5) {\n    x += 1;\n    if( z <= y) {\n       y = z;\n    }\n}"
+    }
+]

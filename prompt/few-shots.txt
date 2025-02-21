@@ -1,0 +1,96 @@
+Example 1:
+
+Input:
+
+    ```c
+    // Full function:
+    int sum(int n) {{
+        int s = 0;
+        int i = 0;
+        
+        /*@ Inv >>> INFILL LOOP INVARIANT HERE <<<  */ 
+        while (i < n) {{
+            s += i;
+            i++;
+        }}
+
+        return s;
+    }}
+
+    // Pre-condition:
+    // ((i == 0) * (s == 0) * (n == n@pre) * (n@pre >= 0))
+
+
+    // Loop body:
+    /*@ Inv >>> INFILL LOOP INVARIANT HERE <<<  */ 
+    while (i < n) {{
+        s += i;
+        i++;
+    }}
+
+    ```
+
+Output:
+
+    ```c
+    /*@ Inv
+        n == n@pre 
+        && s == (i * (i - 1)) / 2 
+        && 0 <= i
+        && i <= n 
+    */ 
+    while (i < n) {{
+        s += i;
+        i++;
+    }}
+    ```
+
+Example 2:
+
+Input:
+
+    ```c
+    // Full function:
+    int foo(int *t, int len)
+    /*@ With l
+        Require 
+            0 < len 
+            && len < 100 
+            && store_int_array(t, len, l) 
+            && (forall (i: Z), (0 <= i && i < len) => (0 <= l[i] && l[i] < 100))
+        Ensure __return == 0 
+    */
+    {{
+        int i;
+
+        /*@ Inv >>> INFILL LOOP INVARIANT HERE <<< */
+        for (i = 0; i < len; i++) {{
+            t[i] = 1;
+        }}
+
+        return 0;
+    }}
+
+    // Pre-condition:
+    // ((((0 < (len@pre)) && ((len@pre) < 100)) && (forall i_47, (((0 <= i_47) && (i_47 < (len@pre))) => ((0 <= (l[i_47])) && ((l[i_47]) < 100))))) && (((undef_data_at((&i)) * (len == (len@pre))) * (t == (t@pre))) * store_int_array((t@pre), (len@pre), l)))
+
+    // Loop body:
+    /*@ Inv >>> INFILL LOOP INVARIANT HERE <<< */
+        for (i = 0; i < len; i++) {{
+            t[i] = 1;
+    }}
+    ```
+
+Output:
+
+    ```c
+    /*@ Inv
+        i >= 0 
+        && i <= len 
+        && len == len@pre 
+        && (forall (j: Z), (0 <= j && j < i) => ( l[j] == 1 ))
+    */
+    for (i = 0; i < len; i++) {{
+            t[i] = 1;
+    }}
+    ```

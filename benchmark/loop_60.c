@@ -1,4 +1,7 @@
-void foo(int x, int y,int z1,int z2,int z3) {
+void foo(int x, int y,int z1,int z2,int z3)
+/*@  Require emp
+     Ensure emp
+*/ {
 
   int i = x;
   int j = y;
@@ -11,6 +14,8 @@ void foo(int x, int y,int z1,int z2,int z3) {
 
   }
 
-  /*@ assert (i == j) ==> (y == 0); */
+  if(i == j){
+  /*@  (y == 0) */
+  }
 
 }

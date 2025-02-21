@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "((((0 < (len@pre)) && ((len@pre) < 100)) && (forall i_47, (((0 <= i_47) && (i_47 < (len@pre))) => ((0 <= (l[i_47])) && ((l[i_47]) < 100))))) && (((undef_data_at((&i)) * (len == (len@pre))) * (t == (t@pre))) * store_int_array((t@pre), (len@pre), l)))",
+        "content": "/*@ Inv  \n    len == len@pre \n    && t == t@pre \n    && 0 <= i \n    && i <= len \n    && (forall (j: Z), (0 <= j && j < i) => (l[j] == 1))\n*/ \nfor (i=0; i<len; i++) {\n    t[i] = 1;\n}"
+    }
+]

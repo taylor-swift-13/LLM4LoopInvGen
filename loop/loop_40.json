@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(((n@pre) >= 0) && ((((y == 0) * (x == 0)) * (i == 0)) * (n == (n@pre))))",
+        "content": "/*@ Inv\n    n == n@pre \n    && i >= 0 \n    && i <= n \n    && x >= 0 \n    && y >= 0 \n    && (x + y) == (3 * i)\n*/\nwhile (i < n) {\n\n    i  = i + 1;\n    if (i % 2 == 0) {\n        \n        x  = x + 1;\n        y  = y + 2;\n        \n    } else {\n        \n        x  = x + 2;\n        y  = y + 1;\n        \n    }\n\n}"
+    }
+]

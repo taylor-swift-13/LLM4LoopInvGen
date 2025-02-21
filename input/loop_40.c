@@ -1,5 +1,8 @@
-/*@ requires n >= 0; */
-void foo(int n) {
+
+void foo(int n)
+/*@  Require n >= 0
+     Ensure emp
+*/ {
   
   int i = 0;
   int x = 0;
@@ -8,7 +11,7 @@ void foo(int n) {
 
   while (i < n) {
     
-      i  = i + 1;
+    i  = i + 1;
       if ( i % 2 == 0) {
         
         x  = x + 1;
@@ -24,6 +27,6 @@ void foo(int n) {
 
   }
 
-  /*@ assert (3 * n) == (x + y); */
+  /*@ (3 * n) == (x + y) */
 
 }

@@ -1,5 +1,8 @@
 
 void foo(int n)
+/*@  Require emp
+     Ensure emp
+*/
 {
     int x = 1;
     int m = 1;
@@ -9,7 +12,9 @@ void foo(int n)
         m = x;
         x = x + 1;
     }
- 
-    /*@ assert (n > 1) ==> ((m <= n) && (m >= 1)); */
+
+    if(n > 1){
+    /*@  (m <= n) && (m >= 1) */
+  }
 
 }

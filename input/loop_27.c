@@ -1,4 +1,7 @@
-void foo() {
+void foo()
+/*@  Require emp
+     Ensure emp
+*/ {
     int x = 1;
     int y = 10;
     
@@ -8,6 +11,6 @@ void foo() {
         x = x +1;
     }
 
-    /*@ assert (y >= 0) && (y < 10); */
+    /*@ (y >= 0) && (y < 10) */
 
 }

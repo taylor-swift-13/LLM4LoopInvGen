@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "((j == 20) * (i == 1))",
+        "content": "/*@ Inv\n    (j == 20 - (i - 1)) \n    && (i >= 1) \n    && (j >= 13) \n    && (i <= 20) \n    && (j >= i)\n*/ \nwhile (j >= i) {\n    i = i + 2;\n    j = j - 1;\n}"
+    }
+]

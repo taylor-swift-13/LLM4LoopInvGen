@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(((((((x == 0) * (z == (z@pre))) * (y == (y@pre))) * (size == (size@pre))) * (v3 == (v3@pre))) * (v2 == (v2@pre))) * (v1 == (v1@pre)))",
+        "content": "/*@ Inv   \n    z == z@pre \n    && size == size@pre \n    && v3 == v3@pre \n    && v2 == v2@pre \n    && v1 == v1@pre \n    && x >= 0 \n    && x <= size \n    && (x == 0 => y == y@pre) \n    && (x > 0 => y == (z <= y@pre ? z : y@pre))\n*/ \nwhile(x < size) {\n    x += 1;\n    if( z <= y) {\n        y = z;\n    }\n}"
+    }
+]

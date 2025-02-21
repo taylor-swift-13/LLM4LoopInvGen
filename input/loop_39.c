@@ -1,4 +1,7 @@
-void foo() {
+void foo()
+/*@  Require emp
+     Ensure emp
+*/ {
 
     int x = 0;
     int y = 0;
@@ -7,6 +10,6 @@ void foo() {
     while(y >= 0) {
         y = y + x;
     }
-    /*@ assert y >= 0;*/
+    /*@ y >= 0 */
 
 }

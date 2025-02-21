@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "((((c == 0) * (v3 == (v3@pre))) * (v2 == (v2@pre))) * (v1 == (v1@pre)))",
+        "content": "/*@ Inv   \n    v3 == v3@pre && v2 == v2@pre && v1 == v1@pre \n    && c >= 0 && c <= 40\n*/ \nwhile (1) {\n    if (c != 40) {\n        c = c + 1;\n    }\n    else if (c == 40) {\n        c = 1;\n    }\n    /*@ (c >= 0) && (c <= 40) */\n}"
+    }
+]

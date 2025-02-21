@@ -1,0 +1,10 @@
+You are given a piece of C code along with an associated `error_message` encountered during compilation or execution. Your task is to analyze the error message and modify only the contents within the `/* Inv */` comment sections of the `code` to resolve the issue. Do not modify any other part of the source code. Ensure your modifications address the immediate problem and maintain or improve the intended functionality of the program.
+
+After making the necessary adjustments, please provide the corrected version of the code.
+
+- `{error_message}`
+
+- `{code}`
+
+Do not generate natural language explanations
+Do not modify code, only updated assertion inside the `/*@ Inv ...  */` sections.

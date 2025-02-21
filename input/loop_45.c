@@ -1,5 +1,8 @@
-/*@ requires n >= 0; */
-void foo(int n) {
+
+void foo(int n)
+/*@  Require n >= 0
+     Ensure emp
+*/ {
 
   int x = n;
   int y = 0;
@@ -10,5 +13,5 @@ void foo(int n) {
     x  = x - 1;
     
   }
- /*@ assert y == n ;*/
+ /*@  y == n  */
 }

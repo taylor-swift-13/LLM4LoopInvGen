@@ -1,4 +1,7 @@
-void foo(int j,int c,int t) {
+void foo(int j,int c,int t)
+/*@  Require emp
+     Ensure emp
+*/ {
 
     int i = 0;
 
@@ -12,8 +15,10 @@ while(1) {
                 i = j + t;
             }
         }
-    /*@ assert i >= 0; */
+
+        /*@ i >= 0 */
     } 
+
 
 
 }

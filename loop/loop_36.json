@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "((x == (-50)) * (y == (y@pre)))",
+        "content": "/*@ Inv\n    x == (-50 + (y@pre * (y - y@pre)) + ((y - y@pre) * ((y - y@pre) - 1)) / 2)\n    && y >= y@pre\n    && x < 0\n*/\nwhile (x < 0) {\n    x = x + y;\n    y = y + 1;\n}"
+    }
+]
