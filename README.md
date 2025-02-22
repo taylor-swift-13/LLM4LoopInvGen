@@ -18,18 +18,15 @@ the tool using large language model to automatically generate inductive loop inv
 ========================================
                   统计结果                  
 ========================================
-合法个数：58/66
-合法率： 87.88%
+合法个数：61/65
+合法率： 93.85%
 ----------------------------------------
 错误的文件名:
-  - loop_57.c
-  - loop_55.c
-  - loop_4.c
-  - loop_11.c
-  - loop_58.c
-  - loop_54.c
-  - loop_35.c
-  - loop_56.c
+  - loop_13.c
+  - loop_15.c
+  - loop_14.c
+  - loop_40.c
+  - loop_27.c
 ========================================
 ```
 
