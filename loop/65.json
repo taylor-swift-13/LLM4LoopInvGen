@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(x == 1) * (y == y@pre)",
+        "content": "while (x <= 100) {\n        y = 100 - x;\n        x = x +1;\n    }"
+    }
+]

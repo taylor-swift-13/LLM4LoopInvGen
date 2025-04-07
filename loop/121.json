@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(sn == 0) * (i == 1)",
+        "content": "while (i <= 8) {\n  \n      i  = (i + 1);\n      sn  = (sn + 1);\n      \n    }"
+    }
+]

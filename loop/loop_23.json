@@ -1,7 +1,0 @@
-[
-    {
-        "loop_id": 0,
-        "condition": "(c == 0)",
-        "content": "while (1) {\n      if ( c != 40 )\n        {\n        c  = c + 1;\n        }\n      else if ( c == 40 )\n        {\n        c = 1;\n        }\n\n      /*@ assert (c >= 0) && (c <= 40); */\n  }"
-    }
-]

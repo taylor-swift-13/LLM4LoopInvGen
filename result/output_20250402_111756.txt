@@ -1,0 +1,224 @@
+finshed_files:[]
+file:34.c
+pass@1
+合法个数：0/133
+合法率： 0.00%
+有效个数：0/133
+有效率： 0.00%
+正确个数: 0/133
+正确率: 0.00%
+正确文件:[]
+错误文件：[]
+------------------------------------------------------------
+pass@3
+合法个数：0/133
+合法率： 0.00%
+有效个数：0/133
+有效率： 0.00%
+正确个数: 0/133
+正确率: 0.00%
+正确文件:[]
+错误文件：[]
+------------------------------------------------------------
+pass@5
+合法个数：0/133
+合法率： 0.00%
+有效个数：0/133
+有效率： 0.00%
+正确个数: 0/133
+正确率: 0.00%
+正确文件:[]
+错误文件：[]
+Variable Maps: [{'x': 'n@pre', 'v3': 'v3@pre', 'v2': 'v2@pre', 'v1': 'v1@pre', 'n': 'n@pre'}]
+Path condition: [None]
+Pre condition: (x == n@pre) * (v3 == v3@pre) * (v2 == v2@pre) * (v1 == v1@pre) * (n == n@pre)
+Loop Condition: x > 0
+Updated Loop Conditions: ['n@pre > 0']
+Global Unchanged Variables ['v3', 'v2', 'v1', 'n']
+
+        /*@
+          loop invariant v3 == \at(v3, Pre);
+          loop invariant v2 == \at(v2, Pre);
+          loop invariant v1 == \at(v1, Pre);
+          loop invariant n == \at(n, Pre);
+        */
+        while (x > 0) {
+      
+       x  = x - 1;
+  
+    }
+        
+
+        /*@
+          loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(v3 == \at(v3, Pre))&&(v2 == \at(v2, Pre))&&(v1 == \at(v1, Pre))&&(n == \at(n, Pre))) || (PLACE_HOLDER_x));
+          loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre))&&(v3 == \at(v3, Pre))&&(v2 == \at(v2, Pre))&&(v1 == \at(v1, Pre))&&(n == \at(n, Pre)));
+          loop invariant v3 == \at(v3, Pre);
+          loop invariant v2 == \at(v2, Pre);
+          loop invariant v1 == \at(v1, Pre);
+          loop invariant n == \at(n, Pre);
+        */
+        while (x > 0) {
+      
+       x  = x - 1;
+  
+    }
+        
+### Analysis
+
+#### a. Purpose and Structure of the Loop:
+- **Purpose**: The loop is designed to decrement the variable `x` from its initial value `n` down to 0. This is a simple countdown loop.
+- **Structure**:
+  - **Loop Condition**: `x > 0`
+  - **Loop Body**: `x = x - 1;`
+  - **Relevant Variables**: `x`, initialized to `n`.
+
+#### b. Discussion of the Loop Invariant:
+- **Loop Invariant**:
+  - `(\at(n, Pre) > 0) ==> (((x == \at(n, Pre)) && (v3 == \at(v3, Pre)) && (v2 == \at(v2, Pre)) && (v1 == \at(v1, Pre)) && (n == \at(n, Pre))) || (x <= \at(n, Pre) && x >= 0))`
+  - `(!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre)) && (v3 == \at(v3, Pre)) && (v2 == \at(v2, Pre)) && (v1 == \at(v1, Pre)) && (n == \at(n, Pre)))`
+  - `v3 == \at(v3, Pre)`
+  - `v2 == \at(v2, Pre)`
+  - `v1 == \at(v1, Pre)`
+  - `n == \at(n, Pre)`
+- **Validity**:
+  - **Establishment**: Before the loop starts, `x` is initialized to `n`, so the invariant holds.
+  - **Preservation**: During each iteration, `x` is decremented by 1. The invariant ensures that `x` remains between 0 and `n`.
+  - **Termination**: When the loop terminates, `x` is 0, satisfying the invariant.
+
+#### c. Termination Analysis of the Loop:
+- **Variable Assignments**: When the loop terminates, `x` is 0.
+- **Satisfaction of Invariant**: The invariant `x <= \at(n, Pre) && x >= 0` holds true when `x` is 0.
+
+#### d. Correctness of the Post-condition:
+- **Post-condition**: `/*@ assert (n >= 0) ==> (x == 0); */`
+- **Explanation**: When the loop exits, `x` is 0. The invariant combined with the negation of the loop condition (`x <= 0`) ensures that `x` is 0, satisfying the post-condition.
+
+#### e. Implication of the Pre-condition:
+- **Pre-condition**: `(x == \at(n, Pre)) * (v3 == \at(v3, Pre)) * (v2 == \at(v2, Pre)) * (v1 == \at(v1, Pre)) * (n == \at(n, Pre))`
+- **Explanation**: The pre-condition directly initializes `x` to `n` and ensures that `v1`, `v2`, `v3`, and `n` remain unchanged. This establishes the initial state required for the invariant.
+
+### Loop Body with Invariant Annotations
+
+```c
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre)) && (v3 == \at(v3, Pre)) && (v2 == \at(v2, Pre)) && (v1 == \at(v1, Pre)) && (n == \at(n, Pre))) || (x <= \at(n, Pre) && x >= 0));
+  loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre)) && (v3 == \at(v3, Pre)) && (v2 == \at(v2, Pre)) && (v1 == \at(v1, Pre)) && (n == \at(n, Pre)));
+  loop invariant v3 == \at(v3, Pre);
+  loop invariant v2 == \at(v2, Pre);
+  loop invariant v1 == \at(v1, Pre);
+  loop invariant n == \at(n, Pre);
+*/
+while (x > 0) {
+  x = x - 1;
+}
+```
+
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre)) && (v3 == \at(v3, Pre)) && (v2 == \at(v2, Pre)) && (v1 == \at(v1, Pre)) && (n == \at(n, Pre))) || (x <= \at(n, Pre) && x >= 0));
+  loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre)) && (v3 == \at(v3, Pre)) && (v2 == \at(v2, Pre)) && (v1 == \at(v1, Pre)) && (n == \at(n, Pre)));
+  loop invariant v3 == \at(v3, Pre);
+  loop invariant v2 == \at(v2, Pre);
+  loop invariant v1 == \at(v1, Pre);
+  loop invariant n == \at(n, Pre);
+*/
+while (x > 0) {
+  x = x - 1;
+}
+
+
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre)) && (v3 == \at(v3, Pre)) && (v2 == \at(v2, Pre)) && (v1 == \at(v1, Pre)) && (n == \at(n, Pre))) || (x <= \at(n, Pre) && x >= 0));
+  loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre)) && (v3 == \at(v3, Pre)) && (v2 == \at(v2, Pre)) && (v1 == \at(v1, Pre)) && (n == \at(n, Pre)));
+  loop invariant v3 == \at(v3, Pre);
+  loop invariant v2 == \at(v2, Pre);
+  loop invariant v1 == \at(v1, Pre);
+  loop invariant n == \at(n, Pre);
+*/
+while (x > 0) {
+  x = x - 1;
+}
+
+syntax Correct
+Validate:
+[True, True, True, True, True, True]
+
+Verify:
+[True]
+
+syntax Correct
+Validate:
+[True, True, True, True, True, True]
+
+Verify:
+[True]
+
+void foo(int n,int v1,int v2,int v3)  
+/*@ Require emp 
+   Ensure emp
+*/ 
+    {
+
+    int x = n;
+    
+    
+   
+  /*@ Print user assertion at number LoopEntry_0*/ 
+
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre)) && (v3 == \at(v3, Pre)) && (v2 == \at(v2, Pre)) && (v1 == \at(v1, Pre)) && (n == \at(n, Pre))) || (x <= \at(n, Pre) && x >= 0));
+  loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre)) && (v3 == \at(v3, Pre)) && (v2 == \at(v2, Pre)) && (v1 == \at(v1, Pre)) && (n == \at(n, Pre)));
+  loop invariant v3 == \at(v3, Pre);
+  loop invariant v2 == \at(v2, Pre);
+  loop invariant v1 == \at(v1, Pre);
+  loop invariant n == \at(n, Pre);
+*/
+while (x > 0) {
+  x = x - 1;
+}
+
+  
+   /*@  (n >= 0) => (x == 0) */
+  }
+syntax Correct
+Validate:
+[True, True, True, True, True, True]
+
+Verify:
+[True]
+
+已移动文件: 34.c -> finish
+-----------------------------------------
+
+文件 34.c 处理完成. 总耗时: 57.06694197654724
+-----------------------------------------
+finshed_files:['34.c']
+file:123.c
+pass@1
+合法个数：1/133
+合法率： 0.75%
+有效个数：1/133
+有效率： 0.75%
+正确个数: 1/133
+正确率: 0.75%
+正确文件:['34.c']
+错误文件：[]
+------------------------------------------------------------
+pass@3
+合法个数：1/133
+合法率： 0.75%
+有效个数：1/133
+有效率： 0.75%
+正确个数: 1/133
+正确率: 0.75%
+正确文件:['34.c']
+错误文件：[]
+------------------------------------------------------------
+pass@5
+合法个数：1/133
+合法率： 0.75%
+有效个数：1/133
+有效率： 0.75%
+正确个数: 1/133
+正确率: 0.75%
+正确文件:['34.c']
+错误文件：[]

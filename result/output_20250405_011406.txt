@@ -1,0 +1,145 @@
+finshed_files:[]
+file:29.c
+pass@1
+合法个数：0/133
+合法率： 0.00%
+有效个数：0/133
+有效率： 0.00%
+正确个数: 0/133
+正确率: 0.00%
+正确文件:[]
+错误文件：[]
+------------------------------------------------------------
+pass@3
+合法个数：0/133
+合法率： 0.00%
+有效个数：0/133
+有效率： 0.00%
+正确个数: 0/133
+正确率: 0.00%
+正确文件:[]
+错误文件：[]
+------------------------------------------------------------
+pass@5
+合法个数：0/133
+合法率： 0.00%
+有效个数：0/133
+有效率： 0.00%
+正确个数: 0/133
+正确率: 0.00%
+正确文件:[]
+错误文件：[]
+Sorted indices: [0]
+File found: ../sac_c_parser/test/../ip_postcond/goal/29_goal.v. Deleting the file.
+File found: ../sac_c_parser/test/../ip_postcond/goal/29_proof_auto.v. Deleting the file.
+File found: ../sac_c_parser/test/../ip_postcond/goal/29_proof_manual.v. Deleting the file.
+LoopEntry_0:
+(x == n@pre) * (n == n@pre)
+
+Successfully generated loop/29.json
+Variable Maps: [{'x': 'n@pre', 'n': 'n@pre'}]
+Path condition: [None]
+Pre condition: (x == n@pre) * (n == n@pre)
+Loop Condition: x > 0
+Updated Loop Conditions: ['n@pre > 0']
+Global Unchanged Variables ['n']
+
+            /*@
+          loop invariant n == \at(n, Pre);
+            */
+            while (x > 0) {
+      
+       x  = x - 1;
+  
+    }
+            
+
+            /*@
+          loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(n == \at(n, Pre))) || (PLACE_HOLDER_x));
+          loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre))&&(n == \at(n, Pre)));
+          loop invariant n == \at(n, Pre);
+            */
+            while (x > 0) {
+      
+       x  = x - 1;
+  
+    }
+            
+Let's analyze the provided C loop in detail and generate the necessary ACSL annotations for the loop invariants.
+
+### a. Purpose and Structure of the Loop:
+**Purpose:**
+The loop is designed to decrement the variable `x` until it reaches zero. It starts with `x` initialized to the value of `n`, and the loop continues as long as `x` is greater than zero. The ultimate goal is to ensure that when the loop exits, `x` is zero if `n` was initially non-negative.
+
+**Structure:**
+- **Loop Condition:** `x > 0`
+- **Loop Body:** `x = x - 1;`
+- **Relevant Variables:** `x` (initialized to `n`), `n` (input parameter).
+
+### b. Discussion of the Loop Invariant:
+**Loop Invariant:**
+1. `(\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(n == \at(n, Pre))) || (PLACE_HOLDER_x));`
+2. `!(\at(n, Pre) > 0) ==> ((x == \at(n, Pre))&&(n == \at(n, Pre)));`
+3. `n == \at(n, Pre);`
+
+**Validity of the Invariant:**
+- **Establishment:** Before the loop starts, `x` is initialized to `n`, so the invariant holds true. If `n` is greater than 0, then `x` is equal to `n`, and both conditions of the invariant are satisfied. If `n` is 0 or negative, then `x` is also 0, satisfying the second part of the invariant.
+  
+- **Preservation:** During each iteration of the loop, `x` is decremented by 1. If `x` was equal to `n` at the start of the iteration (and `n` was positive), it will remain true that `x` is equal to `n - k` where `k` is the number of iterations completed. Thus, the invariant continues to hold. If `n` was 0 or negative, the invariant remains satisfied as `x` will not change from 0.
+
+- **Termination:** When the loop condition `x > 0` becomes false, `x` will be 0. If `n` was initially non-negative, the invariant ensures that `x` is indeed 0 when the loop terminates, which satisfies the post-condition `assert (n >= 0) ==> (x == 0);`.
+
+### c. Termination Analysis of the Loop:
+When the loop terminates, `x` will be 0. This satisfies the loop invariant because:
+- If `n` was initially greater than 0, then `x` has been decremented to 0.
+- If `n` was 0, then `x` was initialized to 0 and remains 0.
+
+Thus, the invariant holds true at termination.
+
+### d. Correctness of the Post-condition:
+The post-condition states that if `n` is non-negative, then `x` must be 0. The loop invariant ensures that when the loop exits (when `x` is no longer greater than 0), if `n` was non-negative, `x` must be 0. Therefore, the post-condition is guaranteed to be true based on the established loop invariant.
+
+### e. Implication of the Pre-condition:
+The pre-condition ensures that `x` is initialized to the value of `n`. This means that before the loop starts, the invariant is established because `x` is set to `n`, and the loop invariant conditions are satisfied. Thus, the pre-condition implies the loop invariant holds before the loop begins.
+
+### Final C Loop Content with Invariant Annotations:
+Here is the loop body with the PLACE_HOLDER filled in:
+
+```c
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(n == \at(n, Pre))) || (x == \at(n, Pre) - k));
+  loop invariant !(\at(n, Pre) > 0) ==> ((x == \at(n, Pre))&&(n == \at(n, Pre)));
+  loop invariant n == \at(n, Pre);
+  // k is the number of iterations completed, which can be represented as \at(n, Pre) - x
+  // where k = \at(n, Pre) - x is non-negative while the loop is running.
+*/
+while (x > 0) {
+    x = x - 1;
+}
+```
+
+In this case, `k` is implicitly understood as the number of iterations completed, and the invariant reflects that `x` will eventually reach 0 after `n` iterations if `n` is positive.
+
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(n == \at(n, Pre))) || (x == \at(n, Pre) - k));
+  loop invariant !(\at(n, Pre) > 0) ==> ((x == \at(n, Pre))&&(n == \at(n, Pre)));
+  loop invariant n == \at(n, Pre);
+  // k is the number of iterations completed, which can be represented as \at(n, Pre) - x
+  // where k = \at(n, Pre) - x is non-negative while the loop is running.
+*/
+while (x > 0) {
+    x = x - 1;
+}
+
+
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(n == \at(n, Pre))) || (x == \at(n, Pre) - k));
+  loop invariant !(\at(n, Pre) > 0) ==> ((x == \at(n, Pre))&&(n == \at(n, Pre)));
+  loop invariant n == \at(n, Pre);
+  // k is the number of iterations completed, which can be represented as \at(n, Pre) - x
+  // where k = \at(n, Pre) - x is non-negative while the loop is running.
+*/
+while (x > 0) {
+    x = x - 1;
+}
+

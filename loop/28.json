@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(x == n@pre) * (n == n@pre)",
+        "content": "while (x > 0) {\n      \n       x  = x - 1;\n  \n    }"
+    }
+]

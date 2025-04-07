@@ -1,7 +1,7 @@
 from loopProcessor import LoopProcessor
 import os
 # 获取 input 文件夹路径
-input_folder = "input"  # 假设 input 文件夹在当前目录下
+input_folder = "sysGus"  # 假设 input 文件夹在当前目录下
 
 # 检查 input 文件夹是否存在
 if not os.path.exists(input_folder):

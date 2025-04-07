@@ -22,7 +22,7 @@ class LoopProcessor:
         self.proof_manual_file = f"../ip_postcond/goal/{self.file_name}_proof_manual.v"
         self.input_file = f"symexe/input/{self.file_name}.c"
         self.output_file =f"symexe/output/{self.file_name}.c"
-        self.iter_file = f"../../LLM4LoopInvGen/symexe/output/{self.file_name}.c"
+        self.iter_file = f"../../LoopInvGen_V6/symexe/output/{self.file_name}.c"
         self.json_file = f'loop/{self.file_name}.json'
 
     def delete_file_if_exists(self, file_path):
@@ -87,10 +87,12 @@ class LoopProcessor:
     
             # 替换为 /*@ assert xxxxxx ;*/
             loop_content = re.sub(assert_pattern, r'/*@ assert \1; */', loop_content)
+
+            loop_content = loop_content.replace('=>','==>')
             
             
             # 打印循环内容
-            print(f"LoopContent_{idx}:\n{loop_content}\n")
+            # print(f"LoopContent_{idx}:\n{loop_content}\n")
             loop_contents.append(loop_content)
             
         # 按 end_index 从小到大排序
@@ -142,8 +144,6 @@ class LoopProcessor:
         将循环内容和条目写入 JSON 文件。
         """
         if len(self.loop_contents) != len(self.loop_entries):
-            print(self.loop_contents)
-            print(self.loop_entries)
             raise ValueError("loop_contents 和 loop_entries 的长度必须一致")
 
         data = []
@@ -203,6 +203,59 @@ class LoopProcessor:
 
         # 运行 symexec 命令
         self.run_symexec()
+
+    
+    def update_loop_content(self,code,new_loop_content,ridx):
+        # 将代码拆分成单字符的列表
+
+        code_list = list(code)
+        
+        # 查找所有的 for 或 while 循环位置
+        loop_pattern = r'\b(for|while)\s*\((.*?)\)\s*{'
+        matches = list(re.finditer(loop_pattern, code))
+
+
+        at_index =0
+        end_index  =0
+        
+        # 处理每一个循环
+        for idx, match in enumerate(matches):
+            # 循环的起始位置
+            if idx == ridx:
+
+                loop_start = match.start()  
+                 
+                at_index = -1  # 默认值，如果没有找到 '@' 就返回 -1
+                for i in range(loop_start - 1, -1, -1):  # 从 loop_start - 1 开始，反向遍历
+                    if code_list[i] == '@':
+                        at_index = i
+                        break  # 找到第一个 '@'，跳出循环
+
+                at_index = at_index -2
+
+                # 在循环后找到第一个 { 对应的 }
+                brace_count = 0
+                loop_end = match.end()
+                end_index = loop_end
+                while brace_count >= 0:
+                    if code_list[end_index] == '{':
+                        brace_count += 1
+                    elif code_list[end_index] == '}':
+                        brace_count -= 1
+                    end_index += 1
+                
+
+
+        # 替换循环内容
+        updated_code = (
+            ''.join(code_list[:at_index]) +  # 循环之前的部分
+            new_loop_content +                   # 替换后的循环内容
+            ''.join(code_list[end_index:])   # 循环之后的部分
+        )
+            
+        # 将字符列表重新拼接成字符串
+        return updated_code
+
     
 
 

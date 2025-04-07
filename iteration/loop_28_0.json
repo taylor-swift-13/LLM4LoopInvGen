@@ -1,7 +1,0 @@
-[
-    {
-        "id": 1,
-        "state": "((y == (100 - (x@pre))) * (x == ((x@pre) + 1)))",
-        "path_condition": ""
-    }
-]

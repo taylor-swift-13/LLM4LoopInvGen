@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(i == 0) * (t == t@pre) * (c == c@pre) * (j == j@pre)",
+        "content": "while(unknown()) {\n        if(c > 48) {\n            if (c < 57) {\n                j = i + i;\n                t = c - 48;\n                i = j + t;\n            }\n        }\n    }"
+    }
+]

@@ -1,0 +1,1091 @@
+finshed_files:[]
+file:29.c
+pass@1
+合法个数：0/133
+合法率： 0.00%
+有效个数：0/133
+有效率： 0.00%
+正确个数: 0/133
+正确率: 0.00%
+正确文件:[]
+------------------------------------------------------------
+pass@3
+合法个数：0/133
+合法率： 0.00%
+有效个数：0/133
+有效率： 0.00%
+正确个数: 0/133
+正确率: 0.00%
+正确文件:[]
+------------------------------------------------------------
+pass@5
+合法个数：0/133
+合法率： 0.00%
+有效个数：0/133
+有效率： 0.00%
+正确个数: 0/133
+正确率: 0.00%
+正确文件:[]
+void foo(int n) {
+
+    int x = n;
+    
+    
+    while (x > 0) {
+      
+       x  = x - 1;
+  
+    }
+  
+   /*@ assert (n >= 0) ==> (x == 0); */
+  }
+Variable Maps: [{'x': 'n@pre', 'n': 'n@pre'}]
+Path condition: [None]
+Pre condition: (x == n@pre) * (n == n@pre)
+Loop Condition: x > 0
+Updated Loop Conditions: ['n@pre > 0']
+Global Unchanged Variables ['n']
+
+        /*@
+          loop invariant n == \at(n, Pre);
+        */
+        while (x > 0) {
+      
+       x  = x - 1;
+  
+    }
+        
+
+        /*@
+          loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(n == \at(n, Pre))) || (PLACE_HOLDER_x));
+          loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre))&&(n == \at(n, Pre)));
+          loop invariant n == \at(n, Pre);
+        */
+        while (x > 0) {
+      
+       x  = x - 1;
+  
+    }
+        
+### Analysis
+
+#### a. Purpose and Structure of the Loop:
+- **Purpose**: The loop decrements the variable `x` until it reaches zero. The purpose is to count down from `n` to zero.
+- **Structure**:
+  - **Loop Condition**: `x > 0`
+  - **Loop Body**: `x = x - 1`
+  - **Relevant Variables**: `x` (initially set to `n`), `n` (constant throughout the loop)
+
+#### b. Discussion of the Loop Invariant:
+- **Loop Invariant**:
+  - `(\at(n, Pre) > 0) ==> (((x == \at(n, Pre)) && (n == \at(n, Pre))) || (0 <= x <= \at(n, Pre)))`
+  - `(!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre)) && (n == \at(n, Pre)))`
+  - `n == \at(n, Pre)`
+- **Establishment**: Before the loop begins, `x == n` and `n == \at(n, Pre)`, so the invariant holds.
+- **Preservation**: If the invariant holds at the start of an iteration and `x > 0`, then after `x = x - 1`, the invariant still holds because `x` is decremented by 1, and `n` remains unchanged.
+- **Termination**: When the loop terminates (`x <= 0`), the invariant combined with the negation of the loop condition (`x == 0`) ensures the post-condition.
+
+#### c. Termination Analysis of the Loop:
+- **Variable Assignments**: When the loop terminates, `x == 0`.
+- **Satisfaction of Invariant**: The invariant `0 <= x <= \at(n, Pre)` holds because `x == 0`.
+
+#### d. Correctness of the Post-condition:
+- **Post-condition**: `n >= 0 ==> x == 0`
+- **Explanation**: When the loop exits, `x == 0`, and since `n` is non-negative, the post-condition is satisfied.
+
+#### e. Implication of the Pre-condition:
+- **Pre-condition**: `(x == \at(n, Pre)) * (n == \at(n, Pre))`
+- **Explanation**: The pre-condition ensures that `x` is initially equal to `n`, and `n` is constant, establishing the loop invariant before the loop begins.
+
+### Annotated Loop Body
+
+```c
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(n == \at(n, Pre))) || (0 <= x <= \at(n, Pre)));
+  loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre))&&(n == \at(n, Pre)));
+  loop invariant n == \at(n, Pre);
+*/
+while (x > 0) {
+  x = x - 1;
+}
+```
+
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(n == \at(n, Pre))) || (0 <= x <= \at(n, Pre)));
+  loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre))&&(n == \at(n, Pre)));
+  loop invariant n == \at(n, Pre);
+*/
+while (x > 0) {
+  x = x - 1;
+}
+
+
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(n == \at(n, Pre))) || (0 <= x <= \at(n, Pre)));
+  loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre))&&(n == \at(n, Pre)));
+  loop invariant n == \at(n, Pre);
+*/
+while (x > 0) {
+  x = x - 1;
+}
+
+syntax Correct
+Validate:
+[True, True, True]
+
+Verify:
+[True]
+
+syntax Correct
+Validate:
+[True, True, True]
+
+Verify:
+[True]
+
+void foo(int n)  
+/*@ Require emp 
+   Ensure emp
+*/ 
+    {
+
+    int x = n;
+    
+    
+   
+  /*@ Print user assertion at number LoopEntry_0*/ 
+
+/*@
+  loop invariant (\at(n, Pre) > 0) ==> (((x == \at(n, Pre))&&(n == \at(n, Pre))) || (0 <= x <= \at(n, Pre)));
+  loop invariant (!(\at(n, Pre) > 0)) ==> ((x == \at(n, Pre))&&(n == \at(n, Pre)));
+  loop invariant n == \at(n, Pre);
+*/
+while (x > 0) {
+  x = x - 1;
+}
+
+  
+   /*@  (n >= 0) => (x == 0) */
+  }
+syntax Correct
+Validate:
+[True, True, True]
+
+Verify:
+[True]
+
+已移动文件: 29.c -> finish
+-----------------------------------------
+
+文件 29.c 处理完成. 总耗时: 52.610862255096436
+-----------------------------------------
+finshed_files:['29.c']
+file:87.c
+pass@1
+合法个数：1/133
+合法率： 0.75%
+有效个数：1/133
+有效率： 0.75%
+正确个数: 1/133
+正确率: 0.75%
+正确文件:['29.c']
+------------------------------------------------------------
+pass@3
+合法个数：1/133
+合法率： 0.75%
+有效个数：1/133
+有效率： 0.75%
+正确个数: 1/133
+正确率: 0.75%
+正确文件:['29.c']
+------------------------------------------------------------
+pass@5
+合法个数：1/133
+合法率： 0.75%
+有效个数：1/133
+有效率： 0.75%
+正确个数: 1/133
+正确率: 0.75%
+正确文件:['29.c']
+int unknown();
+
+int main(int y) {
+
+    int lock = 1;
+    int x = y;
+
+    while (x != y) {
+        if ( unknown() ) {
+          
+          lock  = 1;
+          x  = y;
+          
+        } else {
+          
+          lock  = 0;
+          x  = y;
+          y  = y + 1;
+          
+        }
+ 
+    }
+    /*@ assert lock == 1;*/
+  }
+Variable Maps: [{'x': 'y@pre', 'lock': '1', 'y': 'y@pre'}]
+Path condition: [None]
+Pre condition: (x == y@pre) * (lock == 1) * (y == y@pre)
+Loop Condition: x != y
+Updated Loop Conditions: ['y@pre != y@pre']
+Global Unchanged Variables []
+
+        /*@
+        */
+        while (x != y) {
+        if ( unknown() ) {
+          
+          lock  = 1;
+          x  = y;
+          
+        } else {
+          
+          lock  = 0;
+          x  = y;
+          y  = y + 1;
+          
+        }
+ 
+    }
+        
+
+        /*@
+          loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (PLACE_HOLDER_y));
+          loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (PLACE_HOLDER_lock));
+          loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (PLACE_HOLDER_x));
+          loop invariant (!(\at(y, Pre) != \at(y, Pre))) ==> ((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre)));
+        */
+        while (x != y) {
+        if ( unknown() ) {
+          
+          lock  = 1;
+          x  = y;
+          
+        } else {
+          
+          lock  = 0;
+          x  = y;
+          y  = y + 1;
+          
+        }
+ 
+    }
+        
+### Analysis:
+
+1. **Purpose and Structure of the Loop:**
+   - **Purpose:** The loop's purpose is to repeatedly check a condition involving an unknown function and update the variables `lock`, `x`, and `y` based on the result of this function. The loop continues until `x` equals `y`.
+   - **Structure:**
+     - **Loop Condition:** `x != y`
+     - **Loop Body:** 
+       - If `unknown()` returns true, set `lock` to 1 and `x` to `y`.
+       - Otherwise, set `lock` to 0, `x` to `y`, and increment `y` by 1.
+     - **Relevant Variables:** `x`, `y`, `lock`
+
+2. **Discussion of the Loop Invariant:**
+   - **Invariant:** The invariant must hold true before the loop starts, remain true after each iteration, and help in proving the post-condition when the loop terminates.
+   - **Establishment:** The invariant must be true before the loop starts. Given the pre-condition `(x == \at(y, Pre)) * (lock == 1) * (y == \at(y, Pre))`, the invariant is initially true.
+   - **Preservation:** If the invariant holds at the start of an iteration and the loop condition is true, the invariant must hold at the end of the iteration. The invariant ensures that the relationship between `x`, `y`, and `lock` is maintained.
+   - **Termination:** When the loop terminates (`x == y`), the invariant combined with the negation of the loop condition should imply the post-condition.
+
+3. **Termination Analysis of the Loop:**
+   - The loop terminates when `x == y`. At this point, the invariant ensures that the relationship between `x`, `y`, and `lock` is maintained, and the post-condition `lock == 1` is satisfied.
+
+4. **Correctness of the Post-condition:**
+   - When the loop exits (`x == y`), the invariant and the negation of the loop condition ensure that `lock == 1`.
+
+5. **Implication of the Pre-condition:**
+   - The pre-condition `(x == \at(y, Pre)) * (lock == 1) * (y == \at(y, Pre))` ensures that the invariant is established before the loop begins. The initial values of `x`, `y`, and `lock` satisfy the invariant.
+
+### Loop Body with Filled Invariants:
+
+```c
+/*@
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (y == \at(y, Pre) + 1));
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (lock == 0));
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (x == \at(y, Pre)));
+  loop invariant (!(\at(y, Pre) != \at(y, Pre))) ==> ((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre)));
+*/
+while (x != y) {
+    if (unknown()) {
+        lock = 1;
+        x = y;
+    } else {
+        lock = 0;
+        x = y;
+        y = y + 1;
+    }
+}
+```
+
+### Explanation of Filled Invariants:
+
+1. **First Invariant:**
+   - `(\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (y == \at(y, Pre) + 1))`
+   - This invariant ensures that if `y` has changed from its initial value, then either the initial conditions hold, or `y` has been incremented by 1.
+
+2. **Second Invariant:**
+   - `(\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (lock == 0))`
+   - This invariant ensures that if `y` has changed from its initial value, then either the initial conditions hold, or `lock` is set to 0.
+
+3. **Third Invariant:**
+   - `(\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (x == \at(y, Pre)))`
+   - This invariant ensures that if `y` has changed from its initial value, then either the initial conditions hold, or `x` is set to its initial value.
+
+4. **Fourth Invariant:**
+   - `(!(\at(y, Pre) != \at(y, Pre))) ==> ((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre)))`
+   - This invariant ensures that if `y` has not changed from its initial value, the initial conditions hold.
+
+/*@
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (y == \at(y, Pre) + 1));
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (lock == 0));
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (x == \at(y, Pre)));
+  loop invariant (!(\at(y, Pre) != \at(y, Pre))) ==> ((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre)));
+*/
+while (x != y) {
+    if (unknown()) {
+        lock = 1;
+        x = y;
+    } else {
+        lock = 0;
+        x = y;
+        y = y + 1;
+    }
+}
+
+
+/*@
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (y == \at(y, Pre) + 1));
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (lock == 0));
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (x == \at(y, Pre)));
+  loop invariant (!(\at(y, Pre) != \at(y, Pre))) ==> ((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre)));
+*/
+while (x != y) {
+    if (unknown()) {
+        lock = 1;
+        x = y;
+    } else {
+        lock = 0;
+        x = y;
+        y = y + 1;
+    }
+}
+
+syntax Correct
+Validate:
+[True, True, True, True]
+
+Verify:
+[True]
+
+syntax Correct
+Validate:
+[True, True, True, True]
+
+Verify:
+[True]
+
+int unknown();
+int main(int y)  
+/*@ Require emp 
+   Ensure emp
+*/ 
+    {
+
+    int lock = 1;
+    int x = y;
+
+   
+  /*@ Print user assertion at number LoopEntry_0*/ 
+
+/*@
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (y == \at(y, Pre) + 1));
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (lock == 0));
+  loop invariant (\at(y, Pre) != \at(y, Pre)) ==> (((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre))) || (x == \at(y, Pre)));
+  loop invariant (!(\at(y, Pre) != \at(y, Pre))) ==> ((x == \at(y, Pre))&&(lock == 1)&&(y == \at(y, Pre)));
+*/
+while (x != y) {
+    if (unknown()) {
+        lock = 1;
+        x = y;
+    } else {
+        lock = 0;
+        x = y;
+        y = y + 1;
+    }
+}
+
+    /*@  lock == 1*/
+  }
+syntax Correct
+Validate:
+[True, True, True, True]
+
+Verify:
+[True]
+
+已移动文件: 87.c -> finish
+-----------------------------------------
+
+文件 87.c 处理完成. 总耗时: 56.329102754592896
+-----------------------------------------
+finshed_files:['29.c', '87.c']
+file:9.c
+pass@1
+合法个数：2/133
+合法率： 1.50%
+有效个数：2/133
+有效率： 1.50%
+正确个数: 2/133
+正确率: 1.50%
+正确文件:['29.c', '87.c']
+------------------------------------------------------------
+pass@3
+合法个数：2/133
+合法率： 1.50%
+有效个数：2/133
+有效率： 1.50%
+正确个数: 2/133
+正确率: 1.50%
+正确文件:['29.c', '87.c']
+------------------------------------------------------------
+pass@5
+合法个数：2/133
+合法率： 1.50%
+有效个数：2/133
+有效率： 1.50%
+正确个数: 2/133
+正确率: 1.50%
+正确文件:['29.c', '87.c']
+int unknown();
+/*@ requires x >= 0 && x <= 2 && y <= 2 && y >= 0; */
+void foo(int x,int y) {
+
+  
+    while (unknown()) {
+      
+      x  = x + 2;
+      y  = y + 2;
+
+    }
+  
+    /*@ assert (x == 4) ==> (y != 0);  */
+  
+    
+  
+  }
+Variable Maps: [{'y': 'y@pre', 'x': 'x@pre'}]
+Path condition: ['x@pre >= 0 && x@pre <= 2 && y@pre <= 2 && y@pre >= 0']
+Pre condition: x@pre >= 0 && x@pre <= 2 && y@pre <= 2 && y@pre >= 0 && (y == y@pre) * (x == x@pre)
+Loop Condition: 1
+Updated Loop Conditions: ['1']
+Global Unchanged Variables []
+
+        /*@
+        */
+        while (1) {
+      
+      x  = x + 2;
+      y  = y + 2;
+  
+    }
+        
+
+        /*@
+          loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (((y == \at(y, Pre))&&(x == \at(x, Pre))) || (PLACE_HOLDER_x)) ;
+          loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (((y == \at(y, Pre))&&(x == \at(x, Pre))) || (PLACE_HOLDER_y)) ;
+        */
+        while (1) {
+      
+      x  = x + 2;
+      y  = y + 2;
+  
+    }
+        
+### Analysis
+
+#### a. Purpose and Structure of the Loop:
+- **Purpose**: The loop is intended to increment the values of `x` and `y` by 2 repeatedly until the function `unknown()` returns false.
+- **Structure**:
+  - **Loop Condition**: `unknown()`
+  - **Loop Body**: 
+    ```c
+    x = x + 2;
+    y = y + 2;
+    ```
+  - **Relevant Variables**: `x` and `y`
+
+#### b. Discussion of the Loop Invariant:
+- **Loop Invariant**:
+  ```c
+  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (((y == \at(y, Pre))&&(x == \at(x, Pre))) || (x == \at(x, Pre) + 2 * k))
+  ```
+  ```c
+  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (((y == \at(y, Pre))&&(x == \at(x, Pre))) || (y == \at(y, Pre) + 2 * k))
+  ```
+  where `k` is the number of iterations of the loop.
+
+- **Validity**:
+  - **Establishment**: Before the loop starts, `x` and `y` are within the specified range, and no iterations have occurred, so `k = 0`.
+  - **Preservation**: If the invariant holds at the start of an iteration, after incrementing `x` and `y` by 2, the invariant still holds with `k` incremented by 1.
+  - **Termination**: When the loop exits, the invariant combined with the negation of the loop condition should imply the post-condition.
+
+#### c. Termination Analysis of the Loop:
+- **Variable Assignments**: When the loop terminates, `x` and `y` will have been incremented by 2 for each iteration.
+- **Satisfaction of Invariant**: The invariant still holds as `x` and `y` will be `\at(x, Pre) + 2 * k` and `\at(y, Pre) + 2 * k` respectively.
+
+#### d. Correctness of the Post-condition:
+- **Post-condition**: `(x == 4) ==> (y != 0)`
+- **Explanation**: When the loop exits, if `x == 4`, then `y` must have been incremented by the same number of iterations, ensuring `y != 0`.
+
+#### e. Implication of the Pre-condition:
+- **Explanation**: The pre-condition ensures that `x` and `y` start within the specified range, which establishes the initial conditions for the loop invariant.
+
+### Annotated Loop Body
+
+```c
+/*@
+  loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (((y == \at(y, Pre))&&(x == \at(x, Pre))) || (x == \at(x, Pre) + 2 * k)) ;
+  loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (((y == \at(y, Pre))&&(x == \at(x, Pre))) || (y == \at(y, Pre) + 2 * k)) ;
+  loop assigns x, y;
+*/
+while (unknown()) {
+  x = x + 2;
+  y = y + 2;
+}
+```
+
+In this annotated loop, `k` represents the number of iterations, and the invariants ensure that `x` and `y` are incremented correctly while maintaining the conditions required to prove the post-condition.
+
+/*@
+  loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (((y == \at(y, Pre))&&(x == \at(x, Pre))) || (x == \at(x, Pre) + 2 * k)) ;
+  loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (((y == \at(y, Pre))&&(x == \at(x, Pre))) || (y == \at(y, Pre) + 2 * k)) ;
+  loop assigns x, y;
+*/
+while (unknown()) {
+  x = x + 2;
+  y = y + 2;
+}
+
+
+/*@
+  loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (((y == \at(y, Pre))&&(x == \at(x, Pre))) || (x == \at(x, Pre) + 2 * k)) ;
+  loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (((y == \at(y, Pre))&&(x == \at(x, Pre))) || (y == \at(y, Pre) + 2 * k)) ;
+  loop assigns x, y;
+*/
+while (unknown()) {
+  x = x + 2;
+  y = y + 2;
+}
+
+syntax Error
+[kernel] Parsing output/9.c (with preprocessing)
+[kernel:annot-error] output/9.c:8: Warning: 
+  unbound logic variable k. Ignoring loop annotation
+[kernel] User Error: warning annot-error treated as fatal error.
+[kernel] Frama-C aborted: invalid user input.
+
+after repair
+
+/*@
+  loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (x % 2 == \at(x, Pre) % 2) ;
+  loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (y % 2 == \at(y, Pre) % 2) ;
+  loop assigns x, y;
+*/
+while (unknown()) {
+  x = x + 2;
+  y = y + 2;
+}
+
+syntax Correct
+Validate:
+[True, True]
+
+Verify:
+[False]
+
+Goal Assertion (file output/9.c, line 18):
+Assume {
+  Type: is_sint32(x) /\ is_sint32(y_1) /\ is_sint32(y).
+  (* Pre-condition *)
+  Have: (0 <= x) /\ (0 <= y_1) /\ (x <= 2) /\ (y_1 <= 2).
+  (* Invariant *)
+  Have: (x % 2) = 0.
+  (* Invariant *)
+  Have: (y % 2) = (y_1 % 2).
+}
+Prove: y != 0.
+Prover Z3 4.8.12 returns Timeout (Qed:6ms) (3s)
+Error found in file: output/9.c at line: 18
+Error line content: /*@ assert (x == 4) ==> (y != 0);  */
+
+### Error Analysis
+
+The provided error message indicates that the Frama-C tool encountered a timeout while trying to prove the post-condition assertion `/*@ assert (x == 4) ==> (y != 0); */`. This suggests that the loop invariants provided may not be strong enough to help the prover establish the post-condition.
+
+The original loop invariants are:
+```c
+/*@
+  loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (x % 2 == \at(x, Pre) % 2) ;
+  loop invariant  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) ==> (y % 2 == \at(y, Pre) % 2) ;
+  loop assigns x, y;
+*/
+```
+
+These invariants state that the parity (even or odd) of `x` and `y` remains the same as their initial values. However, this is not sufficient to prove the post-condition because it does not provide enough information about the values of `x` and `y` after the loop terminates.
+
+### Modification Rationale
+
+To fix the issue, we need to provide stronger invariants that can help the prover establish the post-condition. Specifically, we need invariants that describe the relationship between `x` and `y` as they are updated within the loop.
+
+We know that `x` and `y` are both incremented by 2 in each iteration of the loop. Therefore, we can establish that `x` and `y` will always be even numbers, and their difference will remain constant.
+
+### Fixed C Code
+
+Here is the corrected C code with fixed ACSL annotations:
+
+```c
+/*@
+  loop invariant  x % 2 == 0;
+  loop invariant  y % 2 == 0;
+  loop invariant  y - x == \at(y, Pre) - \at(x, Pre);
+  loop assigns x, y;
+*/
+while (unknown()) {
+  x = x + 2;
+  y = y + 2;
+}
+```
+
+### Explanation
+
+1. **Establishment**: Before the loop begins, `x` and `y` are within the range [0, 2], and both are even numbers. The difference `y - x` is initially `\at(y, Pre) - \at(x, Pre)`.
+
+2. **Preservation**: In each iteration, `x` and `y` are both incremented by 2, so they remain even. The difference `y - x` remains constant because both `x` and `y` are incremented by the same amount.
+
+3. **Termination**: When the loop terminates, the invariants hold, and we can use them to prove the post-condition. Specifically, if `x == 4`, then `y` must also be even and satisfy the invariant `y - x == \at(y, Pre) - \at(x, Pre)`. Given the initial constraints, this ensures that `y` cannot be 0 when `x` is 4.
+
+By providing these stronger invariants, we help the prover establish the post-condition and ensure the correctness of the program.
+after modify
+
+/*@
+  loop invariant  x % 2 == 0;
+  loop invariant  y % 2 == 0;
+  loop invariant  y - x == \at(y, Pre) - \at(x, Pre);
+  loop assigns x, y;
+*/
+while (unknown()) {
+  x = x + 2;
+  y = y + 2;
+}
+
+syntax Correct
+Validate:
+[False, False, True]
+
+Goal Establishment of Invariant (file output/9.c, line 8):
+Assume {
+  Type: is_sint32(x) /\ is_sint32(y).
+  (* Pre-condition *)
+  Have: (0 <= x) /\ (0 <= y) /\ (x <= 2) /\ (y <= 2).
+}
+Prove: (x % 2) = 0.
+Prover Z3 4.8.12 returns Timeout (Qed:2ms) (3s)
+Error found in file: output/9.c at line: 8
+Error line content: loop invariant  x % 2 == 0;
+
+Goal Establishment of Invariant (file output/9.c, line 9):
+Assume {
+  Type: is_sint32(x) /\ is_sint32(y).
+  (* Pre-condition *)
+  Have: (0 <= x) /\ (0 <= y) /\ (x <= 2) /\ (y <= 2).
+  (* Invariant *)
+  Have: (x % 2) = 0.
+}
+Prove: (y % 2) = 0.
+Prover Z3 4.8.12 returns Timeout (Qed:2ms) (3s)
+Error found in file: output/9.c at line: 9
+Error line content: loop invariant  y % 2 == 0;
+
+Verify:
+[True]
+
+### Error Analysis
+
+1. **Error 1: Goal Establishment of Invariant (x % 2 == 0)**
+   - The error indicates that the verification engine cannot prove that `x % 2 == 0` holds before the loop begins execution. The pre-condition `(0 <= x) /\ (x <= 2)` does not guarantee that `x` is even.
+
+2. **Error 2: Goal Establishment of Invariant (y % 2 == 0)**
+   - Similarly, the verification engine cannot prove that `y % 2 == 0` holds before the loop begins execution. The pre-condition `(0 <= y) /\ (y <= 2)` does not guarantee that `y` is even.
+
+### Modification Rationale
+
+To fix these errors, we need to ensure that the loop invariants are established correctly based on the pre-conditions. Since the pre-conditions do not guarantee that `x` and `y` are even, we need to modify the loop invariants to reflect properties that can be derived from the pre-conditions and the loop body.
+
+### Fixed C Code
+
+```c
+/*@
+  loop invariant  x % 2 == \at(x, Pre) % 2;
+  loop invariant  y % 2 == \at(y, Pre) % 2;
+  loop invariant  y - x == \at(y, Pre) - \at(x, Pre);
+  loop assigns x, y;
+*/
+while (unknown()) {
+  x = x + 2;
+  y = y + 2;
+}
+```
+
+### Explanation
+
+1. **Invariant 1: `x % 2 == \at(x, Pre) % 2`**
+   - This invariant ensures that the parity of `x` remains the same as its initial value. Since `x` is incremented by 2 in each iteration, its parity will not change.
+
+2. **Invariant 2: `y % 2 == \at(y, Pre) % 2`**
+   - Similarly, this invariant ensures that the parity of `y` remains the same as its initial value. Since `y` is incremented by 2 in each iteration, its parity will not change.
+
+3. **Invariant 3: `y - x == \at(y, Pre) - \at(x, Pre)`**
+   - This invariant ensures that the difference between `y` and `x` remains constant throughout the loop. This is because both `x` and `y` are incremented by the same amount (2) in each iteration.
+
+By modifying the invariants to reflect properties that can be derived from the pre-conditions and the loop body, we ensure that the invariants are established correctly and preserved throughout the loop execution.
+after modify
+
+/*@
+  loop invariant  x % 2 == \at(x, Pre) % 2;
+  loop invariant  y % 2 == \at(y, Pre) % 2;
+  loop invariant  y - x == \at(y, Pre) - \at(x, Pre);
+  loop assigns x, y;
+*/
+while (unknown()) {
+  x = x + 2;
+  y = y + 2;
+}
+
+syntax Correct
+Validate:
+[True, True, True]
+
+Verify:
+[True]
+
+after hudini
+
+/*@
+  loop invariant  x % 2 == \at(x, Pre) % 2;
+  loop invariant  y % 2 == \at(y, Pre) % 2;
+  loop invariant  y - x == \at(y, Pre) - \at(x, Pre);
+  loop assigns x, y;
+*/
+while (unknown()) {
+  x = x + 2;
+  y = y + 2;
+}
+
+syntax Correct
+Validate:
+[True, True, True]
+
+Verify:
+[True]
+
+int unknown();
+
+void foo(int x,int y)  
+/*@ Require x >= 0 && x <= 2 && y <= 2 && y >= 0
+   Ensure emp
+*/ 
+    {
+
+  
+   
+  /*@ Print user assertion at number LoopEntry_0*/ 
+
+/*@
+  loop invariant  x % 2 == \at(x, Pre) % 2;
+  loop invariant  y % 2 == \at(y, Pre) % 2;
+  loop invariant  y - x == \at(y, Pre) - \at(x, Pre);
+  loop assigns x, y;
+*/
+while (unknown()) {
+  x = x + 2;
+  y = y + 2;
+}
+
+
+    /*@  (x == 4) => (y != 0)  */
+  
+  }
+syntax Correct
+Validate:
+[True, True, True]
+
+Verify:
+[True]
+
+已移动文件: 9.c -> finish
+-----------------------------------------
+
+文件 9.c 处理完成. 总耗时: 112.3942391872406
+-----------------------------------------
+finshed_files:['29.c', '87.c', '9.c']
+file:107.c
+pass@1
+合法个数：3/133
+合法率： 2.26%
+有效个数：3/133
+有效率： 2.26%
+正确个数: 3/133
+正确率: 2.26%
+正确文件:['29.c', '87.c', '9.c']
+------------------------------------------------------------
+pass@3
+合法个数：3/133
+合法率： 2.26%
+有效个数：3/133
+有效率： 2.26%
+正确个数: 3/133
+正确率: 2.26%
+正确文件:['29.c', '87.c', '9.c']
+------------------------------------------------------------
+pass@5
+合法个数：3/133
+合法率： 2.26%
+有效个数：3/133
+有效率： 2.26%
+正确个数: 3/133
+正确率: 2.26%
+正确文件:['29.c', '87.c', '9.c']
+
+void foo(int m,int j,int a) {
+
+    int k = 0;
+    
+    
+    while ( k < 1) {
+
+        if(m < a) {
+            m = a;
+        }
+        
+        k = k + 1;
+    }
+
+  /*@ assert a <= m; */
+
+}
+Variable Maps: [{'k': '0', 'a': 'a@pre', 'j': 'j@pre', 'm': 'm@pre'}]
+Path condition: [None]
+Pre condition: (k == 0) * (a == a@pre) * (j == j@pre) * (m == m@pre)
+Loop Condition: k < 1
+Updated Loop Conditions: ['0 < 1']
+Global Unchanged Variables ['a', 'j']
+
+        /*@
+          loop invariant a == \at(a, Pre);
+          loop invariant j == \at(j, Pre);
+        */
+        while ( k < 1) {
+
+        if(m < a) {
+            m = a;
+        }
+        
+        k = k + 1;
+    }
+        
+
+        /*@
+          loop invariant  ((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (PLACE_HOLDER_m) ;
+          loop invariant  ((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (PLACE_HOLDER_k) ;
+          loop invariant a == \at(a, Pre);
+          loop invariant j == \at(j, Pre);
+        */
+        while ( k < 1) {
+
+        if(m < a) {
+            m = a;
+        }
+        
+        k = k + 1;
+    }
+        
+### Analysis
+
+#### a. Purpose and Structure of the Loop:
+- **Purpose:** The loop's purpose is to ensure that the variable `m` is at least as large as `a`. If `m` is less than `a`, it assigns `a` to `m`.
+- **Structure:**
+  - **Loop Condition:** `k < 1`
+  - **Loop Body:** 
+    - If `m < a`, then `m` is set to `a`.
+    - `k` is incremented by 1.
+  - **Relevant Variables:** `m`, `a`, `k`, `j`
+
+#### b. Discussion of the Loop Invariant:
+- **Loop Invariant:** 
+  - `((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (k == 1 && a <= m)`
+  - `a == \at(a, Pre)`
+  - `j == \at(j, Pre)`
+- **Validity:**
+  - **Establishment:** Initially, `k == 0`, `a == \at(a, Pre)`, `j == \at(j, Pre)`, and `m == \at(m, Pre)`. This satisfies the invariant.
+  - **Preservation:** During each iteration, if `k == 0`, the invariant holds. When `k` is incremented to 1, the condition `a <= m` will be true because if `m < a`, `m` is set to `a`.
+  - **Termination:** When the loop terminates (`k == 1`), the invariant `a <= m` is true, which ensures the post-condition.
+
+#### c. Termination Analysis of the Loop:
+- **Variable Assignments:** When the loop terminates, `k == 1` and `a <= m`.
+- **Satisfaction of Invariant:** The invariant `a <= m` holds true when `k == 1`.
+
+#### d. Correctness of the Post-condition:
+- **Post-condition:** `a <= m`
+- **Explanation:** The loop invariant `a <= m` and the negation of the loop condition `k >= 1` ensure that the post-condition `a <= m` is satisfied.
+
+#### e. Implication of the Pre-condition:
+- **Pre-condition:** `(k == 0) * (a == \at(a, Pre)) * (j == \at(j, Pre)) * (m == \at(m, Pre))`
+- **Explanation:** The pre-condition ensures that the initial values of `k`, `a`, `j`, and `m` are as expected, which establishes the loop invariant before the loop begins execution.
+
+### Annotated Loop Body
+
+```c
+    /*@
+      loop invariant  ((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (k == 1 && a <= m);
+      loop invariant  ((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (k == 1);
+      loop invariant a == \at(a, Pre);
+      loop invariant j == \at(j, Pre);
+    */
+    while ( k < 1) {
+
+        if(m < a) {
+            m = a;
+        }
+        
+        k = k + 1;
+    }
+```
+
+This annotated loop body includes the necessary loop invariants to help Frama-C verify the post-condition `a <= m`.
+
+    /*@
+      loop invariant  ((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (k == 1 && a <= m);
+      loop invariant  ((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (k == 1);
+      loop invariant a == \at(a, Pre);
+      loop invariant j == \at(j, Pre);
+    */
+    while ( k < 1) {
+
+        if(m < a) {
+            m = a;
+        }
+        
+        k = k + 1;
+    }
+
+
+    /*@
+      loop invariant  ((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (k == 1 && a <= m);
+      loop invariant  ((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (k == 1);
+      loop invariant a == \at(a, Pre);
+      loop invariant j == \at(j, Pre);
+    */
+    while ( k < 1) {
+
+        if(m < a) {
+            m = a;
+        }
+        
+        k = k + 1;
+    }
+
+syntax Correct
+Validate:
+[True, True, True, True]
+
+Verify:
+[True]
+
+syntax Correct
+Validate:
+[True, True, True, True]
+
+Verify:
+[True]
+
+
+void foo(int m,int j,int a)  
+/*@ Require emp 
+   Ensure emp
+*/ 
+    {
+
+    int k = 0;
+    
+    
+   
+  /*@ Print user assertion at number LoopEntry_0*/ 
+
+    /*@
+      loop invariant  ((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (k == 1 && a <= m);
+      loop invariant  ((k == 0)&&(a == \at(a, Pre))&&(j == \at(j, Pre))&&(m == \at(m, Pre))) || (k == 1);
+      loop invariant a == \at(a, Pre);
+      loop invariant j == \at(j, Pre);
+    */
+    while ( k < 1) {
+
+        if(m < a) {
+            m = a;
+        }
+        
+        k = k + 1;
+    }
+
+
+  /*@  a <= m */
+
+}
+syntax Correct
+Validate:
+[True, True, True, True]
+
+Verify:
+[True]
+
+已移动文件: 107.c -> finish
+-----------------------------------------
+
+文件 107.c 处理完成. 总耗时: 64.43819975852966
+-----------------------------------------
+finshed_files:['29.c', '87.c', '9.c', '107.c']
+file:65.c
+pass@1
+合法个数：4/133
+合法率： 3.01%
+有效个数：4/133
+有效率： 3.01%
+正确个数: 4/133
+正确率: 3.01%
+正确文件:['29.c', '87.c', '9.c', '107.c']
+------------------------------------------------------------
+pass@3
+合法个数：4/133
+合法率： 3.01%
+有效个数：4/133
+有效率： 3.01%
+正确个数: 4/133
+正确率: 3.01%
+正确文件:['29.c', '87.c', '9.c', '107.c']
+------------------------------------------------------------
+pass@5
+合法个数：4/133
+合法率： 3.01%
+有效个数：4/133
+有效率： 3.01%
+正确个数: 4/133
+正确率: 3.01%
+正确文件:['29.c', '87.c', '9.c', '107.c']
