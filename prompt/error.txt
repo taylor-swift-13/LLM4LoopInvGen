@@ -30,5 +30,3 @@ Your task is to correct syntactically incorrect ACSL annotations in a given C pr
 1.  Strictly adhere to ACSL syntax: Ensure that all corrected annotations comply with the rules of the ACSL specification language.
 
 2.  Do not modify the original C code: Only make changes to the ACSL annotations.
-
-3.  Do not add any natural language explanations after ACSL annotations

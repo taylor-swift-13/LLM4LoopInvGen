@@ -14,9 +14,7 @@ class LoopAnalysis:
         self.loop_condition = None
         self.updated_loop_conditions = None
         self.var_maps = None
-        self.array_names = None
         self.global_unchanged_vars = None
-        self.non_inductive_vars = None
         
 
 
@@ -51,30 +49,6 @@ class LoopAnalysis:
         loop = self.get_json_at_index()  # 获取指定索引的循环数据
         condition = loop.get("condition", "")  # 获取条件表达式
         return condition
-
-
-    def extract_non_inductive_vars(self):
-       
-       
-        loop = self.get_json_at_index()
-        loop_content = loop.get("content", "")
-        var_map = self.var_maps[0]
-        var_names = set(var_map.keys())
-
-        results = []
-        lines = loop_content.split('\n')
-        for idx, line in enumerate(lines, 1):
-            for var in var_names:
-               
-                m = re.match(rf"\s*{re.escape(var)}\s*=(?!=)", line)
-                if m:
-                    # 取等号右侧
-                    right_side = line.split('=', 1)[1]
-                    # 检查右侧是否用到自己
-                    if not re.search(rf"\b{re.escape(var)}\b", right_side):
-                        results.append(var)
-        return results
-
     
     def extract_unchanged_vars(self):
         
@@ -96,47 +70,6 @@ class LoopAnalysis:
                 unchanged_vars.append(var_name)
 
         return unchanged_vars
-
-    def extract_array_names(self):
-        pre_condition = self.pre_condition
-        array_names = []
-        start = 0
-        length = len(pre_condition)
-        
-        while start < length:
-            # 查找 'store_int_array' 的位置
-            func_idx = pre_condition.find('store_int_array', start)
-            if func_idx == -1:
-                break  # 没有更多函数调用
-            
-            # 查找左括号的位置
-            left_paren = pre_condition.find('(', func_idx)
-            if left_paren == -1:
-                start = func_idx + 1
-                continue
-            
-            # 查找右括号的位置
-            right_paren = pre_condition.find(')', left_paren)
-            if right_paren == -1:
-                start = func_idx + 1
-                continue
-            
-            # 提取参数部分并分割
-            param_str = pre_condition[left_paren+1:right_paren].strip()
-            params = [p.strip() for p in param_str.split(',')]
-            
-            if len(params) >= 3:
-                third_param = params[2]
-                # 去除末尾的 '_l'
-                if third_param.endswith('_l'):
-                    third_param = third_param[:-2]
-                array_names.append(third_param)
-            
-            # 继续查找下一个函数调用
-            start = right_paren + 1
-        
-        return array_names
-
 
 
     def extract_var_map_from_file(self):
@@ -373,10 +306,6 @@ class LoopAnalysis:
         global_unchanged_vars = self.extract_unchanged_vars()
         self.global_unchanged_vars = global_unchanged_vars 
         print("Global Unchanged Variables", global_unchanged_vars)
-
-        non_inductive_vars = self.extract_non_inductive_vars()
-        self.non_inductive_vars = non_inductive_vars
-        print("Non Inductive Variables", non_inductive_vars)
 
 
 

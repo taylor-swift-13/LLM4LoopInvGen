@@ -12,9 +12,9 @@ class InvGenerator:
         # self.llm ='gpt-3.5-turbo'
         # self.llm ='claude-3-7-sonnet-thinking'
         # self.llm = 'deepseek-v3'
-        # self.llm = 'gpt-4o-mini'
-        self.llm = 'gpt-4o'
-        
+        self.llm = 'gpt-4o-mini'
+        # self.llm = 'gpt-4o'
+
         self.client = openai.OpenAI(
             base_url="https://yunwu.ai/v1",
             api_key="sk-hfyQZDWdgyc4oQnDw4nvOh6KT1iDQ5EbNy9UjQwnMzBntefe"
@@ -71,47 +71,6 @@ class InvGenerator:
             
         # 将字符列表重新拼接成字符串
         return updated_code
-
-    def get_annotated_loop_content(self,code,ridx):
-        code_list = list(code)
-        
-        # 查找所有的 for 或 while 循环位置
-        loop_pattern = r'\b(for|while)\s*\((.*?)\)\s*{'
-        matches = list(re.finditer(loop_pattern, code))
-       
-        # 处理每一个循环
-        for idx, match in enumerate(matches):
-           
-            # 循环的起始位置
-            if idx == ridx:
-
-                loop_start = match.start()  
-                 
-                at_index = -1  # 默认值，如果没有找到 '@' 就返回 -1
-                for i in range(loop_start - 1, -1, -1):  # 从 loop_start - 1 开始，反向遍历
-                    if code_list[i] == '@':
-                        at_index = i
-                        break  # 找到第一个 '@'，跳出循环
-
-                at_index = at_index -2
-
-                # 在循环后找到第一个 { 对应的 }
-                brace_count = 0
-                loop_end = match.end()
-                end_index = loop_end
-                while brace_count >= 0:
-                    if code_list[end_index] == '{':
-                        brace_count += 1
-                    elif code_list[end_index] == '}':
-                        brace_count -= 1
-                    end_index += 1
-                
-
-        # 替换循环内容
-        annotated_loop_content = ''.join(code_list[at_index:end_index]) 
-            
-        # 将字符列表重新拼接成字符串
-        return annotated_loop_content
     
     def extract_var_map_from_state(self,text):
         var_map = {}
@@ -226,83 +185,6 @@ class InvGenerator:
                 if invariant_annotation:
                     updated_code.append(f"          {invariant_annotation}")
                     found_first_annotation = True
-            else:
-            # Keep other lines as they are
-                updated_code.append(line)
-
-       # Join the list back into a single string and return
-        return "\n".join(updated_code)
-
-    def append_array_annotations(self,annotations,array_name):
-        updated_code = []
-        invariant_annotation = f"loop invariant PLACE_HOLDER_FOR_ARRAY_{array_name} ;" 
-        found_first_annotation = False
-
-        for line in annotations.splitlines():
-            if not found_first_annotation and '/*@' in line:
-            # Append the current line
-                updated_code.append(line)
-            # Insert the invariant annotations below the first occurrence of /*@
-                updated_code.append(f"          {invariant_annotation}")
-                found_first_annotation = True
-            else:
-            # Keep other lines as they are
-                updated_code.append(line)
-
-       # Join the list back into a single string and return
-        return "\n".join(updated_code)
-
-    
-    def append_non_inductive_annotations(self,annotations,var_map,updated_loop_condition,key, path_cond=None):
-
-        invariant_annotation = None
-
-        init_invariants = []
-        for var in var_map:
-            init_value = var_map[var]
-            init_value = self.filter_conditon(init_value)
-            init_invariants.append( f'({var} == {init_value})')
-        
-        init_invariant = '&&'.join(init_invariants)
-
-        
-        def contains_no_letters(updated_loop_condition):
-
-            if updated_loop_condition == None:
-                return True
-            # 检查字符串中是否含有字母
-            if  'unknown' in updated_loop_condition:
-                return True
-
-            if re.search(r'[a-zA-Z]', updated_loop_condition):
-                return False  # 含有字母
-            else:
-                return True  # 不含字母
-            
-
-
-
-        if contains_no_letters(updated_loop_condition) :
-                if path_cond!=None:
-                    invariant_annotation = f"loop invariant  ({path_cond}) ==> (({init_invariant}) || (PLACE_HOLDER_{key})) ;" 
-                else:
-                    invariant_annotation = f"loop invariant  ({init_invariant}) || (PLACE_HOLDER_{key}) ;" 
-        else:
-                if path_cond!=None:
-                    invariant_annotation = f"loop invariant  ({path_cond}) ==> (({updated_loop_condition}) ==> (({init_invariant}) || (PLACE_HOLDER_{key}))) ;" 
-                else:
-                    invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> (({init_invariant}) || (PLACE_HOLDER_{key}));"
-
-        updated_code = []
-        found_first_annotation = False
-
-        for line in annotations.splitlines():
-            if not found_first_annotation and '/*@' in line:
-            # Append the current line
-                updated_code.append(line)
-            # Insert the invariant annotations below the first occurrence of /*@
-                updated_code.append(f"          {invariant_annotation}")
-                found_first_annotation = True
             else:
             # Keep other lines as they are
                 updated_code.append(line)
@@ -492,7 +374,7 @@ class InvGenerator:
                     file.write(annotations)
 
             ht = ht +1
-        return annotations
+            return annotations
 
     
     def get_user_prompt(self, loop_content,pre_condition):
@@ -544,7 +426,7 @@ class InvGenerator:
         return regen_prompt
     
     def get_strength_prompt(self,error_message, c_code):
-        # 从文件中读取 prompt 模板
+         # 从文件中读取 prompt 模板
         with open("prompt/strength.txt", "r", encoding="utf-8") as file:
             prompt_template = file.read()
 
@@ -789,43 +671,39 @@ class InvGenerator:
 
     def convert_annotations(self, annotations):
 
-        print (annotations)
+        """调用大模型生成ACSL规约"""
 
-        index = annotations.find("*/")
-        if index != -1:
-            before = annotations[:index + 2]  # 包含 '*/'
-            after = annotations[index + 2:]
+        prompt =  self.get_convert_prompt(annotations)
+
+        try:
+            """调用 OpenAI API 获取 ACSL 注释"""
+            # 将内容添加到消息中
+            self.messages.append({"role": "user", "content": prompt})
         
-        def replace_at(match):
-            variable = match.group(1).strip()
-            return f"{variable}@pre"
-        
-        def replace_forall(match):
-            variable = match.group(1).strip()
-            return f"forall ({variable}:Z),"
-    
-        def replace_exists(match):
-            variable = match.group(1).strip()
-            return f"exists ({variable}:Z),"
+            # 获取助手的响应
+            response = self.client.chat.completions.create(
+                model= self.llm,
+                messages=self.messages,
+                temperature=0.3
+            )
 
+            def extract_last_c_code(text):
+                # 匹配 C 代码块（Markdown 代码块 或 以 #include 开头的代码）
+                code_blocks = re.findall(r'```c(.*?)```', text, re.DOTALL)  # Markdown 代码块
 
-        parts = before.strip()[3:-2].split('loop invariant')
-        invariants = [f'({part.strip()})' for part in parts if part.strip()]
-        invariant = ' &&\n'.join(invariants)
-        invariant = re.sub(r'\\forall\s+(?:int|integer)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*;' , replace_forall, invariant)
-        invariant = re.sub(r'\\exists\s+(?:int|integer)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*;' , replace_exists, invariant)
-        invariant = re.sub(r'\\at\(\s*([a-zA-Z0-9_\[\]\->\.\*]+)\s*,\s*Pre\s*\)', replace_at, invariant)
-        invariant = re.sub(r'([a-zA-Z_][a-zA-Z0-9_]*)\[', r'\1_l[', invariant)
-        invariant = re.sub(r'(<|<=)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+(<|<=)', r'\1 \2 && \2 \3', invariant)
-        invariant = invariant.replace("==>", "=>")
-        invariant = invariant.replace(';','')
+                return code_blocks[-1] if code_blocks else text  # 返回最后一个 C 代码块
 
-        before = f'''/*@ Inv
-    {invariant}
-    */
-    ''' 
-        return before+after
-    
+            # 处理响应
+            assistant_response = response.choices[0].message.content
+            assistant_response = re.sub(r'>\s*Reasoning\s*[\s\S]*?(?=\n\n|$)', '', assistant_response, flags=re.IGNORECASE)
+            assistant_response = re.sub(r'<think>.*?</think>', '', assistant_response, flags=re.DOTALL)
+            assistant_response = extract_last_c_code(assistant_response)
+
+            return assistant_response
+
+        except Exception as e:
+            print(f"API调用失败: {e}")
+            return None
 
     def get_annotations(self, user_prompt):
         """调用 OpenAI API 获取 ACSL 注释"""
@@ -898,6 +776,8 @@ class InvGenerator:
         output_symexe_c_file_path = f"symexe/output/{file_name}"
         
 
+
+
         json_file =f'loop/{name}.json'
 
 
@@ -947,8 +827,6 @@ class InvGenerator:
             path_conds =analysis.path_conds
             print(path_conds)
             updated_loop_conditions = analysis.updated_loop_conditions
-            array_names = analysis.array_names
-            non_inductive_vars = analysis.non_inductive_vars
 
             if not inner_flags[idx]:
 
@@ -1044,8 +922,7 @@ class InvGenerator:
                     # 判断验证结果
                     valid = bool(validate_result) and all(validate_result)
                     syntax = syntax_error ==''
-                    satisfy = bool(verify_result) 
-                    
+                    satisfy = all(verify_result)
 
                     if not syntax:
 
@@ -1069,7 +946,6 @@ class InvGenerator:
                             annotations  = self.regen(validate_result,error_list,annotations,output_c_file_path)
 
                     else:
-                        print("CORRECT INVARIANT")
                         break
 
                 
@@ -1078,17 +954,12 @@ class InvGenerator:
                 verifier = OutputVerifier()
                 verifier.run(file_name)   
 
-                annotations = self.get_annotated_loop_content(annotations,idx)
 
                 annotations = self.convert_annotations(annotations)
-
-                symexe_updated_code  =processor.update_loop_content(self.get_c_code(processor.output_file),annotations,idx)
-
-                print('继续符号执行')
                 print(annotations)
                 # 将 ACSL 注释写入输出文件
                 with open( output_symexe_c_file_path, 'w', encoding='utf-8') as file:
-                        file.write(symexe_updated_code)
+                        file.write(annotations)
                 processor.execute()
 
         

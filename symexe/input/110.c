@@ -1,6 +1,6 @@
 void foo(int n)  
-/*@ Require emp 
-   Ensure emp
+/*@ Require n >= 1
+   Ensure empty
 */ 
     {
 

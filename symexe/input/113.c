@@ -1,5 +1,5 @@
 void foo(int n,int v1,int v2,int v3)  
-/*@ Require emp 
+/*@ Require n >= 1
    Ensure emp
 */ 
     {

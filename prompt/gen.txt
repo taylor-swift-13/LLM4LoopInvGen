@@ -49,11 +49,11 @@ Rules:
 
 1.  Only use keywords and constructs supported in ACSL annotations for loops.
 2.  Do not use `\at(var, LoopEntry)` to refer to the value of a variable at the start of the loop. Instead, use the value specified in the pre-condition.
-3.  Do not modify the structure or wording of the existing invariants. You are only allowed to fill in the placeholders PLACE_HOLDER_FOR_ARRAY_a and PLACE_HOLDER_i with appropriate logical expressions to make the invariants meaningful and valid. Preserve the overall structure exactly as it is. Provide only the filled-in placeholders.
-4.  The invariant does not need to be overly strong; it only needs to be sufficient to prove the post-condition.
-5.  Generate loop invariants with equality constraints as comprehensively as possible.
-6.  The variables in the loop condition must be constrained by upper and lower bounds within the invariant.
-7.  Do not add any natural language explanations after ACSL annotations.
+3.  You can use `\at(var, Pre)` to represent the value of a parameter passed into the function (e.g., `void foo (int v ...)`), but you cannot use it for local variables (e.g., `int v = 0`).
+4.  Only replace the comment `PLACE_HOLDER_v` with a logical expression about the variable `v`. Do not modify the code or other comments. Ensure the expression fits the context.
+5.  The invariant does not need to be overly strong; it only needs to be sufficient to prove the post-condition.
+6.  Generate loop invariants with equality constraints as comprehensively as possible.
+7.  The variables in the loop condition must be constrained by upper and lower bounds within the invariant.
 8.  If you break any of these rules, my family will disown me.
 
 Consider the following C loop:

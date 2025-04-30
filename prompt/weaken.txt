@@ -49,8 +49,6 @@ When the "Goal Assertion" is correct, but either "Goal Establishment" or "Goal P
 
 2.  Do not modify the original C code: Only make changes to the ACSL annotations.
 
-3.  Do not add any natural language explanations after ACSL annotations
-
 
 
 

@@ -1,0 +1,119 @@
+### Task ###
+Convert the given ACSL-format loop invariants into the specified ​Syntax Tree Format while:
+
+1. Replacing \at(var, Pre) with var@pre
+2. Using Inv instead of loop invariant /* Inv    */
+3. Preserving all logical structure and semantics
+
+### Syntax Tree Format ###
+    The loop invariant must be written in the following syntax tree format:
+```txt
+term ::=
+	| C                 (* constant *)
+	| string            (* variable *)
+	| nil              	(* null pointer *)
+	| term op term			(* se1 op se2 *)
+	| "*" term					(* dereference *)
+	| "&" term					(* address of *)
+	| unop term					(* unary operator *)
+	| term "." string		(* field access *)
+	| term "[" term "]"	(* array access *)
+	| "(" term ")"			(* parenthesis *)
+	| term "->" string			(* pointer field access *)
+	| term"("term, term, ... ")"	(* function call *)
+
+op ::=
+	| "+" | "-" | "*" | "/" | "%" | "^" | "&" | "|" | "~" | "<<" | ">>" | "&&" | "||" | "==" | "!=" | "<" | "<=" | ">" | ">="
+
+unop ::=
+	| "+" | "-" | "~" | "!"
+
+prop_formula ::=
+	| TRUE | FALSE | term
+	| "(" prop_formula ")"  							(* parenthesis *)
+	| prop_formula " && " prop_formula    (* conjunction *)
+	| prop_formula " || " prop_formula    (* disjunction *)
+	| "!" prop_formula    								(* negation *)
+	| prop_formula "=>" prop_formula    	(* implication *)
+	| prop_formula "<=>" prop_formula    	(* equivalence *)
+	| "forall" variables "," prop_formula    (* universal quantifier *)
+	| "exists" variables "," prop_formula    (* existential quantifier *)
+
+sep_formula ::=
+	| emp 															(* empty *)
+	| "(" sep_formula ")"  							(* parenthesis *)
+	| f"("term1, term2, ...")" 					(* predicate *)
+	| sep_formula "*" sep_formula 			(* separation conjuction *)
+	| "forall" variables "," prop_formula "=>" sep_formula    (* universal quantifier *)
+
+single_assertion_formula ::=
+	| prop_formula "&&" sep_formula
+	| "exists" variable "," single_assertion_formula
+
+assertion_in_function ::=
+	| assert_annotation
+	| inv_annotation
+
+assert_annotation ::= "/*@ " single_assertion_formula " */"
+inv_annotation ::= "/*@ Inv " single_assertion_formula " */"
+
+### Examples ###
+Input1:
+```c
+/*@
+  loop invariant x == y;
+  loop invariant n == 0;
+*/
+while(x != n) {{
+    x--;
+    y--;
+}}
+```
+Output2:
+```c
+/*@Inv
+  x == y &&
+  n == 0
+*/
+while(x != n) {{
+    x--;
+    y--;
+}}
+
+```
+Input2:
+```c
+/*@
+  loop invariant i % 2 == 0;
+  loop invariant i % 2 == 0 ==> j == 2 * (i / 2) + 1;
+  loop invariant a == b;
+ */
+  while (1) {{
+    a++;
+    b += (j - i);
+  }}
+```
+
+Output2:
+```c
+/*@Inv
+  i % 2 == 0 &&
+  i % 2 == 0 ==> j == 2 * (i / 2) + 1 &&
+  a == b
+*/
+ while (1) {{
+    a++;
+    b += (j - i);
+  }}
+
+```
+
+
+### Input ###
+ACSL-format loop invariants:
+{loop_inv}
+
+### Output ###
+Converted loop invariants in ```c ```:
+
+
