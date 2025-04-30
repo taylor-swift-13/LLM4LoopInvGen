@@ -1,3 +1,4 @@
+int unknown();
 void foo(int n,int z1,int z2,int z3)
 {
     int x = 0;
@@ -6,7 +7,7 @@ void foo(int n,int z1,int z2,int z3)
     
     while (x < n) {
 
-        if (1) {
+        if (unknown()) {
             m = x;
         }
         
