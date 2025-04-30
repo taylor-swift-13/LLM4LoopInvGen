@@ -9,8 +9,8 @@ the tool using large language model to automatically generate inductive loop inv
 | Symbolic execution | 1    |      |
 | Feedback Iteration | 1    |      |
 | hudini             | 1    |      |
-| Array              | 1    |      |
-|                    | 1    |      |
+| Array fit          | 1    |      |
+
 
 ### result for gpt-4o-mini sysGus
 
