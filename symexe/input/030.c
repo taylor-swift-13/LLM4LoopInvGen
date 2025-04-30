@@ -3,7 +3,7 @@ void foo()
 /*@ Require emp 
    Ensure emp
 */ 
-    {
+  {
 
   int i, c;
   i = 0;

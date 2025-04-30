@@ -1,21 +1,18 @@
-void foo(int n,int y,int v1,int v2,int v3)  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
+
+void foo(int n,int y,int v1,int v2,int v3) {
     
     int x = 1;
 
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (x <= n) {
+    /*@Inv
+      v3 == v3@pre &&
+      v2 == v2@pre &&
+      v1 == v1@pre &&
+      n == n@pre
+    */
+    while (x <= n) {
         y = n - x;
         x = x + 1;
     }
 
-    /*@  (n > 0) => (y >= 0) */
-
-
+    /*@ assert (n > 0) ==> (y >= 0); */
 }

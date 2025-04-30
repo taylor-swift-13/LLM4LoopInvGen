@@ -1,22 +1,11 @@
-int unknown();
-void foo(int x, int y)  
-/*@ Require x >= 0 && x <= 10 && y <= 10 && y >= 0 
-   Ensure emp
-*/ 
-    {
-  
-  
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (unknown()) {
-      
-        x = x + 10;
-        y = y + 10;
-        
-      
-    }
 
-    /*@  (x ==20) =>  (y != 0) */
-  }
-   
+/*@Inv
+  (\at(x, Pre) >= 0 && \at(x, Pre) <= 10 && \at(y, Pre) <= 10 && \at(y, Pre) >= 0) => (((y == \at(y, Pre)) && (x == \at(x, Pre))) || (x >= 0 && x <= 20)) &&
+  (\at(x, Pre) >= 0 && \at(x, Pre) <= 10 && \at(y, Pre) <= 10 && \at(y, Pre) >= 0) => (((y == \at(y, Pre)) && (x == \at(x, Pre))) || (y >= 0 && y <= 20))
+*/
+while (1) {
+    x = x + 10;
+    y = y + 10;
+    
+    /*@ assert (x == 20) ==> (y != 0); */
+}

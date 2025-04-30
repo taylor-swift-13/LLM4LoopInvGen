@@ -14,9 +14,10 @@ class LoopAnalysis:
         self.loop_condition = None
         self.updated_loop_conditions = None
         self.var_maps = None
+        self.array_names = None
         self.global_unchanged_vars = None
-        self.unloop_name =None
-        self.unloop_paths = None
+        self.non_inductive_vars = None
+        
 
 
         # OpenAI 客户端初始化
@@ -46,21 +47,37 @@ class LoopAnalysis:
     
 
     def extract_precond_from_file(self):
-        """
-        从指定的 JSON 文件中读取数据，并提取前置条件。
         
-        :param json_file: JSON 文件路径或数据
-        :param idx: 需要提取的循环索引
-        :return: 前置条件（字符串）
-        """
         loop = self.get_json_at_index()  # 获取指定索引的循环数据
         condition = loop.get("condition", "")  # 获取条件表达式
         return condition
+
+
+    def extract_non_inductive_vars(self):
+       
+       
+        loop = self.get_json_at_index()
+        loop_content = loop.get("content", "")
+        var_map = self.var_maps[0]
+        var_names = set(var_map.keys())
+
+        results = []
+        lines = loop_content.split('\n')
+        for idx, line in enumerate(lines, 1):
+            for var in var_names:
+               
+                m = re.match(rf"\s*{re.escape(var)}\s*=(?!=)", line)
+                if m:
+                    # 取等号右侧
+                    right_side = line.split('=', 1)[1]
+                    # 检查右侧是否用到自己
+                    if not re.search(rf"\b{re.escape(var)}\b", right_side):
+                        results.append(var)
+        return results
+
     
     def extract_unchanged_vars(self):
-        """
-        获得不变的变量
-        """
+        
         loop = self.get_json_at_index()  # 获取指定索引的循环数据
         loop_content = loop.get("content", "")  # 获取循环内容
         var_map = self.var_maps[0]  # 获取变量映射表（字典）
@@ -71,30 +88,56 @@ class LoopAnalysis:
         for var_name in var_map.keys():
             # 使用正则表达式检查变量是否在循环内容中作为左值出现
             # 匹配模式：变量名 + 可能的空格 + = （排除 ==）
-            pattern = re.compile(rf"\b{var_name}\s*(\+=|-=|\*=|/=|=)(?!=)")
+            # pattern = re.compile(rf"\b{var_name}\s*(\+=|-=|\*=|/=|=)(?!=)")
+            pattern = re.compile(
+            rf"(\b{var_name}\b\s*(\+\+|--|\+=|-=|\*=|/=|=(?!=))|(\+\+|--)\s*\b{var_name}\b)"
+        )
             if not pattern.search(loop_content):
                 unchanged_vars.append(var_name)
 
         return unchanged_vars
 
+    def extract_array_names(self):
+        pre_condition = self.pre_condition
+        array_names = []
+        start = 0
+        length = len(pre_condition)
+        
+        while start < length:
+            # 查找 'store_int_array' 的位置
+            func_idx = pre_condition.find('store_int_array', start)
+            if func_idx == -1:
+                break  # 没有更多函数调用
+            
+            # 查找左括号的位置
+            left_paren = pre_condition.find('(', func_idx)
+            if left_paren == -1:
+                start = func_idx + 1
+                continue
+            
+            # 查找右括号的位置
+            right_paren = pre_condition.find(')', left_paren)
+            if right_paren == -1:
+                start = func_idx + 1
+                continue
+            
+            # 提取参数部分并分割
+            param_str = pre_condition[left_paren+1:right_paren].strip()
+            params = [p.strip() for p in param_str.split(',')]
+            
+            if len(params) >= 3:
+                third_param = params[2]
+                # 去除末尾的 '_l'
+                if third_param.endswith('_l'):
+                    third_param = third_param[:-2]
+                array_names.append(third_param)
+            
+            # 继续查找下一个函数调用
+            start = right_paren + 1
+        
+        return array_names
 
-    # def extract_var_map_from_file(self):
-    #     var_map = {}
-    #     loop = self.get_json_at_index()  # 获取指定索引的循环数据
-    #     condition = loop.get("condition", "")  # 获取条件表达式
 
-    #     # 正则表达式匹配形如 "var == value" 的部分，支持嵌套括号
-    #     pattern = r'(\w+)\s*==\s*(\((?:[^()]*|\((?:[^()]*|\([^()]*\))*\))*\)|[^()]+)'
-    #     matches = re.findall(pattern, condition)
-
-    #     for var, value in matches:
-    #         # 去掉 value 中的外层括号（如果存在）
-    #         value = value.strip()
-    #         if value.startswith('(') and value.endswith(')'):
-    #             value = value[1:-1]
-    #         var_map[var] = value
-
-    #     return var_map
 
     def extract_var_map_from_file(self):
         loop = self.get_json_at_index()  # 获取指定索引的循环数据
@@ -123,6 +166,8 @@ class LoopAnalysis:
             else:
                 # 按最后一个 && 分割
                 path = expression[:last_and_index].strip()
+                if 'exists' in path:
+                    path = None
                 state = expression[last_and_index + 2:].strip()
 
             return path, state
@@ -130,7 +175,48 @@ class LoopAnalysis:
         # 正则表达式匹配形如 "var == value" 的部分，支持嵌套括号
 
 
-        pattern = r'(\w+)\s*==\s*($(?:[^()]*|\((?:[^()]*|\([^()]*$)*\))*\)|[^()]+)'
+        def parse_expressions(s):
+            var_map = {}
+            remaining = s.strip()
+            stack = []
+            expr_start = 0
+            i = 0
+            n = len(remaining)
+            
+            while i < n:
+                char = remaining[i]
+                
+                # 处理括号层级
+                if char == '(':
+                    stack.append(i)
+                elif char == ')':
+                    if stack:
+                        stack.pop()
+                
+                # 遇到逻辑运算符且不在括号内时，分割表达式
+                if i < n-1 and remaining[i:i+2] in ('&&', '* ') and not stack:
+                    # 提取当前表达式
+                    expr = remaining[expr_start:i].strip()
+                    # 解析表达式中的键值对
+                    eq_pos = expr.find('==')
+                    if eq_pos != -1:
+                        var = expr[:eq_pos].strip(' ()')
+                        value = expr[eq_pos+2:].strip(' ()')
+                        var_map[var] = value
+                    expr_start = i + 2
+                    i += 1  # 跳过运算符的第二个字符
+                
+                i += 1
+            
+            # 处理最后一个表达式
+            expr = remaining[expr_start:].strip()
+            eq_pos = expr.find('==')
+            if eq_pos != -1:
+                var = expr[:eq_pos].strip(' ()')
+                value = expr[eq_pos+2:].strip(' ()')
+                var_map[var] = value
+                
+            return var_map
 
         for sub_condition in sub_conditions:
 
@@ -138,132 +224,96 @@ class LoopAnalysis:
             var_map = {}  # 为每个子条件创建一个新的 var_map
             path_cond = path
             path_conds.append(path_cond)
-
-            matches = re.findall(pattern, state)
-
-            for var, value in matches:
-                # 去掉 value 中的外层括号（如果存在）
-                value = value.strip()
-                if value.startswith('(') and value.endswith(')'):
-                    value = value[1:-1]
-                var_map[var] = value
+           
+            var_map = parse_expressions(state)
 
             var_maps.append(var_map)  # 将 var_map 添加到列表中
 
         return var_maps,path_conds
     
     def extract_first_loop_condition(self):
-        """
-        从输入的代码中提取第一个 for 或 while 循环的条件（支持括号嵌套）
-        使用手动解析代替正则表达式
-        
-        :return: 第一个循环条件字符串，若无则返回 None
-        """
+       
         loop = self.get_json_at_index()
-        loop_content = loop.get("content", "").strip()
+        code = loop.get("content", "")
         
-        # 查找循环关键字起始位置
-        loop_keywords = ["while", "for"]
-        start_idx = -1
+        # 查找第一个出现的 for 或 while 关键字
+        loop_keywords = ["for", "while"]
+        first_pos = len(code)
+        keyword_found = None
         for keyword in loop_keywords:
-            idx = loop_content.find(keyword)
-            if idx != -1 and (start_idx == -1 or idx < start_idx):
-                start_idx = idx
-        if start_idx == -1:
-            return None  # 没有找到循环关键字
+            pos = code.find(keyword)
+            if pos != -1 and pos < first_pos:
+                first_pos = pos
+                keyword_found = keyword
+        if keyword_found is None:
+            return None  # 未找到循环关键字
         
-        # 定位条件开始位置（跳过关键字和空格）
-        cursor = start_idx + len(loop_keywords[0])  # 跳至关键字结尾
-        while cursor < len(loop_content) and loop_content[cursor].isspace():
+        # 确保找到的是完整的关键字
+        if (first_pos > 0 and (code[first_pos-1].isalnum() or code[first_pos-1]=='_')) or \
+        (first_pos + len(keyword_found) < len(code) and (code[first_pos+len(keyword_found)].isalnum() or code[first_pos+len(keyword_found)]=='_')):
+            return None
+        
+        # 定位 '('（跳过关键字和空格）
+        cursor = first_pos + len(keyword_found)
+        while cursor < len(code) and code[cursor].isspace():
             cursor += 1
-        
-        # 检查左括号
-        if cursor >= len(loop_content) or loop_content[cursor] != '(':
-            return None  # 没有左括号
+        if cursor >= len(code) or code[cursor] != '(':
+            return None  # 没有找到左括号
         cursor += 1  # 跳过 '('
         
-        # 提取带嵌套括号的条件内容
-        paren_depth = 1
+        # 提取括号内的内容，支持括号嵌套
         condition_start = cursor
-        while cursor < len(loop_content) and paren_depth > 0:
-            char = loop_content[cursor]
-            if char == '(':
+        paren_depth = 1
+        while cursor < len(code) and paren_depth > 0:
+            if code[cursor] == '(':
                 paren_depth += 1
-            elif char == ')':
+            elif code[cursor] == ')':
                 paren_depth -= 1
             cursor += 1
-        
         if paren_depth != 0:
             return None  # 括号不匹配
+        inner = code[condition_start: cursor-1].strip()
         
-        # 提取并清理条件
-        condition = loop_content[condition_start : cursor-1].strip()
-        self.loop_condition = condition
+        # 提取条件
+        condition = None
+        if keyword_found == "while":
+            # while 循环条件为整个括号内内容
+            condition = inner
+        elif keyword_found == "for":
+            # for 循环通常包含三个表达式：初始化; 条件; 迭代，条件在中间
+            parts = []
+            part = ""
+            nested = 0  # 处理内部括号嵌套
+            for ch in inner:
+                if ch == '(':
+                    nested += 1
+                elif ch == ')':
+                    nested -= 1
+                if ch == ';' and nested == 0:
+                    parts.append(part.strip())
+                    part = ""
+                else:
+                    part += ch
+            parts.append(part.strip())
+            # 条件部分位于第二个分号分隔部分（若存在）
+            if len(parts) >= 2:
+                condition = parts[1]
+            else:
+                condition = None
+
+            if condition == '':
+                condition = None
         return condition
 
+    
 
-    # def extract_first_loop_condition(self):
-    #     """
-    #     从输入的代码中提取第一个 for 或 while 循环的条件。
-
-    #     :param json_file: JSON 文件路径或数据
-    #     :param idx: 需要提取的循环索引
-    #     :return: 第一个循环条件（字符串），如果未找到则返回 None
-    #     """
-
-    #     loop = self.get_json_at_index()  # 获取指定索引的循环数据
-    #     loop_content = loop.get("content", "")  # 获取循环内容
-
-    #     # 正则表达式匹配 for 或 while 循环的条件
-    #     pattern = r'(?:for|while)\s*\((.*?)\)'
-    #     match = re.search(pattern, loop_content)
-        
-    #     if match:
-    #         self.loop_condition = match.group(1)
-    #         return match.group(1)  # 返回第一个匹配的条件部分
-    #     return None  # 如果未找到，返回 None
-
-    # def replace_vars_with_values(self, loop_cond, var_map):
-    #     """
-    #     将循环条件中的变量替换为它们的值，确保每个位置只替换一次，从左到右查找并替换。
-
-    #     :param loop_cond: 循环条件（字符串）
-    #     :param var_map: 变量及其值的映射（字典）
-    #     :return: 替换后的循环条件（字符串）
-    #     """
-    #     # 将字符串转换为列表，方便修改
-    #     loop_cond_list = list(loop_cond)
-    #     i = 0  # 当前查找位置
-
-    #     while i < len(loop_cond_list):
-    #         # 从左到右查找变量名
-            
-    #         for var in var_map:
-    #             # 检查当前位置是否匹配变量名
-    #             if loop_cond_list[i:i + len(var)] == list(var):
-    #                 # 检查变量名是否完整（前后是单词边界或非字母数字字符）
-    #                 is_start_boundary = (i == 0 or not loop_cond_list[i - 1].isalnum())
-    #                 is_end_boundary = (i + len(var) >= len(loop_cond_list) or not loop_cond_list[i + len(var)].isalnum())
-    #                 if is_start_boundary and is_end_boundary:
-    #                     # 替换变量名
-    #                     loop_cond_list[i:i + len(var)] = list(var_map[var])
-    #                     # 跳过替换后的部分
-    #                     i += len(var_map[var]) - 1
-    #                     break
-    #         i += 1
-
-    #     # 将列表转换回字符串
-    #     return ''.join(loop_cond_list)
 
     def replace_vars_with_values(self, loop_cond, var_maps):
-        """
-        将循环条件中的变量替换为它们的值，确保每个位置只替换一次，从左到右查找并替换。
-
-        :param loop_cond: 循环条件（字符串）
-        :param var_maps: 变量及其值的映射列表（列表，每个元素是一个字典）
-        :return: 替换后的循环条件列表（列表，每个元素是一个字符串）
-        """
+        
         updated_loop_conditions = []
+
+        if loop_cond == None:
+            return [None]
 
         for var_map in var_maps:
             # 将字符串转换为列表，方便修改
@@ -301,7 +351,7 @@ class LoopAnalysis:
         self.var_maps =var_maps
         self.path_conds = path_conds
         print("Variable Maps:", var_maps)
-        print("Path condition:", path_conds)
+        print("Path conditions:", path_conds)
     
 
         # 提取前置条件
@@ -315,7 +365,7 @@ class LoopAnalysis:
         print("Loop Condition:", loop_condition)
 
         # 替换循环条件中的变量为值
-        if var_maps and loop_condition:
+        if var_maps :
             updated_loop_conditions = self.replace_vars_with_values(loop_condition, var_maps)
             self.updated_loop_conditions = updated_loop_conditions
             print("Updated Loop Conditions:", updated_loop_conditions)
@@ -323,6 +373,10 @@ class LoopAnalysis:
         global_unchanged_vars = self.extract_unchanged_vars()
         self.global_unchanged_vars = global_unchanged_vars 
         print("Global Unchanged Variables", global_unchanged_vars)
+
+        non_inductive_vars = self.extract_non_inductive_vars()
+        self.non_inductive_vars = non_inductive_vars
+        print("Non Inductive Variables", non_inductive_vars)
 
 
 
@@ -332,7 +386,7 @@ class LoopAnalysis:
 # 示例调用 
 if __name__ == "__main__":
    
-   json_file = 'loop/test_1.json'
+   json_file = 'loop/09.json'
    idx = 0
    analyzer= LoopAnalysis(json_file,idx)
    analyzer.run()

@@ -1,15 +1,16 @@
 
-void foo(int l)  
+void foo(int l,int n)  
 /*@ Require l>0
    Ensure emp
 */ 
     {
-  int i, k, n;
+  int i, k;
  
 
- 
-  for (k = 1; k < n; k++) {
-    for (i = l; i < n; i++) {
+  k =1;
+  for (k =1; k < n; k++) {
+    i =l;
+    for (i=l; i < n; i++) {
 
     }
 

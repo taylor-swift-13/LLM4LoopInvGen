@@ -1,5 +1,8 @@
 
-int unknown();
+int unknown()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/;
 
 
 void foo(int x, int y, int k, int j, int i, int n)  
@@ -23,7 +26,7 @@ void foo(int x, int y, int k, int j, int i, int n)
     }
     j++;
   }
-  /*@ (x + y) == k) */
+  /*@ (x + y) == k */
   
   /*@ (n > 0) => (0 <= m && m < n)*/
   

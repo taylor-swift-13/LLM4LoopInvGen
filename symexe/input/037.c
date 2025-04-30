@@ -1,4 +1,7 @@
-
+int unknown()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/;
 
 void foo(int n)  
 /*@ Require n > 0
@@ -9,7 +12,7 @@ void foo(int n)
   int m = 0;
  
   while (x < n) {
-    if (unknown1()) {
+    if (unknown()) {
       m = x;
     }
     x = x + 1;

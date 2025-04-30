@@ -1,19 +1,8 @@
-void foo()  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
 
-    int x = 0;
-    int y = 0;
-
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while(y >= 0) {
-        y = y + x;
-    }
-    /*@  y >= 0*/
-
+/*@Inv
+  (y == 0 && x == 0) || (y >= 0) &&
+  x == 0
+*/
+while(y >= 0) {
+    y = y + x;
 }

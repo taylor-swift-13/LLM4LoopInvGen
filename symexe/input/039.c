@@ -1,9 +1,12 @@
 
-int unknown();
+int unknown()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/;
 
 void foo(int MAXPATHLEN,int  __BLAST_NONDET)
  
-/*@ Require emp 
+/*@ Require MAXPATHLEN <= 0
    Ensure emp
 */ 
     {
@@ -18,8 +21,6 @@ void foo(int MAXPATHLEN,int  __BLAST_NONDET)
   int glob3_pathlim_off;
   int glob3_pattern_off;
   int glob3_dc;
-
-  if(MAXPATHLEN > 0); else goto END;
 
 
   buf_off = 0;
@@ -43,9 +44,8 @@ void foo(int MAXPATHLEN,int  __BLAST_NONDET)
      
       /*@  0 <= glob3_dc*/
       /*@  glob3_dc < MAXPATHLEN + 1*/
-      if (unknown()) goto END;
+      if (unknown()) return;
     }
- END: return;
 }
 
 }

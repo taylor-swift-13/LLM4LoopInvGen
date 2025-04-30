@@ -10,21 +10,22 @@ int main(int y)
 
    
   /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (x != y) {
-        if ( unknown() ) {
-          
-          lock  = 1;
-          x  = y;
-          
+/*@ Inv
+    ((y@pre != y@pre) => (((x == y@pre)&&(lock == 1)&&(y == y@pre)) || (y == y@pre))) &&
+((y@pre != y@pre) => (((x == y@pre)&&(lock == 1)&&(y == y@pre)) || (lock == 1))) &&
+((y@pre != y@pre) => (((x == y@pre)&&(lock == 1)&&(y == y@pre)) || (x == y@pre))) &&
+((!(y@pre != y@pre)) => ((x == y@pre)&&(lock == 1)&&(y == y@pre)))
+    */
+    
+    while (x != y) {
+        if (1) {
+            lock = 1;
+            x = y;
         } else {
-          
-          lock  = 0;
-          x  = y;
-          y  = y + 1;
-          
+            lock = 0;
+            x = y;
+            y = y + 1;
         }
- 
     }
     /*@  lock == 1*/
   }

@@ -1,22 +1,7 @@
-int unknown();
-void foo(int x,int y,int z1,int z2,int z3)  
-/*@ Require  x >= 0 && x <= 2 && y <= 2 && y >= 0 
-   Ensure emp
-*/ 
-    {
 
-  
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (unknown()) {
-      
-      x  = x + 2;
-      y  = y + 2;
-  
-    }
-
-       /*@  (y == 0) => (x != 4)  */
-  
-   
-  }
+/*@Inv
+  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) => (x >= x@pre + 2 * n && y >= y@pre + 2 * n) &&
+  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) => (z3 == z3@pre) &&
+  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) => (z2 == z2@pre) &&
+  (\at(x, Pre) >= 0 && \at(x, Pre) <= 2 && \at(y, Pre) <= 2 && \at(y, Pre) >= 0) => (z1 == z1@pre)
+*/

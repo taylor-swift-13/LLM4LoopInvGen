@@ -1,23 +1,11 @@
-int unknown();
-void foo(int v1,int v2,int v3)  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
 
-    int sn = 0;
-    int x = 0;
-    
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (unknown()) {
+/*@Inv
+  (x == 0) && (sn == 0) && (v3 == v3@pre) && (v2 == v2@pre) && (v1 == v1@pre) ||
+  sn == 0
+*/
+while (1) {
+    x  = (x + 1);
+    sn  = (sn + 1);
   
-      x  = (x + 1);
-      sn  = (sn + 1);
-      
-    }
-    /*@  (sn != x) => (sn == -1)*/
-  
-  }
+    /*@ assert (sn != x) ==> (sn == -1);*/
+}

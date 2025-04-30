@@ -1,33 +1,14 @@
-int unknown();
-void foo(int n)  
-/*@ Require n >0
-   Ensure emp
-*/ 
-    {
 
-    int c = 0;
-
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (unknown()) {
-        {
-          if (unknown()) {
-            if ( c > n )
-            {
-            c  = c + 1;
-            }
-          } else {
-            if (c == n) 
-            {
-            c  = 1;
-            }
-          }
-    
-        }
-    
-    }  
-           
-         /*@  (n <= -1) => (c != n ) */
-
+/*@Inv
+  n > 0 => n == n@pre
+*/
+while (1) {
+    if(c > n) {
+        c = c + 1; // Incrementing c
+    }
+    else if(c == n){
+        c = 1; // Resetting c
+    }
+       
+    /*@ assert (n <= -1) ==> (c != n ); */
 }

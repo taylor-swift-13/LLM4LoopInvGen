@@ -1,20 +1,9 @@
-void foo(int n,int v1,int v2,int v3)  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
-  
-    int x = 0;
-    
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (x < n) {
-      
-      x  = (x + 1);
-      
-    }
-    /*@  (n >= 0) => (x == n) */
-    
-  }
+
+/*@Inv
+  (0 < n@pre) ==> (((x < n) && (v3@pre == v3@pre) && (v2@pre == v2@pre) && (v1@pre == v1@pre) && (n@pre == n@pre)) || (x < n)) &&
+  !(0 < n@pre) ==> ((x == 0) && (v3@pre == v3@pre) && (v2@pre == v2@pre) && (v1@pre == v1@pre) && (n@pre == n@pre)) &&
+  v3@pre == v3@pre &&
+  v2@pre == v2@pre &&
+  v1@pre == v1@pre &&
+  n@pre == n@pre
+*/

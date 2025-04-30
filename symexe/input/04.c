@@ -4,7 +4,6 @@ void foo(int x,int y)
    Ensure emp
 */ 
 {
-  int x, y;
 
   x = -50;
   
@@ -12,6 +11,7 @@ void foo(int x,int y)
 	x = x + y;
 	y++;
   }
+
   /*@ y > 0 */
 }
 

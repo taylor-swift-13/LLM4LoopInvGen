@@ -1,23 +1,12 @@
-void foo(int x)  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
-    int i =0;
-    int j =0;
-    int y =2;
-    
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (i <= x) {
-      
-      i  = i + 1;
-      j  = j + y;
-  
-    }
-  
-  /*@  (y == 1) => (i == j) */
-  
-  }
+
+/*@Inv
+  (0 <= x@pre) ==> (((y == 2) && (j == 0) && (i == 0) && (x == x@pre)) || (PLACE_HOLDER_i)) &&
+  (0 <= x@pre) ==> (((y == 2) && (j == 0) && (i == 0) && (x == x@pre)) || (PLACE_HOLDER_j)) &&
+  !(0 <= x@pre) ==> ((y == 2) && (j == 0) && (i == 0) && (x == x@pre)) &&
+  y == 2 &&
+  x == x@pre
+*/
+while (i <= x) {
+    i = i + 1;
+    j = j + y;
+}

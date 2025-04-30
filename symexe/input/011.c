@@ -8,7 +8,7 @@ void foo()
 */ 
     {
   int j = 0;
-  int i;
+  int i = 0;
   int x = 100;
    
  

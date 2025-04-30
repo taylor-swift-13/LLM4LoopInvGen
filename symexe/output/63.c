@@ -1,20 +1,14 @@
-void foo(int y)  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
+
+void foo(int y) {
     int x = 1;
     
-    
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (x <= 10) {
+    /*@Inv
+      ((x == 1) && (y == y@pre)) || (y >= 0 && y <= 10)
+    */
+    while (x <= 10) {
         y = 10 - x;
-        x = x +1;
+        x = x + 1;
     }
-
-    /*@  (y >= 0) */
-
+    
+    /*@ assert (y >= 0); */
 }

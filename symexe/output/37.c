@@ -1,30 +1,12 @@
-int unknown();
 
-void foo()  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
-    int c = 0;
-  
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (unknown()) {
-      if (unknown()) {
-        if (c != 40) {
-          c  = c + 1;
-        }
-      } else {
-        if (c == 40) {
-          c  = 1;
-        }
-      }
+/*@Inv
+  (c == 0) || (c >= 1 && c <= 40)
+*/
+while (1) {
+    if (c != 40) {
+        c = c + 1;
+    } else {
+        c = 1;
     }
-    
-      /*@  ((c < 0) && (c > 40)) => (c == 40)*/
-  
-   
-  
-  }
-  
+    /*@ assert ((c < 0) && (c > 40)) ==> (c == 40); */
+}

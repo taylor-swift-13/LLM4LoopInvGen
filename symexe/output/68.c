@@ -1,21 +1,7 @@
-void foo(int n,int y)  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
-    
-    int x = 1;
 
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (x <= n) {
-        y = n - x;
-        x = x + 1;
-    }
-
-    /*@  (n > 0) => (y <= n) */
-
-
-}
+/*@Inv
+  (1 <= n@pre) ==> (((x == 1) && (y == y@pre) && (n == n@pre)) || (1 <= x <= n + 1)) &&
+  (1 <= n@pre) ==> (((x == 1) && (y == y@pre) && (n == n@pre)) || (y == n - x)) &&
+  !(1 <= n@pre) ==> ((x == 1) && (y == y@pre) && (n == n@pre)) &&
+  n == n@pre
+*/

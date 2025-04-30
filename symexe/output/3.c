@@ -1,21 +1,20 @@
-void foo(int y,int z)  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
+
+void foo(int y,int z) {
 
     int x = 0;
     
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while(x < 5) {
+    /*@
+      Inv
+      ((x == 0) && (z == z@pre) && (y == y@pre)) || (y <= y@pre && y >= 0) &&
+      ((x == 0) && (z == z@pre) && (y == y@pre)) || (x == 0) &&
+      z == z@pre;
+    */
+    while(x < 5) {
        x += 1;
        if( z <= y) {
           y = z;
        }
     }
-   
-   /*@  z >= y */
+            
+    /*@ assert z >= y; */
 }

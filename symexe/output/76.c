@@ -1,28 +1,16 @@
-int unknown();
-void foo(int y,int x1,int x2,int x3)  
-/*@ Require 0 <= y && y <= 127 
-   Ensure emp
-*/ 
-    {
-    int c = 0;
-    int z = 36 * y;
-    
-  
-  
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (unknown()) {
-        
-      if ( c < 36 )
-      {
-      z  = z + 1;
-      c  = c + 1;
-  
-      }
-    }
-    /*@   ( z < 0 && z >= 4608 ) => ( c >= 36 ) */
 
-    
-  
-  }
+/*@Inv
+  (0 <= y@pre && y@pre <= 127) => (((z == 36 * y@pre) && (c == 0) && (x3 == x3@pre) && (x2 == x2@pre) && (x1 == x1@pre) && (y == y@pre)) || (PLACE_HOLDER_c)) &&
+  (0 <= y@pre && y@pre <= 127) => (((z == 36 * y@pre) && (c == 0) && (x3 == x3@pre) && (x2 == x2@pre) && (x1 == x1@pre) && (y == y@pre)) || (PLACE_HOLDER_z)) &&
+  (0 <= y@pre && y@pre <= 127) => (x3 == x3@pre) &&
+  (0 <= y@pre && y@pre <= 127) => (x2 == x2@pre) &&
+  (0 <= y@pre && y@pre <= 127) => (x1 == x1@pre) &&
+  (0 <= y@pre && y@pre <= 127) => (y == y@pre)
+*/
+while (unknown()) {
+    if (c < 36) {
+        z = z + 1;
+        c = c + 1;
+    }
+    /*@ assert (z < 0 && z >= 4608) => (c >= 36); */
+}

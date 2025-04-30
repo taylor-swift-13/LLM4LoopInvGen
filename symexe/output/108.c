@@ -1,25 +1,15 @@
 
-void foo(int m,int j,int a,int c)  
-/*@ Require a <= m
-   Ensure emp
-*/ 
-    {
-
-    int k = 0;
-    
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while ( k < c) {
-
-        if(m < a) {
-            m = a;
-        }
-        
-        k = k + 1;
+/*@Inv
+  (\at(a, Pre) <= \at(m, Pre)) ==> ((0 < \at(c, Pre)) ==> (((k == 0) && (c == \at(c, Pre)) && (a == \at(a, Pre)) && (j == \at(j, Pre)) && (m == \at(m, Pre))) || (m >= a))) &&
+  (\at(a, Pre) <= \at(m, Pre)) ==> ((0 < \at(c, Pre)) ==> (((k == 0) && (c == \at(c, Pre)) && (a == \at(a, Pre)) && (j == \at(j, Pre)) && (m == \at(m, Pre))) || (k < c))) &&
+  (\at(a, Pre) <= \at(m, Pre)) ==> ((!(0 < \at(c, Pre))) ==> ((k == 0) && (c == \at(c, Pre)) && (a == \at(a, Pre)) && (j == \at(j, Pre)) && (m == \at(m, Pre)))) &&
+  (\at(a, Pre) <= \at(m, Pre)) ==> (c == \at(c, Pre)) &&
+  (\at(a, Pre) <= \at(m, Pre)) ==> (a == \at(a, Pre)) &&
+  (\at(a, Pre) <= \at(m, Pre)) ==> (j == \at(j, Pre))
+*/
+while (k < c) {
+    if (m < a) {
+        m = a;
     }
-
-  /*@  a <= m */
-
+    k = k + 1;
 }

@@ -1,4 +1,7 @@
-int unknown();
+int unknown()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/;
 
 
 

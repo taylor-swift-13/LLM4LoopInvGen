@@ -1,23 +1,32 @@
 
-int unknown1();
-int unknown2();
-int unknown3();
+int unknown1()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/ ;
+int unknown2()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/ ;
+int unknown3()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/ ;
 
 
 
-void foo() 
+void foo(int pvlen) 
 /*@ Require emp 
    Ensure emp
 */ 
     {
-  int i, pvlen;
+ 
   int t;
   int k = 0;
   int n;
-  i = 0;
+  int i = 0;
 
  
-  while (unknown1())
+  while (unknown1()){
     i = i + 1;
   
   if (i > pvlen) {
@@ -25,6 +34,7 @@ void foo()
   } else {
 
   }
+}
   i = 0;
 
  
@@ -33,7 +43,10 @@ void foo()
     i = i + 1;
     k = k + 1;
   }
-  while (unknown3());
+
+  while (unknown3()){
+     ;
+  }
 
   int j = 0;
   n = i;

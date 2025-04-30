@@ -1,22 +1,16 @@
-void foo(int v1, int v2 ,int v3,int size, int y, int z)
- 
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
-    
-    int x = 0;
 
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while(x < size) {
-       x += 1;
-       if( z <= y) {
-          y = z;
-       }
+/*@Inv
+  z == z@pre &&
+  size == size@pre &&
+  v3 == v3@pre &&
+  v2 == v2@pre &&
+  v1 == v1@pre
+*/
+while(x < size) {
+    x += 1;
+    if(z <= y) {
+        y = z;
     }
-
-    /*@  (size > 0) => (z >= y)  */
-
 }
+
+/*@ assert (size > 0) ==> (z >= y);  */

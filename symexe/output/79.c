@@ -1,28 +1,13 @@
 
-int unknown();
-
-void foo(int x, int y)  
-/*@ Require  x >= y  && y >= 0
-   Ensure emp
-*/ 
-    {
-
-    int i = 0;
-    
-  
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (unknown()) {
-      if ( i < y )
-      {
-      i  = i + 1;
-      }
-  
+/*@Inv
+  (\at(x, Pre) >= \at(y, Pre) && \at(y, Pre) >= 0) ==> (((i == 0) && (y == \at(y, Pre)) && (x == \at(x, Pre))) || (i < y)) &&
+  (\at(x, Pre) >= \at(y, Pre) && \at(y, Pre) >= 0) ==> (y == \at(y, Pre)) &&
+  (\at(x, Pre) >= \at(y, Pre) && \at(y, Pre) >= 0) ==> (x == \at(x, Pre))
+*/
+while (unknown()) {
+    if (i < y) {
+        i = (i + 1);
     }
-    /*@  (i < 0 && i >= x) => (i >= y) */
     
-  
-
+    /*@ assert (i < 0 && i >= x) ==> (i >= y); */
 }

@@ -197,7 +197,7 @@ def main():
         total_time = time.time() - start_time
 
         print(f"总耗时：{total_time}")
-        print(f"平均用时：{(total_time/133)}")
+        print(f"平均用时：{(total_time/file_count)}")
         print_statistics(syntax_count_1, valid_count_1, correct_count_1, file_count, error_files_1)
         print_statistics(syntax_count_3, valid_count_3, correct_count_3, file_count, error_files_3)
         print_statistics(syntax_count_5, valid_count_5, correct_count_5, file_count, error_files_5)

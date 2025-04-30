@@ -1,5 +1,8 @@
 
-int unknown();
+int unknown()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/;
 
 void foo(int i,int j,int k,int n,int m)  
 /*@ Require m + 1 < n
@@ -7,8 +10,9 @@ void foo(int i,int j,int k,int n,int m)
 */ 
     {
 
- 
+  i = 0;
   for (i = 0; i < n; i += 4) {
+    j = i ;
     for (j = i; j < m;) {
         
       if (unknown()) {

@@ -2,10 +2,10 @@
 
 void foo(int n, int m)
  
-/*@ Require n > =0 && m >=0 && m< n 
+/*@ Require n >=0 && m >=0 && m < n 
    Ensure emp
 */ 
-    {
+{
  
   int x = 0; 
   int y = m;

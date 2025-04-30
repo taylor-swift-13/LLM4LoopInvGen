@@ -1,27 +1,10 @@
-int unknown();
-void foo(int n,int z1,int z2,int z3)
- 
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
-    int x = 1;
-    int m = 1;
 
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (x < n) {
-
-        if (unknown()) {
-            m = x;
-        }
-        
-        x = x + 1;
-    }
-
-
-    /*@  (n > 0) => (m >= 1) */
-
-}
+/*@Inv
+  (1 < n@pre) ==> (((m == 1) && (x == 1) && (z3@pre) && (z2@pre) && (z1@pre) && (n@pre)) || (m <= x)) &&
+  (1 < n@pre) ==> (((m == 1) && (x == 1) && (z3@pre) && (z2@pre) && (z1@pre) && (n@pre)) || (m < n)) &&
+  !(1 < n@pre) ==> ((m == 1) && (x == 1) && (z3@pre) && (z2@pre) && (z1@pre) && (n@pre)) &&
+  z3 == z3@pre &&
+  z2 == z2@pre &&
+  z1 == z1@pre &&
+  n == n@pre
+*/

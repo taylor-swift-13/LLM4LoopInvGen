@@ -1,26 +1,13 @@
 
-
-void foo(int m,int j,int a)  
-/*@ Require a <= m && j < 1
-   Ensure emp
-*/ 
-    {
-
-    int k = 0;
-    
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while ( k < 1) {
-
-        if(m < a) {
-            m = a;
-        }
-        
-        k = k + 1;
+/*@Inv
+  (\at(a, Pre) <= \at(m, Pre) && \at(j, Pre) < 1) ==> (((k == 0) && (a == a@pre) && (j == j@pre) && (m == m@pre)) || (PLACE_HOLDER_m)) &&
+  (\at(a, Pre) <= \at(m, Pre) && \at(j, Pre) < 1) ==> (((k == 0) && (a == a@pre) && (j == j@pre) && (m == m@pre)) || (PLACE_HOLDER_k)) &&
+  (\at(a, Pre) <= \at(m, Pre) && \at(j, Pre) < 1) ==> (a == a@pre) &&
+  (\at(a, Pre) <= \at(m, Pre) && \at(j, Pre) < 1) ==> (j == j@pre)
+*/
+while ( k < 1) {
+    if(m < a) {
+        m = a;
     }
-
-  /*@  a <= m */
-
+    k = k + 1;
 }

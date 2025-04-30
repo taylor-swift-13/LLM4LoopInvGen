@@ -17,7 +17,7 @@ void foo(int n, int flag)
     {
   int k = 1;
   if (flag) {
-    k = unknown1();
+    k = unknown();
   }
   int i = 0, j = 0;
   while (i <= n) {

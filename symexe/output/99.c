@@ -1,24 +1,11 @@
 
-void foo(int n)  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
-
-    int x = n;
-    int y = 0;
-    
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (x > 0) {
-      
-      y  = y + 1;
-      x  = x - 1;
-  
-    }
-  
-    /*@  n == x + y */
-  
-  }
+/*@Inv
+  (\at(n, Pre) > 0) ==> (((y == 0) && (x == n@pre) && (n == n@pre)) || (x >= 0)) &&
+  (\at(n, Pre) > 0) ==> (((y == 0) && (x == n@pre) && (n == n@pre)) || (y == \at(n, Pre) - x)) &&
+  !(\at(n, Pre) > 0) ==> ((y == 0) && (x == n@pre) && (n == n@pre)) &&
+  n == n@pre
+*/
+while (x > 0) {
+    y = y + 1;
+    x = x - 1;
+}

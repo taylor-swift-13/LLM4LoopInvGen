@@ -1,5 +1,8 @@
 
-int unknown();
+int unknown()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/;
 
 void foo(int flag)  
 /*@ Require emp 
@@ -18,5 +21,5 @@ void foo(int flag)
        k = k + 1;
      }
    }
-   /*@  (k!= 0 )=> (j == 2 * k + 2 ) */
+   /*@  (k != 0 ) => (j == 2 * k + 2 ) */
 }

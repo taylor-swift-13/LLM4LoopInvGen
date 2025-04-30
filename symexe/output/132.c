@@ -1,28 +1,20 @@
-int unknown();
-void foo(int j,int c,int t)  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
 
-    int i = 0;
-
-
-
- 
-/*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while(unknown()) {
-        if(c > 48) {
-            if (c < 57) {
-                j = i + i;
-                t = c - 48;
-                i = j + t;
-            }
+/*@Inv
+  ((i == 0) && (t == t@pre) && (c == c@pre) && (j == j@pre)) ||
+  (j == i + i) &&
+  ((i == 0) && (t == t@pre) && (c == c@pre) && (j == j@pre)) ||
+  (t == c - 48) &&
+  ((i == 0) && (t == t@pre) && (c == c@pre) && (j == j@pre)) ||
+  (i == j + t) &&
+  c == c@pre
+*/
+while(1) {
+    if(c > 48) {
+        if (c < 57) {
+            j = i + i;
+            t = c - 48;
+            i = j + t;
         }
-    } 
-
-    /*@  i >= 0 */
-
-
+    }
+    /*@ assert i >= 0; */
 }

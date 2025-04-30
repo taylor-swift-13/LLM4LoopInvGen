@@ -1,15 +1,22 @@
 
 
-void foo()  
+void foo(int n)  
 /*@ Require emp 
    Ensure emp
 */ 
     {
-  int i,j,k,n;
+  int i,j,k;
   
-  for (i=0;i<n;i++)
-    for (j=i;j<n;j++)
+  i=0;
+  for (i=0;i<n;i++){
+
+    j=i;
+    for (j=i;j<n;j++){
+
+      k=j;
       for (k=j;k<n;k++){
 	      /*@ k >= i*/
       }
+    }
+  }
 }

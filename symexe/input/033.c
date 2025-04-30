@@ -1,6 +1,15 @@
-int unknown1();
-int unknown2();
-int unknown3();
+int unknown1()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/;
+int unknown2()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/;
+int unknown3()
+/*@ Require emp 
+   Ensure __return <= INT_MAX && __return > INT_MIN
+*/;
 
 void foo(int k)
  

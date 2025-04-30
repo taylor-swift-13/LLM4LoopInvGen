@@ -1,23 +1,19 @@
-void foo(int m,int j,int a,int c)  
-/*@ Require emp 
-   Ensure emp
-*/ 
-    {
 
-    int k = 0;
-    
-    
-   
-  /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while ( k < c) {
+/*@Inv
+  (0 < c@pre) => (((0 <= k) && (k < c@pre) && (m >= m@pre)) || (m >= a)) &&
+  c == c@pre &&
+  a == a@pre &&
+  j == j@pre &&
+  (0 < c@pre) => (m >= m@pre)
+*/
 
-        if(m < a) {
-            m = a;
-        }
-        
-        k = k + 1;
+while (k < c) {
+
+    if (m < a) {
+        m = a;
     }
-
-  /*@  (c > 0 ) => (a <= m) */
+    
+    k = k + 1;
 }
+
+/*@ assert (c > 0) => (a <= m); */

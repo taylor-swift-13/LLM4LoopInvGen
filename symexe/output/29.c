@@ -9,11 +9,14 @@ void foo(int n)
     
    
   /*@ Print user assertion at number LoopEntry_0*/ 
-/*@ Inv emp */ /*0*/ 
- while (x > 0) {
-      
-       x  = x - 1;
-  
+/*@ Inv
+    ((n@pre > 0) => (x >= 0 && x <= n@pre)) &&
+((!(n@pre > 0)) => ((x == n@pre)&&(n == n@pre))) &&
+(n == n@pre)
+    */
+    
+    while (x > 0) {
+        x = x - 1;
     }
   
    /*@  (n >= 0) => (x == 0) */

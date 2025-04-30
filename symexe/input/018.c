@@ -3,8 +3,8 @@ void foo(int flag, int a)
 /*@ Require flag > 0
    Ensure emp
 */ 
-    {
-   int b;
+{
+   int b = 0;
    int j = 0;
  
    for (b = 0; b < 100 ; ++b){
@@ -12,5 +12,5 @@ void foo(int flag, int a)
          j = j + 1;
    }
 
-   /*@  falg => (j == 100) */
+   /*@  (flag!=0) => (j == 100) */
 }

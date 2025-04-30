@@ -22,7 +22,7 @@ class LoopProcessor:
         self.proof_manual_file = f"../ip_postcond/goal/{self.file_name}_proof_manual.v"
         self.input_file = f"symexe/input/{self.file_name}.c"
         self.output_file =f"symexe/output/{self.file_name}.c"
-        self.iter_file = f"../../LoopInvGen_V6/symexe/output/{self.file_name}.c"
+        self.iter_file = f"../../LLM4LoopInvGen/symexe/output/{self.file_name}.c"
         self.json_file = f'loop/{self.file_name}.json'
 
     def delete_file_if_exists(self, file_path):
@@ -37,11 +37,35 @@ class LoopProcessor:
         else:
             print(f"File not found: {file_path}. No file to delete.")
     
-    # def update_loop_contents(self):
-    #     self.loop_contents = update_loop_file(self.output_file)
+   
 
     # 寻找每个 循环 开头和结尾的地方
     def process_loop(self,code):
+
+        def determine_inner_loops(loop_info):
+            """
+            判断每个循环是否是内层循环。
+            参数:
+                loop_info: list of tuples, 每个元素为 (start_pos, end_pos, loop_index)
+            返回:
+                list of bool，表示每个循环是否是内层循环（按 loop_info 输入顺序）
+            """
+            inner_flags = [False] * len(loop_info)
+            
+            
+            # 遍历所有循环对 (i, j)
+            for j in range(len(loop_info)):
+                s_j, e_j, idx_j = loop_info[j]
+                for i in range(len(loop_info)):
+                    if i == j:
+                        continue
+                    s_i, e_i, idx_i = loop_info[i]
+                    # 如果循环i完全包含循环j：i的起始更早，结束更晚
+                    if s_i < s_j and e_i > e_j:
+                        inner_flags[j] = True
+                        break  # 只要被一个外层循环包含，即可判定为内层
+            
+            return inner_flags
         # 将代码拆分成单字符的列表
         code_list = list(code)
         
@@ -75,13 +99,14 @@ class LoopProcessor:
                     brace_count -= 1
                 end_index += 1
 
-            # 将 (end_index, idx) 压入列表
-            loop_indices.append((end_index, idx))
+            # 将 (at_index,end_index, idx) 压入列表
+            loop_indices.append((at_index,end_index, idx))
+          
 
             # 提取循环内容
             loop_content = loop_head + ''.join(code_list[loop_start +1:end_index])
 
-            
+           
             # 修改注释为 acsl 格式
             assert_pattern = r'/\*@\s*(.*?)\s*\*/'
     
@@ -94,13 +119,56 @@ class LoopProcessor:
             # 打印循环内容
             # print(f"LoopContent_{idx}:\n{loop_content}\n")
             loop_contents.append(loop_content)
-            
+        
+        print(loop_indices)
+
+        inner_flags = determine_inner_loops(loop_indices)
+
+        
         # 按 end_index 从小到大排序
-        sorted_indices = [x[1] for x in sorted(loop_indices, key=lambda x: x[0])]
+        sorted_indices = [x[2] for x in sorted(loop_indices, key=lambda x: x[1])]
         
             
         # 将字符列表重新拼接成字符串
-        return ''.join(code_list),loop_contents,sorted_indices
+        return ''.join(code_list),loop_contents,sorted_indices,inner_flags
+    
+
+
+    def get_loop_content(self,code,ridx):
+
+        # 查找所有的 for 或 while 循环位置
+        code_list = list(code)
+        loop_pattern = r'\b(for|while)\s*\((.*?)\)\s*{'
+        loop_content = None
+        matches = list(re.finditer(loop_pattern, code))
+        
+        # 处理每一个循环
+        for idx, match in enumerate(matches):
+            if idx == ridx:
+                # 循环的起始位置
+                loop_start = match.start()    
+
+                at_index = loop_start
+
+                loop_head = code_list[at_index] 
+            
+                # 在循环后找到第一个 { 对应的 }
+                brace_count = 0
+                loop_end = match.end()
+                end_index = loop_end
+                while brace_count >= 0:
+                    if code_list[end_index] == '{':
+                        brace_count += 1
+                    elif code_list[end_index] == '}':
+                        brace_count -= 1
+                    end_index += 1
+
+                # 提取循环内容
+                loop_content = loop_head + ''.join(code_list[loop_start +1:end_index])
+                break
+
+        return loop_content
+
     
     def process_loop_file(self,input_file_path, output_file_path):
         # 读取原始文件内容
@@ -111,13 +179,14 @@ class LoopProcessor:
         processed_code = self.process_loop(code)[0]
         loop_contents = self.process_loop(code)[1]
         sorted_indices = self.process_loop(code)[2]
+        inner_flags = self.process_loop(code)[3]
 
 
         # 将处理后的代码写入新文件
         with open(output_file_path, 'w', encoding='utf-8') as outfile:
             outfile.write(processed_code)
 
-        return loop_contents,sorted_indices
+        return loop_contents,sorted_indices,inner_flags
 
     def get_loop_entries(self, text):
         """
@@ -143,7 +212,10 @@ class LoopProcessor:
         """
         将循环内容和条目写入 JSON 文件。
         """
+
         if len(self.loop_contents) != len(self.loop_entries):
+            print(self.loop_contents)
+            print(self.loop_entries)
             raise ValueError("loop_contents 和 loop_entries 的长度必须一致")
 
         data = []
@@ -191,7 +263,10 @@ class LoopProcessor:
 
     def init_execute(self):
         # 处理输入文件
-        self.loop_contents, self.sorted_indices = self.process_loop_file(self.input_file, self.output_file)
+        self.loop_contents, self.sorted_indices,self.inner_flags = self.process_loop_file(self.input_file, self.output_file)
+
+        for idx in self.sorted_indices:
+            print(f"Loop {idx} : {'Inner' if self.inner_flags[idx] else 'Outer'}")
         print("Sorted indices:", self.sorted_indices)
 
 
@@ -213,13 +288,10 @@ class LoopProcessor:
         # 查找所有的 for 或 while 循环位置
         loop_pattern = r'\b(for|while)\s*\((.*?)\)\s*{'
         matches = list(re.finditer(loop_pattern, code))
-
-
-        at_index =0
-        end_index  =0
-        
+       
         # 处理每一个循环
         for idx, match in enumerate(matches):
+           
             # 循环的起始位置
             if idx == ridx:
 
