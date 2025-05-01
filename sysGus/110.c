@@ -1,3 +1,5 @@
+/*@ requires n >= 1;
+*/
 void foo(int n) {
 
     int i = 1;
