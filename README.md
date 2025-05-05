@@ -122,7 +122,7 @@ the tool using large language model to automatically generate inductive loop inv
 ========================================
 ```
 
-### result for gpt-4o oopsla
+### result for claude-3.7 oopsla
 
 ```
 ========================================
