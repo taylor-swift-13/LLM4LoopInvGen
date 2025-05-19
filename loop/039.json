@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "MAXPATHLEN@pre <= 0 && (glob3_dc == 0) * (glob3_pattern_off == 0) * (glob3_pathlim_off == 0 + (MAXPATHLEN@pre + 1) - 1) * (glob3_pathend_off == 0) * (glob3_pathbuf_off == 0) * (bound_off == 0 + (MAXPATHLEN@pre + 1) - 1) * (pattern_off == 0) * (buf_off == 0) * (__BLAST_NONDET == __BLAST_NONDET@pre) * (MAXPATHLEN == MAXPATHLEN@pre)",
+        "content": "for (;;){\n    if (glob3_pathend_off + glob3_dc >= glob3_pathlim_off) break;\n    else {\n     \n      glob3_dc++;\n     \n      /*@ assert 0 <= glob3_dc; */\n      /*@ assert glob3_dc < MAXPATHLEN + 1; */\n      if (unknown()) return;\n    }\n}"
+    }
+]

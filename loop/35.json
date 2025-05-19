@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "c == 0",
+        "content": "while (unknown()) {\n      if (unknown()) {\n        if (c != 40) {\n          c  = c + 1;\n        }\n      } else {\n        if (c == 40) {\n          c  = 1;\n        }\n      }\n    }"
+    }
+]

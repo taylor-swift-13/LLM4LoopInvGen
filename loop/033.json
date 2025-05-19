@@ -1,0 +1,17 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(y == 0) * (x == 0) * (z == k@pre) * (k == k@pre)",
+        "content": "while(unknown1())\n  {\n    int c = 0;\n    while(unknown2())\n    {\n      if(z==k+y-c)\n      {\n        x++;\n        y++;\n        c++;\n      }else\n      {\n        x++;\n        y--;\n        c++;\n      }\n    }\n\n    while(unknown3())\n    {\n      x--;\n      y--;\n    }\n    z=k+y;\n  }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "exists retval_45, retval_45 != 0 && retval_45 <= INT_MAX && retval_45 > INT_MIN && (c == 0) * (y == 0) * (x == 0) * (z == k@pre) * (k == k@pre)",
+        "content": "while(unknown2())\n    {\n      if(z==k+y-c)\n      {\n        x++;\n        y++;\n        c++;\n      }else\n      {\n        x++;\n        y--;\n        c++;\n      }\n    }"
+    },
+    {
+        "loop_id": 2,
+        "condition": "exists retval_50, retval_50 == 0 && retval_50 <= INT_MAX && retval_50 > INT_MIN && retval_45 != 0 && retval_45 <= INT_MAX && retval_45 > INT_MIN && (c == 0) * (y == 0) * (x == 0) * (z == k@pre) * (k == k@pre)",
+        "content": "while(unknown3())\n    {\n      x--;\n      y--;\n    }"
+    }
+]

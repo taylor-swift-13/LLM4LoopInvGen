@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(y == 0) * (x == 1)",
+        "content": "while (y < 1000 ) {\n        x = x + y;\n        y = y + 1;\n    }"
+    }
+]

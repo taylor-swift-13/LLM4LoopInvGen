@@ -1,0 +1,22 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(w == 0) * (j == 0) * (z == 0) * (y == 0) * (x == 0) * (b == 0) * (a == 0) * (flag == flag@pre)",
+        "content": "while (unknown1()) {\n    int i = z;\n    int j = w;\n    int k = 0;\n    while (i < j) {\n      k++;\n      i++;\n    }\n\n    x = z;\n    y = k;\n\n    if (x % 2 == 1) {\n      x++;\n      y--;\n    }\n\n  \n    while (unknown2()) {\n      if (x % 2 == 0) {\n        x += 2;\n        y -= 2;\n      } else {\n        x--;\n        y--;\n      }\n    }\n    z++;\n    w = x + y + 1;\n  }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "exists retval_57, retval_57 != 0 && retval_57 <= INT_MAX && retval_57 > INT_MIN && (k == 0) * (j == 0) * (i == 0) * (w == 0) * (#j == 0) * (z == 0) * (y == 0) * (x == 0) * (b == 0) * (a == 0) * (flag == flag@pre)",
+        "content": "while (i < j) {\n      k++;\n      i++;\n    }"
+    },
+    {
+        "loop_id": 2,
+        "condition": "0 % 2 == 1 && 0 >= 0 && retval_57 != 0 && retval_57 <= INT_MAX && retval_57 > INT_MIN && (k == 0) * (j == 0) * (i == 0) * (w == 0) * (#j == 0) * (z == 0) * (y == 0 - 1) * (x == 0 + 1) * (b == 0) * (a == 0) * (flag == flag@pre)",
+        "content": "while (unknown2()) {\n      if (x % 2 == 0) {\n        x += 2;\n        y -= 2;\n      } else {\n        x--;\n        y--;\n      }\n    }"
+    },
+    {
+        "loop_id": 3,
+        "condition": "exists retval_57, retval_57 == 0 && retval_57 <= INT_MAX && retval_57 > INT_MIN && (d == 0) * (c == 0) * (w == 0) * (j == 0) * (z == 0) * (y == 0) * (x == 0) * (b == 0) * (a == 0) * (flag == flag@pre)",
+        "content": "while (unknown3()) {\n    c++;\n    d++;\n    if (flag) {\n      a++;\n      b++;\n    } else {\n      a += c;\n      b += d;\n    }\n  }"
+    }
+]

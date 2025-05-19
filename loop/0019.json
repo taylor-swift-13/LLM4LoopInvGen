@@ -1,0 +1,12 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "n@pre <= INT_MAX && (k == n@pre) * (i == 0) * (n == n@pre)",
+        "content": "while( i < n ) {\n    k--;\n    i = i + 2;\n  }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "",
+        "content": "while( j < n/2 ) {\n    /*@ assert k>0; */\n    k--;\n    j++;\n  }"
+    }
+]

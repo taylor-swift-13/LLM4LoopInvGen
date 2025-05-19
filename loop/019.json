@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "n@pre >= 0 && m@pre >= 0 && m@pre < n@pre && (y == m@pre) * (x == 0) * (m == m@pre) * (n == n@pre)",
+        "content": "while(x < n) {\n    x++;\n    if(x > m) y++;\n  }"
+    }
+]

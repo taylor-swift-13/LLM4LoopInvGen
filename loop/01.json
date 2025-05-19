@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(y == 1) * (x == 1)",
+        "content": "while(unknown()) {\n   int t1 = x;\n   int t2 = y;\n   x = t1 + t2;\n   y = t1 + t2;\n }"
+    }
+]

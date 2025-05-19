@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "n@pre == 2048 && (i == 0) * (n == n@pre) * (B == B@pre) * (A == A@pre) * (tmp == tmp@pre) * store_int_array(A@pre, n@pre, A_l) * store_int_array(B@pre, n@pre, B_l)",
+        "content": "for (i = 0; i < 2048; i++) {\n    tmp = A[i];\n    B[i] = tmp;\n  }"
+    }
+]

@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "a@pre < 1000000 && 0 <= b@pre && b@pre <= 1000000 && (cnt == b@pre) * (res == a@pre) * (b == b@pre) * (a == a@pre)",
+        "content": "while (cnt > 0) {\n    \tcnt = cnt - 1;\n        res = res + 1;\n    }"
+    }
+]

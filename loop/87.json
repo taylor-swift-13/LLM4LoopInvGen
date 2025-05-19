@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(x == y@pre) * (lock == 1) * (y == y@pre)",
+        "content": "while (x != y) {\n        if ( unknown() ) {\n          \n          lock  = 1;\n          x  = y;\n          \n        } else {\n          \n          lock  = 0;\n          x  = y;\n          y  = y + 1;\n          \n        }\n \n    }"
+    }
+]

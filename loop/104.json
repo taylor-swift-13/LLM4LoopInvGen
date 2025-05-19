@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(x == 0) * (v3 == v3@pre) * (v2 == v2@pre) * (v1 == v1@pre) * (n == n@pre)",
+        "content": "while (x < n) {\n      \n      x  = (x + 1);\n      \n    }"
+    }
+]

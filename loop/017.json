@@ -1,0 +1,12 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(j == 0) * (i == 1) * (k == 1) * (n == n@pre)",
+        "content": "while(i < n) {\n  j = 0;\n  while(j < i) {\n      k += (i-j);\n      j++;\n  }\n  i++;\n }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "1 < n@pre && (j == 0) * (i == 1) * (k == 1) * (n == n@pre)",
+        "content": "while(j < i) {\n      k += (i-j);\n      j++;\n  }"
+    }
+]

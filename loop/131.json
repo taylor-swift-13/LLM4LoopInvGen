@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(x1 == 1) * (d3 == 1) * (d2 == 1) * (d1 == 1) * (x3 == x3@pre) * (x2 == x2@pre)",
+        "content": "while(x1 > 0) {\n        if(x2 > 0) {\n            if(x3 > 0) {\n                x1 = x1 - d1;\n                x2 = x2 - d2;\n                x3 = x3 - d3;\n            }\n        }\n    }"
+    }
+]

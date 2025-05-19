@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "m@pre > 0 && (j == 1) * (a == 0) * (m == m@pre)",
+        "content": "for(j = 1; j <= m ; j++){\n    if(unknown()) \n       a++;\n    else\n       a--; \n  }"
+    }
+]

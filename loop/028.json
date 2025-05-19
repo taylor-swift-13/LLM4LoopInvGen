@@ -1,0 +1,12 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(n == 0) * (y == 0) * (x == 0)",
+        "content": "while(unknown()) {\n      x++;\n      y++;\n  }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "exists retval_32, retval_32 == 0 && retval_32 <= INT_MAX && retval_32 > INT_MIN && (n == 0) * (y == 0) * (x == 0)",
+        "content": "while(x!=n) {\n      x--;\n      y--;\n  }"
+    }
+]

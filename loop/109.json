@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(k == 0) * (c == c@pre) * (a == a@pre) * (j == j@pre) * (m == m@pre)",
+        "content": "while ( k < c) {\n\n        if(m < a) {\n            m = a;\n        }\n        \n        k = k + 1;\n    }"
+    }
+]

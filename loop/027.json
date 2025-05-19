@@ -1,0 +1,12 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "l@pre > 0 && (k == 1) * undef_data_at(&i) * (n == n@pre) * (l == l@pre)",
+        "content": "for (k =1; k < n; k++) {\n    i =l;\n    for (i=l; i < n; i++) {\n\n    }\n\n    /*@ assert (forall (i: Z), (l <= i && i < n) ==> (1 <= k)); */\n  }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "1 < n@pre && l@pre > 0 && (k == 1) * (i == l@pre) * (n == n@pre) * (l == l@pre)",
+        "content": "for (i=l; i < n; i++) {\n\n    }"
+    }
+]

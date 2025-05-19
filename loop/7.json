@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "x@pre >= 0 && x@pre <= 10 && y@pre <= 10 && y@pre >= 0 && (y == y@pre) * (x == x@pre)",
+        "content": "while (unknown()) {\n      \n        x = x + 10;\n        y = y + 10;\n        \n      \n    }"
+    }
+]

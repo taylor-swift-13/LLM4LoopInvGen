@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(y == j@pre) * (x == i@pre) * (j == j@pre) * (i == i@pre)",
+        "content": "while(x != 0) {\n\t  x--;\n\t  y--;\n  }"
+    }
+]

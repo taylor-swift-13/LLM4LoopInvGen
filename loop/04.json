@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(y == y@pre) * (x == -50)",
+        "content": "while( x < 0 ) {\n\tx = x + y;\n\ty++;\n  }"
+    }
+]

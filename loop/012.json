@@ -1,0 +1,12 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(b == 0) * (a == 0) * (s == 0) * (t == 0) * (flag == flag@pre)",
+        "content": "while(unknown1()) {\n    a++;\n    b++;\n    s += a;\n    t += b;\n    if(flag) {\n      t += a;\n    }\n  }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "",
+        "content": "while(y <= x){\n    if(unknown2()) \n       y++;\n    else \n       y += 2;\n  }"
+    }
+]

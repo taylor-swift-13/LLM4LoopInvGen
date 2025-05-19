@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(i == 0) * (j == 0) * (y == 0) * (x == 0) * (flag == flag@pre)",
+        "content": "while(unknown())\n\t{\n\t  x++;\n\t  y++;\n\t  i += x;\n\t  j += y;\n\t  if (flag){\n\t  \tj+=1;\n      }\n\t}"
+    }
+]

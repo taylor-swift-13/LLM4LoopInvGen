@@ -1,0 +1,12 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "0 < n@pre && (i == 0) * (k == 0) * (n == n@pre)",
+        "content": "while (i < n) {\n\t\ti++;\n\t\tk++;\n\t}"
+    },
+    {
+        "loop_id": 1,
+        "condition": "emp",
+        "content": "while (j > 0) {\n\t\t\n\t\tj--;\n\t\tk--;\n        /*@ assert k>0; */\n\t}"
+    }
+]

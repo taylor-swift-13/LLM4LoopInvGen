@@ -112,7 +112,8 @@ class OutputVerifier:
 
             for item in filter_invs:
                 if 'Valid' not in item:
-                    valid_error_msg = item
+                    
+                    valid_error_msg = item.split(':')[0]
                     error_location_msg, error_content_msg = self.extract_semantic_error(valid_error_msg)
                     self.valid_error_list.append((valid_error_msg.strip(), error_location_msg, error_content_msg))
 
@@ -126,7 +127,7 @@ class OutputVerifier:
 
             for item in filter_contents:
                 if 'Valid' not in item:
-                    verify_error_msg = item
+                    verify_error_msg = item.split(':')[0]
                     error_location_msg, error_content_msg = self.extract_semantic_error(verify_error_msg)
                     self.verify_error_list.append((verify_error_msg.strip(), error_location_msg, error_content_msg))
 

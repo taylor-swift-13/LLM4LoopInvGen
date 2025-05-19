@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "",
+        "content": "for (k = i; k< j; k++) {\n                /*@ assert k-i <= 2*n; */\n            }"
+    }
+]

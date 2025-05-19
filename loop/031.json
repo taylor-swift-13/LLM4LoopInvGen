@@ -1,0 +1,17 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "m@pre + 1 < n@pre && (m == m@pre) * (n == n@pre) * (k == k@pre) * (j == j@pre) * (i == 0)",
+        "content": "for (i = 0; i < n; i += 4) {\n    j = i ;\n    for (j = i; j < m;) {\n        \n      if (unknown()) {\n        /*@ assert j >= 0; */\n        j++;\n        k = 0;\n        while (k < j) {\n          k++;\n        }\n      } else {\n        /*@ assert n + j + 5 > i; */\n        j += 2;\n      }\n    }\n  }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "0 < n@pre && m@pre + 1 < n@pre && (m == m@pre) * (n == n@pre) * (k == k@pre) * (j == 0) * (i == 0)",
+        "content": "for (j = i; j < m;) {\n        \n      if (unknown()) {\n        /*@ assert j >= 0; */\n        j++;\n        k = 0;\n        while (k < j) {\n          k++;\n        }\n      } else {\n        /*@ assert n + j + 5 > i; */\n        j += 2;\n      }\n    }"
+    },
+    {
+        "loop_id": 2,
+        "condition": "0 >= 0 && retval_38 != 0 && retval_38 <= INT_MAX && retval_38 > INT_MIN && 0 < m@pre && 0 < n@pre && m@pre + 1 < n@pre && (j == 0 + 1) * (m == m@pre) * (n == n@pre) * (k == 0) * (i == 0)",
+        "content": "while (k < j) {\n          k++;\n        }"
+    }
+]

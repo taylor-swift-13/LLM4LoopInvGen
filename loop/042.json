@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "flag@pre != 0 && (a == 0) * (y == 1) * (x == 1) * (flag == flag@pre) || flag@pre == 0 && (a == 1) * (y == 1) * (x == 1) * (flag == flag@pre)",
+        "content": "while (unknown()) {\n    if (flag) {\n      a = x + y;\n      x++;\n    } else {\n      a = x + y + 1;\n      y++;\n    }\n    if (a % 2 == 1)\n      y++;\n    else\n      x++;\n  }"
+    }
+]

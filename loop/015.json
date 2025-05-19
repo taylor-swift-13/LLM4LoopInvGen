@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "n@pre > 0 && k@pre > n@pre && (j == 0) * (k == k@pre) * (n == n@pre)",
+        "content": "while( j < n ) {\n    j++;\n    k--;\n  }"
+    }
+]

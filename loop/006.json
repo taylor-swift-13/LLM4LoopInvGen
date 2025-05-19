@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "0 <= k@pre && k@pre <= 1 && (j == 1) * (i == 1) * (k == k@pre)",
+        "content": "while (i < 1000000) {\n        i = i + 1;\n        j = j + k;\n        k = k - 1;\n        /*@ assert 1 <= i + k && i + k <= 2 && i >= 1; */\n    }"
+    }
+]

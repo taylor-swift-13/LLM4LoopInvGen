@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(y == 0) * (x == 0)",
+        "content": "while(unknown1()) {\n   if(unknown2()) { \n      x++; \n      y += 100; \n   }\n   else if (unknown3()){ \n      if (x >= 4) { \n          x++; \n          y++; \n      } \n      if (x < 0) {\n          y--;\n      }\n   }\n  \n }"
+    }
+]

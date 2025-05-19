@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "n@pre > 0 && n@pre < 10 && (k == 0) * (i == 0) * (c2 == 2000) * (c1 == 4000) * (v == v@pre) * (j == j@pre) * (n == n@pre)",
+        "content": "while( i < n ) {\n    i++;\n    if(unknown() % 2 == 0) {\n        v = 0;\n    }\n    else v = 1;\n    \n    if( v == 0 ){\n      k += c1;\n    }else {\n      k += c2;\n    }\n  }"
+    }
+]

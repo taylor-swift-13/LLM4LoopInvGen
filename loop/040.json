@@ -1,0 +1,12 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "flag@pre != 0 && flag@pre > 0 && undef_data_at(&k) * (j == 1) * (i == 0) * (flag == flag@pre)",
+        "content": "while (unknown1()) {\n    i += 2;\n    if (i % 2 == 0) {\n      j += 2;\n    } else j++;\n  }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "exists retval_40, retval_40 == 0 && retval_40 <= INT_MAX && retval_40 > INT_MIN && flag@pre != 0 && flag@pre > 0 && (b == 0) * (a == 0) * undef_data_at(&k) * (j == 1) * (i == 0) * (flag == flag@pre)",
+        "content": "while (unknown2()) {\n    a++;\n    b += (j - i);\n  }"
+    }
+]

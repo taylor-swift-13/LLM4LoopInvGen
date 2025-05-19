@@ -1,0 +1,12 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(y == 3) * (x == 3) * (d == 2) * (c == 2) * (b == 1) * (a == 1)",
+        "content": "while (unknown1()) {\n    x = a + c;\n    y = b + d;\n\n    if ((x + y) % 2 == 0) {\n      a++;\n      d++;\n    } else {\n      a--;\n    }\n\n   \n    while (unknown2()) {\n      c--;\n      b--;\n    }\n  }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "",
+        "content": "while (unknown2()) {\n      c--;\n      b--;\n    }"
+    }
+]

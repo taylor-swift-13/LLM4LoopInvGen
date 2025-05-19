@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "x@pre != y@pre && (t == y@pre) * (i == 0) * (y == y@pre) * (x == x@pre)",
+        "content": "while (unknown()){\n    if (x > 0)   \n      y = y + x;\n  }"
+    }
+]

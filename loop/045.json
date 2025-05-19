@@ -1,0 +1,17 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(i == 0) * (j == 0) * (y == 0) * (x == 0) * (flag == flag@pre)",
+        "content": "while (unknown1()) {\n    x++;\n    y++;\n    i += x;\n    j += y;\n    if (flag) {\n      j += 1;\n    }\n  }"
+    },
+    {
+        "loop_id": 1,
+        "condition": "",
+        "content": "while (unknown2()) {\n   \n    while (unknown3()) {\n      if (w % 2 == 1)\n        x++;\n      if (z % 2 == 0)\n        y++;\n    }\n    z = x + y;\n    w = z + 1;\n  }"
+    },
+    {
+        "loop_id": 3,
+        "condition": "",
+        "content": "while (unknown3()) {\n      if (w % 2 == 1)\n        x++;\n      if (z % 2 == 0)\n        y++;\n    }"
+    }
+]

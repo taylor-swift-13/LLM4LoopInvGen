@@ -1,0 +1,7 @@
+[
+    {
+        "loop_id": 0,
+        "condition": "(n == 0) * (i == j@pre) * (k == 100) * (j == j@pre) * (b == b@pre)",
+        "content": "for( n = 0 ; n < 2*k ; n++ ) {\n    if(b) {\n      i++;\n    } else {\n      j++;\n    }\n    b = !b;\n  }"
+    }
+]
