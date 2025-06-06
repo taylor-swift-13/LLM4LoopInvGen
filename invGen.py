@@ -317,14 +317,6 @@ class InvGenerator:
 
         invariant_annotation = None
 
-        init_invariants = []
-        for var in var_map:
-            init_value = var_map[var]
-            init_value = self.filter_conditon(init_value)
-            init_invariants.append( f'({var} == {init_value})')
-        
-        init_invariant = '&&'.join(init_invariants)
-
         
         def contains_no_letters(updated_loop_condition):
 
@@ -344,14 +336,14 @@ class InvGenerator:
 
         if contains_no_letters(updated_loop_condition):
                 if path_cond!=None:
-                    invariant_annotation = f"loop invariant  ({path_cond}) ==> (({init_invariant}) || (PLACE_HOLDER_{key})) ;" 
+                    invariant_annotation = f"loop invariant  ({path_cond}) ==> (PLACE_HOLDER_{key}) ;" 
                 else:
-                    invariant_annotation = f"loop invariant  ({init_invariant}) || (PLACE_HOLDER_{key}) ;" 
+                    invariant_annotation = f"loop invariant  PLACE_HOLDER_{key} ;" 
         else:
                 if path_cond!=None:
-                    invariant_annotation = f"loop invariant  ({path_cond}) ==> (({updated_loop_condition}) ==> (({init_invariant}) || (PLACE_HOLDER_{key}))) ;" 
+                    invariant_annotation = f"loop invariant ({path_cond}) ==> (({updated_loop_condition}) ==> (PLACE_HOLDER_{key})) ;" 
                 else:
-                    invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> (({init_invariant}) || (PLACE_HOLDER_{key}));"
+                    invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> (PLACE_HOLDER_{key});"
 
 
         
