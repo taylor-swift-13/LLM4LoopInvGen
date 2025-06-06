@@ -9,11 +9,12 @@ from loopProcessor import LoopProcessor
 class InvGenerator:
     def __init__(self):
         # OpenAI 客户端初始化
-        self.llm ='gpt-3.5-turbo'
-        # self.llm ='claude-3-7-sonnet-20250219-thinking'
+        # self.llm ='gpt-3.5-turbo'
+        # self.llm ='claude-3-7-sonnet-20250219'
         # self.llm = 'deepseek-v3'
-        # self.llm = 'gpt-4o'
-        # self.llm = 'gpt-4o'
+        # self.llm = 'gpt-4o-mini'
+        self.llm = 'gpt-4o'
+        self.mask = True
         
         self.client = openai.OpenAI(
             base_url="https://yunwu.ai/v1",
@@ -315,17 +316,6 @@ class InvGenerator:
 
 
     def append_annotations(self,annotations,var_map,updated_loop_condition,key, path_cond=None):
-
-        invariant_annotation = None
-
-        init_invariants = []
-        for var in var_map:
-            init_value = var_map[var]
-            init_value = self.filter_conditon(init_value)
-            init_invariants.append( f'({var} == {init_value})')
-        
-        init_invariant = '&&'.join(init_invariants)
-
         
         def contains_no_letters(updated_loop_condition):
 
@@ -345,14 +335,14 @@ class InvGenerator:
 
         if contains_no_letters(updated_loop_condition):
                 if path_cond!=None:
-                    invariant_annotation = f"loop invariant  ({path_cond}) ==> (({init_invariant}) || (PLACE_HOLDER_{key})) ;" 
+                    invariant_annotation = f"loop invariant  ({path_cond}) ==> (PLACE_HOLDER_{key}) ;" 
                 else:
-                    invariant_annotation = f"loop invariant  ({init_invariant}) || (PLACE_HOLDER_{key}) ;" 
+                    invariant_annotation = f"loop invariant  PLACE_HOLDER_{key} ;" 
         else:
                 if path_cond!=None:
-                    invariant_annotation = f"loop invariant  ({path_cond}) ==> (({updated_loop_condition}) ==> (({init_invariant}) || (PLACE_HOLDER_{key}))) ;" 
+                    invariant_annotation = f"loop invariant  ({path_cond}) ==> (({updated_loop_condition}) ==> (PLACE_HOLDER_{key})) ;" 
                 else:
-                    invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> (({init_invariant}) || (PLACE_HOLDER_{key}));"
+                    invariant_annotation = f"loop invariant ({updated_loop_condition}) ==> (PLACE_HOLDER_{key});"
 
 
         
@@ -477,11 +467,10 @@ class InvGenerator:
             validate_result = verifier.validate_result
                     
             if len(validate_result) <= 1:
-                     break
+                break
 
             valid = bool(validate_result) and all(validate_result)
 
-            
 
             annotations = self.hudini_annotations(validate_result,annotations)
 
@@ -966,6 +955,49 @@ class InvGenerator:
                 offset += len(marked) - (end - start)
         
         return ''.join(code_list)
+    
+    def mask_assert_blocks(self,code_string: str) -> tuple[str, dict[str, str]]:
+
+        original_asserts_map = {}  # 存储原始 assert 注释的字典
+        mask_counter = 0           # 用于生成唯一 ID 的计数器
+        MASK_PREFIX = "/*_auto_mask_id_" # 前缀，用于构建唯一的替换标记
+        MASK_SUFFIX = "_*/"      # 后缀，用于构建唯一的替换标记
+
+        # 正则表达式匹配 '/*@ assert ... */' 形式的注释块
+        pattern = r'/\*@\s*assert[\s\S]*?\*/'
+
+        # 定义一个替换函数，每次匹配时调用
+        def replacer(match):
+            nonlocal mask_counter # 允许修改外部函数的 mask_counter
+            original_text = match.group(0)
+            mask_id = f"{MASK_PREFIX}{mask_counter}{MASK_SUFFIX}"
+            mask_counter += 1
+
+            original_asserts_map[mask_id] = original_text # 记录原始注释内容
+
+            return mask_id
+
+        # 使用 re.sub 和 replacer 函数进行替换
+        masked_code_string = re.sub(pattern, replacer, code_string)
+
+        return masked_code_string, original_asserts_map
+
+    def restore_assert_blocks(self,masked_code_string: str, original_asserts_map: dict[str, str]) -> str:
+      
+        if not original_asserts_map:
+            print("警告: 提供的 original_asserts_map 为空，没有可恢复的注释。")
+            return masked_code_string
+
+        restored_code_string = masked_code_string
+
+        # 遍历 map 中的每一项，进行替换
+        for mask_id, original_text in original_asserts_map.items():
+            # re.escape 用于确保 mask_id 中的特殊字符被正确处理，实现精确匹配
+            escaped_mask_id = re.escape(mask_id)
+            # 使用 re.sub 替换，count=1 确保只替换第一个匹配项（每个唯一的 mask_id 只出现一次）
+            restored_code_string = re.sub(escaped_mask_id, original_text, restored_code_string, count=1)
+            
+        return restored_code_string
 
     def run(self,file_name=None):
         """主逻辑"""
@@ -980,8 +1012,6 @@ class InvGenerator:
         input_c_file_path = f"input/{file_name}"
         output_c_file_path = f"output/{file_name}"
         output_symexe_c_file_path = f"symexe/output/{file_name}"
-        
-
         json_file =f'loop/{name}.json'
 
 
@@ -990,20 +1020,31 @@ class InvGenerator:
         processor.execute()
         sorted_indices = processor.sorted_indices
         inner_flags = processor.inner_flags
+
+
+        input_code = self.get_c_code(input_c_file_path)
+        with open(output_c_file_path, 'w', encoding='utf-8') as file:
+                    file.write(input_code)
+
+        if self.mask:
+            # mask
+            mask_code, asserts_to_restore = self.mask_assert_blocks(input_code)
+            with open(output_c_file_path, 'w', encoding='utf-8') as file:
+                    file.write(mask_code)
+
+
         tag = '/* >>> LOOP INVARIANT TO FILL <<< */'
+        single_loop = len(sorted_indices) == 1
         
        
         for idx in sorted_indices:
 
                 print(f"INNER_FLAG: {inner_flags[idx]}")
-                
-                if idx == sorted_indices[0]:
-                    code = self.get_c_code(input_c_file_path)
-                else:
-                    code = self.get_c_code(output_c_file_path)
-                
-                
+                code = self.get_c_code(output_c_file_path)
                 loop = self.get_json_at_index(json_file,idx)
+
+                
+
                 # loop_content =loop.get('content')
                 loop_content = processor.get_loop_content(code,idx)
                 pre_condition =loop.get('condition')
@@ -1038,9 +1079,14 @@ class InvGenerator:
                 if not inner_flags[idx]:
 
                     for var_map, path_cond,updated_loop_condition in zip(var_maps, path_conds,updated_loop_conditions):
-
+                                
+                                if single_loop:
+                                    path_cond = None
+                                
                                 if path_cond != None:
                                     path_cond =self.filter_conditon(path_cond)
+                                if var_map is not None:
+                                    var_map = {self.filter_conditon(key): value for key, value in var_map.items()}
 
                                 annotations  = self.append_const_annotations(annotations,unchanged_vars,var_map,path_cond)
 
@@ -1174,41 +1220,43 @@ class InvGenerator:
                     
                         annotations  = self.hudini(valid,file_name,annotations,output_c_file_path)
                                 
-                        verifier = OutputVerifier()
-                        verifier.run(file_name) 
+                    verifier = OutputVerifier()
+                    verifier.run(file_name) 
 
-                        validate_result = verifier.validate_result
-                        verify_result = verifier.verify_result
-                        syntax_error = verifier.syntax_error
+                    validate_result = verifier.validate_result
+                    verify_result = verifier.verify_result
+                    syntax_error = verifier.syntax_error
 
-                        valid = bool(validate_result) and all(validate_result)
-                        syntax = syntax_error ==''
-                        satisfy = all(verify_result)
+                    valid = bool(validate_result) and all(validate_result)
+                    syntax = syntax_error ==''
+                    satisfy = all(verify_result)
 
                         
-                        annotations = self.get_annotated_loop_content(annotations,idx)
+                    annotations = self.get_annotated_loop_content(annotations,idx)
 
-                        annotations = self.convert_annotations(annotations)
+                    annotations = self.convert_annotations(annotations)
 
-                        print('转换后')
+                    print('转换后')
+                    print(annotations)
+
+                    symexe_updated_code  =processor.update_loop_content(self.get_c_code(processor.output_file),annotations,idx)
+
+                    if syntax and valid:
+                        print("PARTIAL CORRECT INVARIANT")
+                        print('继续符号执行')
                         print(annotations)
+                        # 将 ACSL 注释写入输出文件
+                        with open( output_symexe_c_file_path, 'w', encoding='utf-8') as file:
+                                file.write(symexe_updated_code)
+                        processor.execute()
+                        
 
-                        symexe_updated_code  =processor.update_loop_content(self.get_c_code(processor.output_file),annotations,idx)
-
-                        if syntax and valid:
-                            print("PARTIAL CORRECT INVARIANT")
-                            print('继续符号执行')
-                            print(annotations)
-                            # 将 ACSL 注释写入输出文件
-                            with open( output_symexe_c_file_path, 'w', encoding='utf-8') as file:
-                                    file.write(symexe_updated_code)
-                            processor.execute()
-                            break
-
-                    
-                
-                    
-
+        # restore       
+        if self.mask:    
+            output_code =  self.get_c_code(output_c_file_path)          
+            restored_code = self.restore_assert_blocks(output_code, asserts_to_restore)
+            with open(output_c_file_path, 'w', encoding='utf-8') as file:
+                                    file.write(restored_code)
 
         verifier = OutputVerifier()
         verifier.run(file_name) 

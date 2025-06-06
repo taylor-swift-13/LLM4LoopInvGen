@@ -35,8 +35,7 @@ def move_processed_files(source_folder, dest_folder, file):
 def main():
 
     # 创建日志文件
-    # log_filename = f"result/output_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-    log_filename = f"result/output_35_oos.txt"
+    log_filename = f"result/output_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
     log_file = open(log_filename, 'a', encoding='utf-8')
     
     # 备份原始stdout
@@ -61,7 +60,7 @@ def main():
         correct_count_3 = 0
         syntax_count_3 =0
 
-        file_count = 46
+        file_count = 133
 
         correct_files_1 = []
         correct_files_3 = []
@@ -111,7 +110,7 @@ def main():
                 syntax_delta_3 =0
                 
 
-                for t in range(5):
+                for t in range(1):
 
 
 

@@ -12,11 +12,11 @@ A loop invariant must satisfy the following conditions to be inductively invaria
 2.  Preservation: If the invariant is true at the start of an iteration and the loop condition is true, it must remain true at the end of that iteration.
 3.  Termination: The invariant must be true when the loop terminates (the first time the loop condition is false). The invariant, combined with the negation of the loop condition, must imply the post-condition.
 
-Inputs:
+Input:
 
-1.  A full C loop program with invariant annotations containing `PLACE_HOLDER` that need to be filled.
+1.  A full C loop program with invariant annotations containing `PLACE_HOLDER_FOR_LOOP` that need to be filled.
 
-Output:
+Outputs:
 
 1.  Perform the following analysis:
 
@@ -40,7 +40,8 @@ f.  Correctness of the Post-condition:
     Explain why the post-condition is correct once the loop has finished executing. Detail how the loop invariant, in conjunction with the negation of the loop condition, ensures that the post-condition is met.
 
 
-2.  Provide the same complete C loop program with invariant annotations where all `PLACE_HOLDER` are filled in within a ` ```c ``` ` block.
+2.  Provide the same complete C loop program with invariant annotations where all `PLACE_HOLDER_FOR_LOOP` are filled by `loop invariant` in within a ` ```c ``` ` block.
+
 
 Rules:
 

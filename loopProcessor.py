@@ -22,7 +22,7 @@ class LoopProcessor:
         self.proof_manual_file = f"../ip_postcond/goal/{self.file_name}_proof_manual.v"
         self.input_file = f"symexe/input/{self.file_name}.c"
         self.output_file =f"symexe/output/{self.file_name}.c"
-        self.iter_file = f"../../LLM4LoopInvGen/symexe/output/{self.file_name}.c"
+        self.iter_file = f"../../LoopInvGen/symexe/output/{self.file_name}.c"
         self.json_file = f'loop/{self.file_name}.json'
 
     def delete_file_if_exists(self, file_path):
