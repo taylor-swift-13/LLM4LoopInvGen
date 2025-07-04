@@ -120,7 +120,7 @@ class LoopProcessor:
             # print(f"LoopContent_{idx}:\n{loop_content}\n")
             loop_contents.append(loop_content)
         
-        print(loop_indices)
+        # print(loop_indices)
 
         inner_flags = determine_inner_loops(loop_indices)
 

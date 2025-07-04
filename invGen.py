@@ -5,6 +5,8 @@ import re
 from loopAnalysis import LoopAnalysis
 from outputVerify import OutputVerifier
 from loopProcessor import LoopProcessor
+from LLM import Chatbot
+from Config import Config
 
 class InvGenerator:
     def __init__(self):
@@ -13,17 +15,12 @@ class InvGenerator:
         # self.llm ='claude-3-7-sonnet-20250219'
         # self.llm = 'deepseek-v3'
         # self.llm = 'gpt-4o-mini'
-        self.llm = 'gpt-4o'
-        self.mask = True
         
-        self.client = openai.OpenAI(
-            base_url="https://yunwu.ai/v1",
-            api_key="sk-hfyQZDWdgyc4oQnDw4nvOh6KT1iDQ5EbNy9UjQwnMzBntefe"
-        )
-        # 初始化消息列表
-        self.messages = [
-            {"role": "system", "content": "You are a helpful assistant."}
-        ]
+        self.mask = False
+        self.config = Config()
+        self.llm = Chatbot(self.config)
+        
+        
     
 
     def filter_conditon(self,condition):
@@ -562,14 +559,6 @@ class InvGenerator:
         try:
             """调用 OpenAI API 获取 ACSL 注释"""
             # 将内容添加到消息中
-            self.messages.append({"role": "user", "content": prompt})
-        
-            # 获取助手的响应
-            response = self.client.chat.completions.create(
-                model=self.llm,
-                messages=self.messages,
-                temperature=0.7
-            )
 
             def extract_last_c_code(text):
                 # 匹配 C 代码块（Markdown 代码块 或 以 #include 开头的代码）
@@ -578,7 +567,8 @@ class InvGenerator:
                 return code_blocks[-1] if code_blocks else text  # 返回最后一个 C 代码块
 
             # 处理响应
-            assistant_response = response.choices[0].message.content
+
+            assistant_response = self.llm.chat(prompt)
             assistant_response = re.sub(r'>\s*Reasoning\s*[\s\S]*?(?=\n\n|$)', '', assistant_response, flags=re.IGNORECASE)
             assistant_response = re.sub(r'<think>.*?</think>', '', assistant_response, flags=re.DOTALL)
             assistant_response = extract_last_c_code(assistant_response)
@@ -613,15 +603,7 @@ class InvGenerator:
 
             try:
                 """调用 OpenAI API 获取 ACSL 注释"""
-                # 将内容添加到消息中
-                self.messages.append({"role": "user", "content": prompt})
             
-                # 获取助手的响应
-                response = self.client.chat.completions.create(
-                    model= self.llm,
-                    messages=self.messages,
-                    temperature=0.7
-                )
 
                 def extract_last_c_code(text):
                     # 匹配 C 代码块（Markdown 代码块 或 以 #include 开头的代码）
@@ -630,7 +612,7 @@ class InvGenerator:
                     return code_blocks[-1] if code_blocks else text  # 返回最后一个 C 代码块
 
                 # 处理响应
-                assistant_response = response.choices[0].message.content
+                assistant_response = self.llm.chat(prompt)
                 print(assistant_response)
                 assistant_response = re.sub(r'>\s*Reasoning\s*[\s\S]*?(?=\n\n|$)', '', assistant_response, flags=re.IGNORECASE)
                 assistant_response = re.sub(r'<think>.*?</think>', '', assistant_response, flags=re.DOTALL)
@@ -667,15 +649,8 @@ class InvGenerator:
 
             try:
                 """调用 OpenAI API 获取 ACSL 注释"""
-                # 将内容添加到消息中
-                self.messages.append({"role": "user", "content": prompt})
-            
-                # 获取助手的响应
-                response = self.client.chat.completions.create(
-                    model= self.llm,
-                    messages=self.messages,
-                    temperature=0.7
-                )
+                
+                
 
                 def extract_last_c_code(text):
                     # 匹配 C 代码块（Markdown 代码块 或 以 #include 开头的代码）
@@ -684,7 +659,7 @@ class InvGenerator:
                     return code_blocks[-1] if code_blocks else text  # 返回最后一个 C 代码块
 
                 # 处理响应
-                assistant_response = response.choices[0].message.content
+                assistant_response = self.llm.chat(prompt)
                 print(assistant_response)
                 assistant_response = re.sub(r'>\s*Reasoning\s*[\s\S]*?(?=\n\n|$)', '', assistant_response, flags=re.IGNORECASE)
                 assistant_response = re.sub(r'<think>.*?</think>', '', assistant_response, flags=re.DOTALL)
@@ -722,15 +697,7 @@ class InvGenerator:
 
             try:
                 """调用 OpenAI API 获取 ACSL 注释"""
-                # 将内容添加到消息中
-                self.messages.append({"role": "user", "content": prompt})
-            
-                # 获取助手的响应
-                response = self.client.chat.completions.create(
-                    model= self.llm,
-                    messages=self.messages,
-                    temperature=0.7
-                )
+               
 
                 def extract_last_c_code(text):
                     # 匹配 C 代码块（Markdown 代码块 或 以 #include 开头的代码）
@@ -739,7 +706,7 @@ class InvGenerator:
                     return code_blocks[-1] if code_blocks else text  # 返回最后一个 C 代码块
 
                 # 处理响应
-                assistant_response = response.choices[0].message.content
+                assistant_response = self.llm.chat(prompt)
                 print(assistant_response)
                 assistant_response = re.sub(r'>\s*Reasoning\s*[\s\S]*?(?=\n\n|$)', '', assistant_response, flags=re.IGNORECASE)
                 assistant_response = re.sub(r'<think>.*?</think>', '', assistant_response, flags=re.DOTALL)
@@ -873,17 +840,9 @@ class InvGenerator:
         return ''.join(parts)
     
 
-    def get_annotations(self, user_prompt):
+    def get_annotations(self, prompt):
         """调用 OpenAI API 获取 ACSL 注释"""
         # 将内容添加到消息中
-        self.messages.append({"role": "user", "content": user_prompt})
-
-        # 获取助手的响应
-        response = self.client.chat.completions.create(
-            model=self.llm,
-            messages=self.messages,
-            temperature=0.7
-        )
 
         def extract_last_c_code(text):
                 # 匹配 C 代码块（Markdown 代码块 或 以 #include 开头的代码）
@@ -892,7 +851,7 @@ class InvGenerator:
                 return code_blocks[-1] if code_blocks else text  # 返回最后一个 C 代码块
 
             # 处理响应
-        assistant_response = response.choices[0].message.content
+        assistant_response = self.llm.chat(prompt)
         print(assistant_response)
         assistant_response = re.sub(r'>\s*Reasoning\s*[\s\S]*?(?=\n\n|$)', '', assistant_response, flags=re.IGNORECASE)
         assistant_response = re.sub(r'<think>.*?</think>', '', assistant_response, flags=re.DOTALL)
@@ -900,17 +859,10 @@ class InvGenerator:
 
         return assistant_response
     
-    def simple_get_annotations(self, user_prompt):
+    def simple_get_annotations(self, prompt):
         """调用 OpenAI API 获取 ACSL 注释"""
         # 将内容添加到消息中
-        self.messages.append({"role": "user", "content": user_prompt})
-
-        # 获取助手的响应
-        response = self.client.chat.completions.create(
-            model=self.llm,
-            messages=self.messages,
-            temperature=0.7
-        )
+        
 
         def extract_last_c_code(text):
                 # 匹配 C 代码块（Markdown 代码块 或 以 #include 开头的代码）
@@ -919,7 +871,7 @@ class InvGenerator:
                 return code_blocks[-1] if code_blocks else text  # 返回最后一个 C 代码块
 
             # 处理响应
-        assistant_response = response.choices[0].message.content
+        assistant_response = self.llm.chat(prompt)
         print(assistant_response)
         assistant_response = re.sub(r'>\s*Reasoning\s*[\s\S]*?(?=\n\n|$)', '', assistant_response, flags=re.IGNORECASE)
         assistant_response = re.sub(r'<think>.*?</think>', '', assistant_response, flags=re.DOTALL)
